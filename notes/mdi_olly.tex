@@ -1,0 +1,279 @@
+\documentclass[fleqn,11pt]{wlscirep}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{verbatim}
+\usepackage{listings}
+
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{tikz}
+
+% for bold math symbols
+\usepackage{bm}
+
+% For iid symbol
+\usepackage{graphicx}
+\makeatletter
+\newcommand{\distas}[1]{\mathbin{\overset{#1}{\kern\z@\sim}}}%
+\newsavebox{\mybox}\newsavebox{\mysim}
+
+\newcommand{\distras}[1]{%
+  \savebox{\mybox}{\hbox{\kern3pt$\scriptstyle#1$\kern3pt}}%
+  \savebox{\mysim}{\hbox{$\sim$}}%
+  \mathbin{\overset{#1}{\kern\z@\resizebox{\wd\mybox}{\ht\mysim}{$\sim$}}}%
+}
+\makeatother
+
+
+%%% BibTex packages (url for website references)
+% \usepackage[style=authoryear-comp,firstinits=true]{biblatex}
+\usepackage[english]{babel}
+\usepackage[square,numbers,sort&compress]{natbib} 
+% \usepackage{url}
+% \usepackage{Biblatex}
+% \usepackage{humanbio}
+
+%For inclusion of hyperlinks
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,      
+    urlcolor=cyan,
+}
+
+%BibTex stuff and referencing sections by name 
+\usepackage{nameref} 
+
+\title{MDI - what is it?}
+
+%\author{}
+\author[1,*]{Stephen Coleman}
+\affil[1]{MRC Biostatistics Unit, Cambridge, UK}
+\affil[*]{stephen.coleman@mrc-bsu.cam.ac.uk}
+
+%\keywords{Keyword1, Keyword2, Keyword3}
+\begin{abstract}
+Multiple dataset integration (\textbf{MDI}) is a Bayesian approach to sharing information from multiple datasets of observations on the same individuals. The method avoids creating a new, larger dataset that is the naive combination of the original datasets and instead carries out clustering on each dataset \emph{in parallel}. If any of the clusters emerging in the datasets contain common individuals, we can consider these clusters similar and can use this information to more upweigh the allocation probability of an individual who belongs to the cluster in one dataset to the corresponding cluster in the second dataset. The magnitude of this upweighting is determined by the ``similarity'' of the clusters (i.e. local similarity) and the datasets (a global similarity). We define similarity around this concept of corresponding clusters across datasets sharing the same individuals. This means that if there is no common information between the datasets that the final clustering will be approximately the same as if clustering was done using traditional methods. Throughout this implementation we limit the number of datasets present to 2 but this is not required as is shown in \cite{kirkBayesianCorrelatedClustering2012}.
+
+%We will not enter into a description of clustering via mixture models as it is assumed the reader (i.e. Oliver ``not Crooke, Crook" Crook) is familiar with these methods. If they are not, we reccomend them to \cite{crookBayesianMixtureModelling2018}.
+
+To implement MDI we require that each dataset share common members of the population in the same order, i.e. observation $i$ in dataset 1 corresponds to observation $i$ in dataset 2 for all $i \in (1, \ldots, n)$ for $n \in \mathbb{N}$ observations. Thus each observation has an associated pair of measurement vectors, $(\vec{x}_{i1}, \vec{x}_{i2})$. We do not require that these measurement vectors share any common nature, but we do require that the type of measurements in each dataset is the same, i.e. either continuous or categorical.
+
+\end{abstract}
+
+\begin{document}
+
+%\begin{titlepage}
+%	\centering
+%	\includegraphics[width=0.15\textwidth]{example-image-1x1}\par\vspace{1cm}
+%	{\scshape\LARGE Cambridge University \par}
+%	\vspace{1cm}
+%	{\scshape\Large Internship project\par}
+%	\vspace{1.5cm}
+%	{\huge\bfseries Pigeons love doves \par \normalsize \emph{The ancient tale of passion, trust and betrayal}  \par}
+%	\vspace{2cm}
+%	{\Large\itshape Stephen D. Coleman\par}
+%	\vfill
+%	supervised by\par
+%	Dr.~Paul D.W. \textsc{Kirk}
+%
+%	\vfill
+%
+%% Bottom of the page
+%	{\large \today\par}
+%\end{titlepage}
+
+\maketitle
+\thispagestyle{fancy}
+
+\vspace{-1.0cm}
+
+\subsection*{A comment on notation}
+We use the following symbols throughout this piece.
+\begin{itemize}
+ \item $n \in \mathbb{N}$: the number of observations in each dataset;
+ \item $x_i$: the $i$th observation for some $i \in \{1,\ldots, N\}$;
+ \item $L  \in \mathbb{N}$: the number of datasets;
+ \item $K_l \in \mathbb{N}$: the number of components in dataset $l$ for some $l \leq L$. If $L = 1$ we do not include the subscript;
+ \item $c_{il} \in \{1,\ldots,K_l\}$: the latent clustering variable for the $i$th observation in the $l$th dataset;
+ \item $Z \in \mathbb{R}$: a relevant normalising constant;
+ \item $\phi \in \mathbb{R} \: | \: \phi > 0$: the context similarity parameter, a measure of the similarity between datasets 1 and 2;
+ \item $\pi_j \in [0, 1] \subset \mathbb{R}$: the component proportions within the dataset for some $j \leq K$; and
+ \item $\gamma_{jl} \in \mathbb{R}  \: | \: \gamma_{jl} > 0$: the component weights for the $j$th component in dataset $l$.
+\end{itemize}
+
+
+\section{Multiple dataset integration}
+%Multiple dataset integration (\textbf{MDI}) is a method to combine information from multiple datasets within a probabilistic framework such that the final clustering should be no worse than clustering each set individually. The method avoids combining the datasets and carries out clustering on each dataset \emph{in parallel}. This allows pooling of information such that if clusters are considered similar in both datasets we can cluster points with greater confidence for some defined notion of ``similar". However, it also means that if the clustering given by one dataset is different to that provided by the other that we can see both these clusterings - there is no muddying of the waters. Throughout this implementation we limit the number of datasets present to 2 but this is not required as is shown in \cite{kirkBayesianCorrelatedClustering2012}.
+%
+%%We will not enter into a description of clustering via mixture models as it is assumed the reader (i.e. Oliver ``not Crooke, Crook" Crook) is familiar with these methods. If they are not, we reccomend them to \cite{crookBayesianMixtureModelling2018}.
+%
+%To implement MDI we require that each dataset share common members of the population in the same order, i.e. observation $i$ in dataset 1 corresponds to observation $i$ in dataset 2 for all $i \in (1, \ldots, n)$ for $n \in \mathbb{N}$ observations. Thus each observation has an associated pair of measurement vectors, $(\bar{x}_{i1}, \bar{x}_{i2})$. We do not require that these measurement vectors share any common nature, but we do require that the type of measurements in each dataset is the same, i.e. either continuous or categorical.
+
+\subsection{Dataset-level modelling}
+For the context-specific clustering assume there exists some model of the form:
+
+\begin{align}
+p(x) = \sum_{i = 1}^K \gamma_i f(x|\theta_i)
+\end{align}
+where $p(x)$ denotes the probability denisty model, here a $K$-component density model where for the $i$-th component we have component weight $\gamma_i$ and some parametric density $f$ (currently limited to a Categorical or Gaussian density) defined by the vector of parameters, $\theta_i$.
+
+As is traditional \cite{tevyeTradition1905}, we introduce the latent component allocation variables $\{c_i\}_{i=1}^n$ where $x_i$ is associated with component $c_i$ and define the model:
+
+\begin{align}
+x_i | c_i & \sim F(\theta_i), \\
+c_i | \pi & \sim Multinomial(\pi_1,\ldots, \pi_K), \\
+\pi_1, \ldots, \pi_K & \sim Dirichlet(\alpha/K, \ldots, \alpha/K), \\
+\theta_c & \sim G^{(0)}
+\end{align}
+where $F$ is the distribution corresponding to density $f$, $\bm{\pi} = (\pi_1, \ldots, \pi_K)$ is the vector of $K$ componenet weights, $\alpha$ is the mass parameter which itself may be given a hyperparameter, and $G^{(0)}$ is the prior on the component parameters.
+
+We consider the $c_i$ to define a \emph{clustering} on the $x_i$ where the number of clusters present is at most $K$.
+
+\subsection{Dependent data sets}
+Consider now the case defined initially of $L$ different datasets for the same $n$ observations. Ideally we can use information from each context to more confidently allocated observations in all other contexts. We thus directly model the dependence between datasets using some parameter, $\phi$, also referred to as the context similarity parameter.
+
+To do this we must consider $L$ context-specific mixture models as referred to above, but augmented by this new parameter $\phi$. If we consider now the case $L = 2$ where we have $K_1$ and $K_2$ components present in the datasets respectively, we can consider two components likely to be aligned if they contain a relatively large number of the same points. The more clusters we have strongly aligned (i.e. with very similar membership), the greater we expect $\phi$ to be and the more likely we expect a point present in component $l$ in dataset 1 to be present in component $l$ in dataset 2. Thus we define a model:
+
+\begin{align}
+p(c_{i1}, c_{i2}| \phi) \propto \pi_{c_{i1}1} \pi_{c_{i2}2} (1 + \phi \mathbb{I}(c_{i1} = c_{i2}))
+\end{align}
+where $c_{il}$ is the component $x_i$ is associated with in dataset $l$ and $\pi_{kl}$ are the weights for component $k$ in dataset $l$. $\mathbb{I}$ is the indicator function defined for any $x,y \in \mathbb{R}$:
+
+\begin{align}
+\mathbb{I}(x = y) = \begin{cases}
+       1, &\quad\text{if $x = y$}\\
+       0, &\quad\text{else}
+     \end{cases}
+\end{align}
+Notice how the original mixture model emerges when $L = 1$. Furthermore, if we construct $\phi$ such that if the datasets have no similar clustering there is approximately no contribution to the clustering then the contribution of the other context on the current clustering is small. Another point to notice here is that at most $\min(K_1, K_2)$ components receive an upweighting as we enforce at most a pairwise association.
+The decision to link the datasets at the level of the latent variable $c_{il}$ avoids the difficulties if the contexts have different types of data present with differing levels of noise.
+
+\subsection{General model}
+If we shift from to a weight variable $\bm{\gamma} = (\gamma_{1l},\ldots,\gamma_{K_ll}) \distas{i.i.d} \mathrm{Ga}(\alpha_l/K_l, 1)$ where $\mathrm{Ga}$ denotes the gamma distribution, and $\bm{\gamma}$ is related to $\bm{\pi}$ by $\pi_{il} = \frac{\gamma_{il}}{\sum_{j = 1}^{K_l}\gamma_{jl}}$ we then have:
+
+\begin{align}
+p(\left\{c_{i1}, c_{i2}\right\}_{i=1}^n) \propto \gamma_{c_{i1}1} \gamma_{c_{i2}2} \left(1 + \phi \mathbb{I}(c_{i1} = c_{i2})\right) \label{general_model}
+\end{align}
+From \eqref{general_model} we calculate the normalising constant $Z$, and find:
+
+\begin{align}
+Z = \sum_{j_1=1}^{K_1}\sum_{j_2=1}^{K_2} \gamma_{j_{1}1} \gamma_{j_{2}2} \left(\left(1 + \phi\mathbb{I}(j_1 = j_2)\right)\right) \label{normal_const}
+\end{align}
+The joint density is hence:
+
+\begin{align}
+p(\left\{c_{i1}, c_{i2}\right\}_{i=1}^n) = \frac{1}{Z} \prod_{i = 1}^n \left( \gamma_{c_{i1}1} \gamma_{ c_{i2}2} \left(1 + \phi \mathbb{I}(c_{i1} = c_{i2})\right) \right) \label{joint_density_no_v}
+\end{align}
+Intoduce a strategic latent variable $v$ such that the form is:
+
+\begin{align}
+p(\left\{c_{i1}, c_{i2}\right\}_{i=1}^n, v) = \frac{v^{n-1} \exp(-vZ)}{(n-1)!} \prod_{i = 1}^n \left(\left(1 + \phi \mathbb{I}(c_{i1} = c_{i2})\right) \prod_{l = 1}^{2}\gamma_{c_{il}l}\right) \label{joint_density}
+\end{align}
+Where $Z$ remains as in \eqref{normal_const}.
+
+\subsection{Conditionals}
+\textbf{Conditional for $v$:} The strategic latent variable has the following associated distribution:
+\begin{align}
+v \sim \mathrm{Ga}(n, Z)
+\end{align}
+\textbf{Conditional for $\gamma_{j_{m}m}$:} The weight for component $j_m$ in context $m$ is $\mathrm{Ga}(	a_\gamma, b_\gamma)$ where, for $l \in (1, 2) \subset \mathbb{N}$ such that $l \neq m$:
+
+\begin{align}
+a_\gamma & = 1 + \sum_{i = 1}^n\mathbb{I}(c_{im} = j_m) \\
+b_\gamma & = v \sum_{j = 1}^{K_{l}}\left( \gamma_{c_{j_{l}}l}(1 + \mathbb{I}(j_1 = j_2) \right)
+\end{align}
+\subsection{Conditional for $\phi$}
+
+Consider the conditional probability of $\phi$, then from \eqref{joint_density} and expanding $Z$:
+
+\begin{align}
+ p(\phi | \left\{c_{i1}, c_{i2}\right\}_{i=1}^n, v) &\propto \exp\left(-v \sum_{j_1=1}^{K_1}\sum_{j_2=1}^{K_2}\left(\left(1 + \phi\mathbb{I}(j_1 = j_2)\right) \prod_{l=1}^2\gamma_{j_ll}\right)\right) \prod_{i = 1}^n \left(\left(1 + \phi \mathbb{I}(c_{i1} = c_{i2})\right) \prod_{l = 1}^{2}\gamma_{c_{il}l}\right) \label{phi_cond_1}
+\end{align}
+Now, consider the coefficients of the two occurences of $\phi$:
+
+\begin{align}
+a &=  \prod_{i = 1}^n \left(\left(1 + \phi \mathbb{I}(c_{i1} = c_{i2})\right) \prod_{l = 1}^{2}\gamma_{c_{il}l}\right) \\
+b &=  \sum_{j_1=1}^{K_1}\sum_{j_2=1}^{K_2}\left(\left(1 + \phi \mathbb{I}(j_1 = j_2)\right) \prod_{l=1}^2\gamma_{j_ll}\right)
+\end{align}
+Beginning with $a$ from above:
+
+\begin{align}
+a &= \prod_{i = 1}^n \gamma_{c_{i1}1} \gamma_{c_{i2}2}  \left(1 + \phi \mathbb{I}(c_{i1} = c_{i2})\right) \\
+ &= \left(1 + \phi \mathbb{I}(c_{i1} = c_{i2})\right)^n \prod_{i = 1}^n \gamma_{c_{i1}1} \gamma_{c_{i2}2} \\
+ &\propto  \left(1 + \phi \mathbb{I}(c_{i1} = c_{i2})\right)^n \\
+ &=  \left(1 + \phi)\right)^{\sum_{i=1}^n  \mathbb{I}(c_{i1} = c_{i2})} \\
+ &= \sum_{r=0}^{\sum_{i=1}^n  \mathbb{I}(c_{i1} = c_{i2})} \binom{\sum_{i=1}^n  \mathbb{I}(c_{i1} = c_{i2})}{r} \phi^r \qquad (\text{from the binomial theorem})
+\end{align}
+Here $\sum_{i=1}^n  \mathbb{I}(c_{i1} = c_{i2})$ is the count of observations assigned to the same cluster in both contexts and will be called $c$.
+
+Now consider $b$:
+
+\begin{align}
+b &=  \exp\left(-v \sum_{j_1=1}^{K_1}\sum_{j_2=1}^{K_2}\left(\left(1 + \phi \mathbb{I}(j_1 = j_2)\right) \prod_{l=1}^2\gamma_{j_ll}\right)\right)
+\end{align}
+We see that for our conditional we can ignore all cases when $j_1 \neq j_2$ as $\phi$ is not present in these. This simplifies $b$ to:
+
+\begin{align}
+b &\propto \sum_{j=1}^{K_{min}} \gamma_{j1} \gamma_{j2} \left(1 + \phi \right) \\
+&\propto \sum_{j=1}^{K_{min}} \gamma_{j1} \gamma_{j2} \phi
+\end{align}
+where $K_{min} = \min(K_1, K_2)$. Thus updating \eqref{phi_cond_1} accordingly gives us:
+
+\begin{align}
+p(\phi | \left\{c_{i1}, c_{i2}\right\}_{i=1}^n, v) &\propto \exp\left(-v \sum_{j=1}^{K_{min}} \gamma_{j1} \gamma_{j2}\phi \right)  \sum_{r=0}^c \binom{c}{r} \phi^r
+\end{align}
+We notice this has the structure similar to a mixture of Gamma distributions. We thus have:
+
+\begin{align}
+ p(\left\{c_{i1}, c_{i2}\right\}_{i=1}^n, v | \phi) &\propto  \sum_{r=0}^c \binom{c}{r} \frac{r!}{\left(v \sum_{j=1}^{K_{min}} \gamma_{j1} \gamma_{j2}\right)^{r+1}}  \frac{\left(v \sum_{j=1}^{K_{min}} \gamma_{j1} \gamma_{j2}\right)^{r+1}}{r!}\phi^r \exp\left(-v \sum_{j=1}^{K_{min}} \gamma_{j1} \gamma_{j2}\phi \right) \\
+&= \sum_{r=0}^c  \binom{c}{r} \frac{r!}{\left(v \sum_{j=1}^N \gamma_{j1} \gamma_{j2}\right)^{r+1}} \mathrm{Ga}\left(r+1, v \sum_{j=1}^{K_{min}} \gamma_{j1} \gamma_{j2} \right)
+\end{align}
+As we know that $p(\phi | \left\{c_{i1}, c_{i2}\right\}_{i=1}^n, v)$ must integrate over $\phi$ to 1, we know the normalising constant must be the sum of the integrals of the Gamma distributions, i.e.:
+
+\begin{align}
+Z_{\phi} &= \sum_{r=0}^c   \binom{c}{r} \frac{r!}{\left(v \sum_{j=1}^{K_{min}} \gamma_{j1} \gamma_{j2}\right)^{r+1}}  \int\frac{\left(v \sum_{j=1}^{K_{min}} \gamma_{j1} \gamma_{j2}\right)^{r+1}}{r!}\phi^r \exp\left(-v \sum_{j=1}^{K_{min}} \gamma_{j1} \gamma_{j2}\phi \right) d\phi_{12} \\
+&= \sum_{r=0}^c  \binom{c}{r} \frac{r!}{\left(v \sum_{j=1}^{K_{min}} \gamma_{j1} \gamma_{j2}\right)^{r+1}}  \label{Z_phi}
+\end{align}
+Combining these gives:
+
+\begin{align}
+p(\phi | \left\{c_{i1}, c_{i2}\right\}_{i=1}^n, v) &= \frac{1}{Z_{\phi}}  \sum_{r=0}^c  \binom{c}{r} \frac{r!}{\left(v \sum_{j=1}^{K_{min}} \gamma_{j1} \gamma_{j2}\right)^{r+1}} \mathrm{Ga}\left(r+1, v \sum_{j=1}^{K_{min}} \gamma_{j1} \gamma_{j2} \right)
+\end{align}
+
+\subsubsection{Posterior distribution}
+
+Now if we consider a prior of $\mathrm{Ga}(a_0, b_0)$ on the $\phi$, we have a prior probability of:
+
+\begin{align}
+p(\phi) &= \frac{b_0^{a_0}}{(a_0 - 1)!}\phi^{a_0 - 1}\exp\left(-b_0 \phi \right)
+\end{align}
+Thus our posterior conditional is:
+
+\begin{align}
+p(\phi | \cdot) &\propto p(\phi) p(\left\{c_{i1}, c_{i2}\right\}_{i=1}^n, v | \phi)  \\
+&\propto \frac{b_0^{a_0}}{(a_0 - 1)!}\phi^{a_0 - 1}\exp\left(-b_0 \phi \right)  \sum_{r=0}^c  \binom{c}{r} \frac{r!}{\left(v \sum_{j=1}^{K_{min}} \gamma_{j1} \gamma_{j2}\right)^{r+1}}  \frac{\left(v \sum_{j=1}^{K_{min}} \gamma_{j1} \gamma_{j2}\right)^{r+1}}{r!}\phi^r \exp\left(-v \sum_{j=1}^{K_{min}} \gamma_{j1} \gamma_{j2}\phi \right) \\
+&\propto \sum_{r=0}^c  \binom{c}{r} \phi^{r + a_0 - 1} \exp \left( \left(-v \sum_{j=1}^{K_{min}} \gamma_{j1} \gamma_{j2}  -b_0 \right)\phi \right) \\
+&\propto \sum_{r=0}^c  \binom{c}{r} \frac{(r + a_0 - 1)!}{ \left(v \sum_{j=1}^{K_{min}} \gamma_{j1} \gamma_{j2} + b_0 \right)^{r + a_0}} \frac{ \left(v \sum_{j=1}^{K_{min}} \gamma_{j1} \gamma_{j2} + b_0 \right)^{r + a_0}}{(r + a_0 - 1)!} \phi^{r + a_0 - 1} \exp \left( - \left(v \sum_{j=1}^{K_{min}} \gamma_{j1} \gamma_{j2} + b_0 \right)\phi\right) \\
+&= \sum_{r=0}^c  \binom{c}{r} \frac{(r + a_0 - 1)!}{ \left(v \sum_{j=1}^{K_{min}} \gamma_{j1} \gamma_{j2} + b_0 \right)^{r + a_0}} \mathrm{Ga} \left(r+ a_0, v \sum_{j=1}^{K_{min}} \gamma_{j1} \gamma_{j2} + b_0 \right)
+\end{align}
+For the normalising constant, we have, similarly to \eqref{Z_phi}:
+
+\begin{align}
+Z_{\phi}' &=\sum_{r=0}^c  \binom{c}{r} \frac{(r + a_0 - 1)!}{ \left(v \sum_{j=1}^{K_{min}} \gamma_{j1} \gamma_{j2} + b_0 \right)^{r + a_0}}  \int \frac{ \left(v \sum_{j=1}^{K_{min}} \gamma_{j1} \gamma_{j2} + b_0 \right)^{r + a_0}}{(r + a_0 - 1)!} \phi^{r + a_0 - 1} \exp \left( - \left(v \sum_{j=1}^{K_{min}} \gamma_{j1} \gamma_{j2} + b_0 \right)\phi\right) d\phi_{12} \\
+&= \sum_{r=0}^c \binom{c}{r} \frac{(r + a_0 - 1)!}{ \left(v \sum_{j=1}^{K_{min}} \gamma_{j1} \gamma_{j2} + b_0 \right)^{r + a_0}} 
+\end{align}
+Thus our final posterior on the context similarity parameter $\phi$ is:
+
+\begin{align}
+p(\phi |  \left\{c_{i1}, c_{i2}\right\}_{i=1}^n, v) &=  \frac{1}{Z_{\phi}'} \sum_{r=0}^c  \binom{c}{r} \frac{(r + a_0 - 1)!}{ \left(v \sum_{j=1}^{K_{min}} \gamma_{j1} \gamma_{j2} + b_0 \right)^{r + a_0}} \mathrm{Ga} \left(r+ a_0, v \sum_{j=1}^{K_{min}} \gamma_{j1} \gamma_{j2} + b_0 \right)
+\end{align}
+
+
+
+\bibliographystyle{abbrv}
+\bibliography{mdi_olly}
+
+\end{document}
+

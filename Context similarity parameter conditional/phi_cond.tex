@@ -1,0 +1,182 @@
+\documentclass[fleqn,11pt]{wlscirep}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{verbatim}
+\usepackage{listings}
+
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{tikz}
+
+% for differential
+\usepackage{physics}
+
+% For iid symbol
+\usepackage{graphicx}
+\makeatletter
+\newcommand{\distas}[1]{\mathbin{\overset{#1}{\kern\z@\sim}}}%
+\newsavebox{\mybox}\newsavebox{\mysim}
+
+\newcommand{\distras}[1]{%
+  \savebox{\mybox}{\hbox{\kern3pt$\scriptstyle#1$\kern3pt}}%
+  \savebox{\mysim}{\hbox{$\sim$}}%
+  \mathbin{\overset{#1}{\kern\z@\resizebox{\wd\mybox}{\ht\mysim}{$\sim$}}}%
+}
+\makeatother
+
+
+\title{MDI Conditional probability for the context similarity parameter}
+
+%\author{}
+\author[1,*]{Stephen Coleman}
+\affil[1]{MRC Biostatistics Unit, Cambridge, UK}
+\affil[*]{stephen.coleman@mrc-bsu.cam.ac.uk}
+
+%\keywords{Keyword1, Keyword2, Keyword3}
+\begin{abstract}
+The derivation of the conditional probability for the context similarity parameter $\phi_{12}$ between 2 different contexts. The final form is a mixture of Gamma distributions.
+\end{abstract}
+
+\begin{document}
+
+
+
+%\begin{titlepage}
+%	\centering
+%	\includegraphics[width=0.15\textwidth]{example-image-1x1}\par\vspace{1cm}
+%	{\scshape\LARGE Cambridge University \par}
+%	\vspace{1cm}
+%	{\scshape\Large Internship project\par}
+%	\vspace{1.5cm}
+%	{\huge\bfseries Pigeons love doves \par \normalsize \emph{The ancient tale of passion, trust and betrayal}  \par}
+%	\vspace{2cm}
+%	{\Large\itshape Stephen D. Coleman\par}
+%	\vfill
+%	supervised by\par
+%	Dr.~Paul D.W. \textsc{Kirk}
+%
+%	\vfill
+%
+%% Bottom of the page
+%	{\large \today\par}
+%\end{titlepage}
+
+\maketitle
+\thispagestyle{fancy}
+
+\vspace{-1.0cm}
+
+\section{Context similarity parameter ($\phi_{12}$)}
+For multiple dataset integration (\textbf{MDI}) in the case of $n$ observations in 2 datasets (also referred to as \emph{contexts}):
+
+\begin{align}
+p(\left\{c_{i1}, c_{i2}\right\}_{i=1}^n, v) \propto \left(1 + \phi_{12} \mathbb{I}(c_{i1} = c_{i2})\right) \prod_{k = 1}^{2}\gamma_{c_{ik}k} \label{general_model}
+\end{align}
+We assume priors of $\gamma_{1k},\ldots,\gamma_{nk} \distas{i.i.d} Gamma(\alpha_k/N,1)\, \forall \, k \in \{1,2\}$ where $N$ is the smaller of the number of clusters in the two contexts. Similarly $\phi_{12} \sim Gamma(a, b)$.
+
+From \eqref{general_model} we calculate the normalising constant $Z$, and find:
+
+\begin{align}
+Z = \sum_{j_1=1}^N\sum_{j_2=1}^N\left(\left(1 + \phi_{12}\mathbb{I}(j_1 = j_2)\right) \prod_{k=1}^2\gamma_{j_kk}\right) \label{normal_const}
+\end{align}
+The joint density is hence:
+
+\begin{align}
+p(\left\{c_{i1}, c_{i2}\right\}_{i=1}^n, v) = \frac{1}{Z} \prod_{i = 1}^n \left(\left(1 + \phi_{12} \mathbb{I}(c_{i1} = c_{i2})\right) \prod_{k = 1}^{2}\gamma_{c_{ik}k}\right) \label{joint_density_no_v}
+\end{align}
+Intoduce a strategic latent variable $v$ such that the form is:
+
+\begin{align}
+p(\left\{c_{i1}, c_{i2}\right\}_{i=1}^n, v) = \frac{v^{n-1} \exp(-vZ)}{(n-1)!} \prod_{i = 1}^n \left(\left(1 + \phi_{12} \mathbb{I}(c_{i1} = c_{i2})\right) \prod_{k = 1}^{2}\gamma_{c_{ik}k}\right) \label{joint_density}
+\end{align}
+Where $Z$ remains as in \eqref{normal_const}.
+
+\subsection{Conditional likelihood}
+
+Consider the conditional probability of $\phi$, then from \eqref{joint_density} and expanding $Z$:
+
+\begin{align}
+ p(\phi_{12} | \left\{c_{i1}, c_{i2}\right\}_{i=1}^n, v) &\propto \exp\left(-v \sum_{j_1=1}^N\sum_{j_2=1}^N\left(\left(1 + \phi_{12}\mathbb{I}(j_1 = j_2)\right) \prod_{k=1}^2\gamma_{j_kk}\right)\right) \prod_{i = 1}^n \left(\left(1 + \phi_{12} \mathbb{I}(c_{i1} = c_{i2})\right) \prod_{k = 1}^{2}\gamma_{c_{ik}k}\right) \label{phi_cond_1}
+\end{align}
+Now, consider the coefficients of the two occurences of $\phi_{12}$:
+
+\begin{align}
+a &=  \prod_{i = 1}^n \left(\left(1 + \phi_{12} \mathbb{I}(c_{i1} = c_{i2})\right) \prod_{k = 1}^{2}\gamma_{c_{ik}k}\right) \\
+b &=  \sum_{j_1=1}^N\sum_{j_2=1}^N\left(\left(1 + \phi_{12}\mathbb{I}(j_1 = j_2)\right) \prod_{k=1}^2\gamma_{j_kk}\right)
+\end{align}
+Beginning with $a$ from above:
+
+\begin{align}
+a &= \prod_{i = 1}^n \gamma_{c_{i1}1} \gamma_{c_{i2}2}  \left(1 + \phi_{12} \mathbb{I}(c_{i1} = c_{i2})\right) \\
+ &= \left(1 + \phi_{12} \mathbb{I}(c_{i1} = c_{i2})\right)^n \prod_{i = 1}^n \gamma_{c_{i1}1} \gamma_{c_{i2}2} \\
+ &\propto  \left(1 + \phi_{12} \mathbb{I}(c_{i1} = c_{i2})\right)^n \\
+ &=  \left(1 + \phi_{12})\right)^{\sum_{i=1}^n  \mathbb{I}(c_{i1} = c_{i2})} \\
+ &= \sum_{r=0}^{\sum_{i=1}^n  \mathbb{I}(c_{i1} = c_{i2})} \binom{\sum_{i=1}^n  \mathbb{I}(c_{i1} = c_{i2})}{r} \phi_{12}^r \qquad (\text{from the binomial theorem})
+\end{align}
+Here $\sum_{i=1}^n  \mathbb{I}(c_{i1} = c_{i2})$ is the count of observations assigned to the same cluster in both contexts and will be called $c$.
+
+Now consider $b$:
+
+\begin{align}
+b &=  \exp\left(-v \sum_{j_1=1}^N\sum_{j_2=1}^N\left(\left(1 + \phi_{12}\mathbb{I}(j_1 = j_2)\right) \prod_{k=1}^2\gamma_{j_kk}\right)\right)
+\end{align}
+We see that for our conditional we can ignore all cases when $j_1 \neq j_2$ as $\phi_{12}$ is not present in these. This simplifies $b$ to:
+
+\begin{align}
+b &\propto \sum_{j=1}^N \gamma_{j1} \gamma_{j2} \left(1 + \phi_{12}\right) \\
+&\propto \sum_{j=1}^N \gamma_{j1} \gamma_{j2} \phi_{12}
+\end{align}
+Thus updating \eqref{phi_cond_1} accordingly gives us:
+
+\begin{align}
+p(\phi_{12} | \left\{c_{i1}, c_{i2}\right\}_{i=1}^n, v) &\propto \exp\left(-v \sum_{j=1}^N \gamma_{j1} \gamma_{j2}\phi_{12}\right)  \sum_{r=0}^c \binom{c}{r} \phi_{12}^r
+\end{align}
+We notice this has the structure similar to a mixture of Gamma distributions. We thus have:
+
+\begin{align}
+ p(\left\{c_{i1}, c_{i2}\right\}_{i=1}^n, v | \phi_{12}) &\propto  \sum_{r=0}^c \binom{c}{r} \frac{r!}{\left(v \sum_{j=1}^N \gamma_{j1} \gamma_{j2}\right)^{r+1}}  \frac{\left(v \sum_{j=1}^N \gamma_{j1} \gamma_{j2}\right)^{r+1}}{r!}\phi_{12}^r \exp\left(-v \sum_{j=1}^N \gamma_{j1} \gamma_{j2}\phi_{12}\right) \\
+&= \sum_{r=0}^c  \binom{c}{r} \frac{r!}{\left(v \sum_{j=1}^N \gamma_{j1} \gamma_{j2}\right)^{r+1}} Gamma\left(r+1, v \sum_{j=1}^N \gamma_{j1} \gamma_{j2} \right)
+\end{align}
+As we know that $p(\phi_{12} | \left\{c_{i1}, c_{i2}\right\}_{i=1}^n, v)$ must integrate over $\phi_{12}$ to 1, we know the normalising constant must be the sum of the integrals of the Gamma distributions, i.e.:
+
+\begin{align}
+Z_{\phi_{12}} &= \sum_{r=0}^c   \binom{c}{r} \frac{r!}{\left(v \sum_{j=1}^N \gamma_{j1} \gamma_{j2}\right)^{r+1}}  \int\frac{\left(v \sum_{j=1}^N \gamma_{j1} \gamma_{j2}\right)^{r+1}}{r!}\phi_{12}^r \exp\left(-v \sum_{j=1}^N \gamma_{j1} \gamma_{j2}\phi_{12}\right) d\phi_{12} \\
+&= \sum_{r=0}^c  \binom{c}{r} \frac{r!}{\left(v \sum_{j=1}^N \gamma_{j1} \gamma_{j2}\right)^{r+1}}  \label{Z_phi}
+\end{align}
+Combining these gives:
+
+\begin{align}
+p(\phi_{12} | \left\{c_{i1}, c_{i2}\right\}_{i=1}^n, v) &= \frac{1}{Z_{\phi_{12}}}  \sum_{r=0}^c  \binom{c}{r} \frac{r!}{\left(v \sum_{j=1}^N \gamma_{j1} \gamma_{j2}\right)^{r+1}} Gamma\left(r+1, v \sum_{j=1}^N \gamma_{j1} \gamma_{j2} \right)
+\end{align}
+
+\subsection{Posterior distribution}
+
+Now if we consider a prior of $Gamma(a_0, b_0)$ on the $\phi_{12}$, we have a prior probability of:
+
+\begin{align}
+p(\phi_{12}) &= \frac{b_0^{a_0}}{(a_0 - 1)!}\phi_{12}^{a_0 - 1}\exp\left(-b_0 \phi_{12} \right)
+\end{align}
+Thus our posterior conditional is:
+
+\begin{align}
+p(\phi_{12} | \cdot) &\propto p(\phi_{12}) p(\left\{c_{i1}, c_{i2}\right\}_{i=1}^n, v | \phi_{12})  \\
+&\propto \frac{b_0^{a_0}}{(a_0 - 1)!}\phi_{12}^{a_0 - 1}\exp\left(-b_0 \phi_{12} \right)  \sum_{r=0}^c  \binom{c}{r} \frac{r!}{\left(v \sum_{j=1}^N \gamma_{j1} \gamma_{j2}\right)^{r+1}}  \frac{\left(v \sum_{j=1}^N \gamma_{j1} \gamma_{j2}\right)^{r+1}}{r!}\phi_{12}^r \exp\left(-v \sum_{j=1}^N \gamma_{j1} \gamma_{j2}\phi_{12}\right) \\
+&\propto \sum_{r=0}^c  \binom{c}{r} \phi_{12}^{r + a_0 - 1} \exp \left( \left(-v \sum_{j=1}^N \gamma_{j1} \gamma_{j2}  -b_0 \right)\phi_{12}\right) \\
+&\propto \sum_{r=0}^c  \binom{c}{r} \frac{(r + a_0 - 1)!}{ \left(v \sum_{j=1}^N \gamma_{j1} \gamma_{j2} + b_0 \right)^{r + a_0}} \frac{ \left(v \sum_{j=1}^N \gamma_{j1} \gamma_{j2} + b_0 \right)^{r + a_0}}{(r + a_0 - 1)!} \phi_{12}^{r + a_0 - 1} \exp \left( - \left(v \sum_{j=1}^N \gamma_{j1} \gamma_{j2} + b_0 \right)\phi_{12}\right) \\
+&= \sum_{r=0}^c  \binom{c}{r} \frac{(r + a_0 - 1)!}{ \left(v \sum_{j=1}^N \gamma_{j1} \gamma_{j2} + b_0 \right)^{r + a_0}} Gamma \left(r+ a_0, v \sum_{j=1}^N \gamma_{j1} \gamma_{j2} + b_0 \right)
+\end{align}
+For the normalising constant, we have, similarly to \eqref{Z_phi}:
+
+\begin{align}
+Z_{\phi_{12}}' &=\sum_{r=0}^c  \binom{c}{r} \frac{(r + a_0 - 1)!}{ \left(v \sum_{j=1}^N \gamma_{j1} \gamma_{j2} + b_0 \right)^{r + a_0}}  \int \frac{ \left(v \sum_{j=1}^N \gamma_{j1} \gamma_{j2} + b_0 \right)^{r + a_0}}{(r + a_0 - 1)!} \phi_{12}^{r + a_0 - 1} \exp \left( - \left(v \sum_{j=1}^N \gamma_{j1} \gamma_{j2} + b_0 \right)\phi_{12}\right) d\phi_{12} \\
+&= \sum_{r=0}^c \binom{c}{r} \frac{(r + a_0 - 1)!}{ \left(v \sum_{j=1}^N \gamma_{j1} \gamma_{j2} + b_0 \right)^{r + a_0}} 
+\end{align}
+Thus our final posterior on the context similarity parameter $\phi_{12}$ is:
+
+\begin{align}
+p(\phi_{12} |  \left\{c_{i1}, c_{i2}\right\}_{i=1}^n, v) &=  \frac{1}{Z_{\phi_{12}}'} \sum_{r=0}^c  \binom{c}{r} \frac{(r + a_0 - 1)!}{ \left(v \sum_{j=1}^N \gamma_{j1} \gamma_{j2} + b_0 \right)^{r + a_0}} Gamma \left(r+ a_0, v \sum_{j=1}^N \gamma_{j1} \gamma_{j2} + b_0 \right)
+\end{align}
+
+
+\end{document}
+

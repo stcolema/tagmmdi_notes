@@ -1,0 +1,403 @@
+% !TEX TS-program = pdflatex
+% !TEX encoding = UTF-8 Unicode
+
+% This is a simple template for a LaTeX document using the "article" class.
+% See "book", "report", "letter" for other types of document.
+
+\documentclass[11pt]{article} % use larger type; default would be 10pt
+
+\usepackage[utf8]{inputenc} % set input encoding (not needed with XeLaTeX)
+
+%%% Examples of Article customizations
+% These packages are optional, depending whether you want the features they provide.
+% See the LaTeX Companion or other references for full information.
+
+%%% PAGE DIMENSIONS
+\usepackage{geometry} % to change the page dimensions
+\geometry{a4paper} % or letterpaper (US) or a5paper or....
+%\geometry{margin=2in} % for example, change the margins to 2 inches all round
+\geometry{left=2.75cm, right=2.75cm, top=3.5cm, bottom=4.5cm}
+% \geometry{landscape} % set up the page for landscape
+%   read geometry.pdf for detailed page layout information
+
+\usepackage{graphicx} % support the \includegraphics command and options
+
+% \usepackage[parfill]{parskip} % Activate to begin paragraphs with an empty line rather than an indent
+
+%%% PACKAGES
+\usepackage{booktabs} % for much better looking tables
+\usepackage{array} % for better arrays (eg matrices) in maths
+\usepackage{paralist} % very flexible & customisable lists (eg. enumerate/itemize, etc.)
+\usepackage{verbatim} % adds environment for commenting out blocks of text & for better verbatim
+\usepackage{subfig} % make it possible to include more than one captioned figure/table in a single float
+% These packages are all incorporated in the memoir class to one degree or another...
+
+%%% HEADERS & FOOTERS
+\usepackage{fancyhdr} % This should be set AFTER setting up the page geometry
+\pagestyle{fancy} % options: empty , plain , fancy
+\renewcommand{\headrulewidth}{0pt} % customise the layout...
+\lhead{}\chead{}\rhead{}
+\lfoot{}\cfoot{\thepage}\rfoot{}
+
+%%% SECTION TITLE APPEARANCE
+\usepackage{sectsty}
+\allsectionsfont{\sffamily\mdseries\upshape} % (See the fntguide.pdf for font help)
+% (This matches ConTeXt defaults)
+
+%%% ToC (table of contents) APPEARANCE
+\usepackage[nottoc,notlof,notlot]{tocbibind} % Put the bibliography in the ToC
+\usepackage[titles,subfigure]{tocloft} % Alter the style of the Table of Contents
+\renewcommand{\cftsecfont}{\rmfamily\mdseries\upshape}
+\renewcommand{\cftsecpagefont}{\rmfamily\mdseries\upshape} % No bold!
+
+%%% BibTex packages (url for website references)
+\usepackage[english]{babel}
+\usepackage[numbers]{natbib}
+% \usepackage{url}
+% \usepackage{Biblatex}
+
+%For inclusion of hyperlinks
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,      
+    urlcolor=cyan,
+}
+
+%BibTex stuff and referencing sections by name 
+\urlstyle{same}
+\usepackage{nameref} 
+
+%%% END Article customizations
+
+%%% Change distance between bullet points
+\usepackage{enumitem}
+%\setlist{noitemsep}
+\setlist{itemsep=0.2pt, topsep=6pt, partopsep=0pt}
+%\setlist{nosep} % or \setlist{noitemsep} to leave space around whole list
+
+%%% For aside comments
+\usepackage[framemethod=TikZ]{mdframed}
+\usepackage{caption}
+
+%%% AMS math
+\usepackage{amsmath}
+
+%%% For differential notation
+\usepackage{physics}
+
+%%% For SI unit notation
+% Dependencies for siunitx
+\usepackage{cancel}
+\usepackage{caption}
+\usepackage{cleveref}
+\usepackage{colortbl}
+\usepackage{csquotes}
+\usepackage{helvet}
+\usepackage{mathpazo}
+\usepackage{multirow}
+\usepackage{listings}
+\usepackage{pgfplots}
+\usepackage{xcolor}
+\usepackage{siunitx}
+
+%%% User commands
+% theorem box
+\newcounter{aside}[section]\setcounter{aside}{0}
+\renewcommand{\theaside}{\arabic{section}.\arabic{aside}}
+\newenvironment{aside}[1][]{%
+\refstepcounter{aside}%
+\mdfsetup{%
+frametitle={%
+\tikz[baseline=(current bounding box.east),outer sep=0pt]
+\node[anchor=east,rectangle,fill=blue!20]
+{\strut Aside~\theaside};}}
+\mdfsetup{innertopmargin=10pt,linecolor=blue!20,%
+linewidth=2pt,topline=true,%
+frametitleaboveskip=\dimexpr-\ht\strutbox\relax
+}
+\begin{mdframed}[]\relax%
+\label{#1}}{\end{mdframed}}
+
+% For titification of tables
+\newcommand{\ra}[1]{\renewcommand{\arraystretch}{#1}}
+
+\usepackage{ctable} % for footnoting tables
+
+% Aside environment for personal comments / ideas
+%\newcounter{asidectr}
+
+%\newenvironment{aside} 
+%  {\begin{mdframed}[style=0,%
+%      leftline=false,rightline=false,leftmargin=2em,rightmargin=2em,%
+%          innerleftmargin=0pt,innerrightmargin=0pt,linewidth=0.75pt,%
+%      skipabove=7pt,skipbelow=7pt]
+%  \refstepcounter{asidectr}% increment the environment's counter
+%  \small 
+%  \textit{Aside \theasidectr:}
+%  \newline
+%  \relax}
+%  {\end{mdframed}
+%}
+%\numberwithin{asidectr}{section}
+
+% For iid symbol
+\usepackage{graphicx}
+\makeatletter
+\newcommand{\distas}[1]{\mathbin{\overset{#1}{\kern\z@\sim}}}%
+\newsavebox{\mybox}\newsavebox{\mysim}
+
+\newcommand{\distras}[1]{%
+  \savebox{\mybox}{\hbox{\kern3pt$\scriptstyle#1$\kern3pt}}%
+  \savebox{\mysim}{\hbox{$\sim$}}%
+  \mathbin{\overset{#1}{\kern\z@\resizebox{\wd\mybox}{\ht\mysim}{$\sim$}}}%
+}
+\makeatother
+
+% Keywords command
+\providecommand{\keywords}[1]
+{
+  \small	
+  \textbf{\textit{Keywords---}} #1
+}
+
+\title{T-augmented Gaussian mixture - multiple dataset integration}
+
+\author{Stephen Coleman}
+%\author[1,*]{Stephen Coleman}
+%\affil[1]{MRC Biostatistics Unit, Cambridge, UK}
+%\affil[*]{stephen.coleman@mrc-bsu.cam.ac.uk}
+
+\begin{document} \pgfplotsset{compat=1.16}
+\maketitle
+
+%\keywords{Keyword1, Keyword2, Keyword3}
+\begin{abstract}
+tagmmdi is a Bayesian method for semi-supervised prediction using paired datasets. It can be considered an extension of multiple dataset integration (MDI) \cite{kirkBayesianCorrelatedClustering2012}, an unsupervised clustering method utilising Dirichlet Processes, to allow semi-supervised clustering using the t-augmented Gaussian mixture (TAGM) model. We applied tagmmdi to protein localisation using two datasets, mass spectrometry data and Gene ontology (GO) terms. The MS data had a tagm model applied for prediction, using proteins with experimentally verified organelles as labelled data and a fixed number of clusters. The GO terms were treated as simple categorical data (i.e. we assumed no hierarchy of terms for model parsimony) using an overfitted unsupervised Dirichlet mixture model. The joint model is shown to outperform the state-of-the-art method tagm which itself is compared to other methods in \citet{CrookBayesianMixtureModelling2018a}.
+
+To implement MDI we require that each dataset share common members of the population in the same order, i.e. observation $i$ in dataset 1 corresponds to observation $i$ in dataset 2 for all $i \in (1, \ldots, n)$ for $n \in \mathbb{N}$ observations.
+
+\end{abstract}
+
+\maketitle
+%\thispagestyle{fancy}
+
+%\vspace{-1.0cm}
+
+\subsection*{A comment on notation}
+We use the following symbols throughout this piece.
+\begin{itemize}
+ \item $n \in \mathbb{N}$: the number of observations in each dataset;
+ \item $x_i$: the $i$th observation for some $i \in \{1,\ldots, n\}$;
+ \item $L  \in \mathbb{N}$: the number of datasets;
+ \item $K_l \in \mathbb{N}$: the number of components in dataset $l$ for some $l \leq L$. If $L = 1$ we do not include the subscript;
+ \item $c_{il} \in \{1,\ldots,K_l\}$: the latent clustering variable for the $i$th observation in the $l$th dataset;
+ \item $Z \in \mathbb{R}$: a relevant normalising constant;
+ \item $\phi \in \mathbb{R} \: | \: \phi > 0$: the context similarity parameter, a measure of the similarity between datasets 1 and 2;
+ \item $\mathbb{R}_+ = \{x \in \mathbb{R} | x > 0\};$
+ \item $\pi_j \in [0, 1] \subset \mathbb{R}$: the component proportions within the dataset for some $j \leq K$; and
+ \item $\gamma_{jl} \in \mathbb{R}  \: | \: \gamma_{jl} > 0$: the component weights for the $j$th component in dataset $l$.
+\end{itemize}
+
+\section{Mixture models} \label{mixture_models}
+Given some data $X = (x_1, \ldots, x_n)$, we assume a number of unobserved processes generate the data, and membership to a process for individual $i$ is represented using the latent variable $c_i$. It is assumed that each of the $K$ processes can be modelled by a parametric distribution, $f(\cdot)$ with associated parameters $\theta$ and that the full model density is then the weighted sum of these probability density functions where the weights are the component proportions, $\pi_k$:
+
+\begin{align}
+p(x_i) = \sum_{k=1}^K \pi_k f(x_i | \theta_k)
+\end{align}
+We carry out Bayesian inference of this model using a Markov-Chain Monte Carlo (MCMC) method. Our implementation uses a Gibbs sampler, sampling first the component parameters, $\theta_k$, and associated weights, $\pi_k$, from the associated distributions and then sampling component membership using the rejection method on the vector of weighted allocation probabilities.
+
+Basically:
+\begin{enumerate}
+ \item Sample $\theta_k$ and $\pi_k$ from the associated distributions based on current memberships, $c_i$; and
+ \item Sample $c_i$ based on the new $\theta_k$ and $\pi_k$.
+\end{enumerate}
+The distribution we sample from for each parameter, $\theta$, is updated after observing data $X$ using Bayes' theorem:
+
+\begin{align} \label{Bayes_theorem}
+p(\theta | X) = \frac{p(X | \theta) p(\theta)}{\int_\Theta p(X | \theta ') p(\theta ') d \theta '}
+\end{align}
+Here $\Theta$ is the entire sample space for $\theta$. 
+\begin{itemize}
+ \item We refer to $p(\theta | X)$ as the \emph{posterior} distribution of $\theta$ as it is the distribution associated with $\theta$ \emph{after} observing $X$.
+ \item $p(\theta)$ is the \emph{prior} distribution of $\theta$ and captures our beliefs about $\theta$ before we observe $X$.
+ \item $p(X | \theta)$ is the \emph{likelihood} of $X$ given $\theta$, the probability of data $X$ being generated given our model is true. It is the model we would use if we were to take a frequentist approach to the inference, the best model fit based purely on the observed data. 
+ \item $\int_\Theta p(X | \theta ') p(\theta ') d \theta '$ is the \emph{normalising constant}. This quantity is also referred to as the \emph{evidence} \cite{MacKayInformationTheoryInference2003} or \emph{marginal likelihood} and is normally represented by $Z$. It is referred to as the marginal likelihood as we marginalise the parameter $\theta$ by integrating over its entire sample space.
+\end{itemize}
+
+In terms of sampling the prior is very useful as it allows us to ensure that the posterior is always solvable, that we do not encounter singularities in our distribution.
+
+Our implementation uses distributions on the random variables that enforce conjugacy. This allows us to sample directly from the correct distribution for each posterior distribution.
+
+\section{Multiple dataset integration}
+If we have observed paired datasets $X_1 = (x_{1,1},\ldots,x_{n,1}), X_2 = (x_{1,2},\ldots,x_{n,2})$, where observations in the $ith$ row of each dataset represent information about the same individual. We would like to cluster using information common to both datasets. One could concatenate the datasets, adding additional covariates for each individual. However, if the two datasets have different clustering structures this would reduce the signal of both clusterings and probably have one dominate. If the two datasets have the same structure but different signal-to-noise ratios this would reduce the signal in the final clustering. In both these cases independent models on each dataset would be preferable. \citet{kirkBayesianCorrelatedClustering2012} suggest a method to carry out clustering on both datasets where common information is used but two individual clusterings are outputted. This method is driven by the allocation prior:
+
+\begin{align} \label{allocation_prior}
+p(c_{i,1}, c_{i,2} | \phi ) \propto \pi_{i,1} \pi_{i,2} (1 + \phi \mathbb{I}(c_{i,1} = c_{i,2}))
+\end{align}
+Here $\phi \in \mathbb{R}_+$ controls the strength of association between datasets. $\mathbb{I}(\cdot)$ is the indicator function. \eqref{allocation_prior} states that the probability of allocating individual $i$ to component $c_{i,1}$ in dataset 1 and to component $c_{i,2}$ in dataset 2 is proportional to the proportion of these components within each dataset and up-weighted by $\phi$ if the individual has the same labelling in each dataset. Thus as $\phi$ grows the correlation between the clusterings grow and we are more likely to see the same clustering emerge from each dataset. Conversely if $\phi = 0$ we have independent mixture models. Note that \citet{kirkBayesianCorrelatedClustering2012} extend this to $N$ datasets for any $N \in \mathbb{N}$.
+
+\section{Protein localisation}
+Protein localisation is a fundamental question as localisation to the correct location is required for interaction with its binding partners and to carry out its function \cite{GibsonCellregulationdetermined2009}. These cellular components also provide the ideal biochemical environment for the proteins to function. Aberrant localisation is associated with a multitude of diseases including many subtypes of cancer, obesity and cardiovascular disease \cite{SiljeeSubcellularlocalizationMC4R2018a}\cite{HungProteinlocalizationdisease2011a}\cite{KauNucleartransportcancer2004a}. A thorough understanding of the biology behind protein localisation is important to a better understanding of these diseases. Possible translational implications of this understanding are diagnostic tools such as blood or urine tests based on protein localisation or drugs to correct mislocalisation as part of treatment \cite{KauNucleartransportcancer2004a}\cite{HorganOmictechnologiesgenomics2011a}.
+
+The protein localisation data is produced using synchronous precursor selection (SPS)-based MS$^3$ technology using the LOPIT and \emph{hyper}LOPIT pipelines \cite{GeladakiLOPITDCsimplerapproach2018}\cite{DunkleyLocalizationOrganelleProteins2004}. In summary:
+\begin{enumerate}
+ \item The cells undergo lysis in such a way as to maintain the integrity of their organelles.
+ \item The cell content is then separated along a density gradient. Thus, organelles and macro-molecular complexes are described by density-specific profiles along the gradient.
+ \item Discrete fractions along the density gradient are collected.
+ \item Within these fractions, quantitative protein profiles are measured using high accuracy mass spectrometry.
+\end{enumerate}
+Thus for each fraction we have a description of the proteins present. The normalised incidence of the protein across fractions is found to follow a specific pattern unique to each organelle's associated proteins. From pre-exiting microscopy experiments we have some proteins with known associations to certain organelles. This allows use of supervised and semi-supervised methods to predict the localisation of the unlabelled data.
+
+\section{T-augmented Gaussian mixture models}
+T-augmented Gaussian mixture (TAGM) models are a semi-supervised prediction method using Gaussian mixture models (i.e. models as described in \ref{mixture_models} where the distribution $f$ is restricted to the Normal distribution) with a t-distribution as a ``junk'' or outlier distribution. The model is defined:
+
+\begin{align} \label{tagm_model}
+p(x_i | \theta, \pi, \kappa, \epsilon, M, V) = \sum_{k=1}^K\pi_k((1 - \epsilon) f(x_i|\mu_k,\Sigma_k) + \epsilon g(x_i |\kappa, M, V))
+\end{align}
+Where:
+\begin{itemize}
+ \item $\theta$ is the component specific parameters for the component Gaussian distribution (here $\mu_k$, $\Sigma_k$);
+ \item $\pi_k$ is the mixture proportion;
+ \item $\kappa$ is the degrees of freedom for the global outlier distribution;
+ \item $\epsilon$ is the outlier component weight;
+ \item $M$ is the global mean used as the mean in the outlier distribution;
+ \item $V$ is half the global covariance, used in the outlier distribution;
+ \item $f(\cdot)$ is the probability density function for the Normal distribution; and 
+ \item $g(\cdot)$ is the probability density function for a t-distribution.
+\end{itemize}
+Similar to the method outlined in \ref{mixture_models}, this model iterates over these steps:
+\begin{enumerate}
+ \item Sample component parameters based on current allocation;
+ \item Sample component weights based on current allocation;
+ \item Sample outlier distribution weight based on current allocation;
+ \item Sample component allocation for each individual;
+ \item Given the above allocation, sample membership of the outlier distribution; and
+ \item Repeat.
+\end{enumerate}
+The proteins allocated as outliers contribute to the mixing proportions but not the component parameters. One of the advantages associated with tagm models is that they quantify the uncertainty of the allocation. This distribution of allocation probability across the $K$ organelles allows greater interpretation of the allocation and as \citet{CrookBayesianMixtureModelling2018a} show can lead to the concept of multiple membership.
+
+\section{GO terms}
+
+\section{TAGMMDI}
+
+\appendix
+\section{MDI model}
+For multiple dataset integration (\textbf{MDI}) in the case of $n$ observations in 2 datasets (also referred to as \emph{contexts}):
+
+\begin{align}
+p(\left\{c_{i1}, c_{i2}\right\}_{i=1}^n, v) \propto \gamma_{c_{i1}1} \gamma_{c_{i2}2} \left(1 + \phi \mathbb{I}(c_{i1} = c_{i2})\right)  \label{general_model}
+\end{align}
+We assume priors of $\gamma_{1,l},\ldots,\gamma_{n,l} \distas{i.i.d} Gamma(\alpha_l/K_l,1)\, \forall \, l \in \{1,2\}$ where $K_l$ is the number of clusters in the $lth$ dataset. Similarly $\phi \sim Gamma(a, b)$.
+
+From /\eqref{general_model} we calculate the normalising constant $Z$, and find:
+
+\begin{align}
+Z = \sum_{j_1=1}^{K_1}\sum_{j_2=1}^{K_2} \gamma_{c_{i1}1} \gamma_{c_{i2}2} \left(1 + \phi \mathbb{I}(j_1 = j_2)\right) \label{normal_const}
+\end{align}
+The joint density is hence:
+
+\begin{align}
+p(\left\{c_{i1}, c_{i2}\right\}_{i=1}^n| \phi) = \frac{1}{Z} \prod_{i = 1}^n  \gamma_{c_{i1}1} \gamma_{c_{i2}2} \left(1 + \phi \mathbb{I}(c_{i1} = c_{i2})\right) \label{joint_density_no_v}
+\end{align}
+We introduce a strategic latent variable $v$ such that the form is:
+
+\begin{align}
+p(\left\{c_{i1}, c_{i2}\right\}_{i=1}^n, v) = \frac{v^{n-1} \exp(-vZ)}{(n-1)!} \prod_{i = 1}^n \left(\left(1 + \phi \mathbb{I}(c_{i1} = c_{i2})\right) \prod_{l = 1}^{2}\gamma_{c_{il}l}\right) \label{joint_density}
+\end{align}
+Where $Z$ remains as in \eqref{normal_const}.
+
+\subsection{Conditional likelihood}
+
+Consider the conditional probability of $\phi$, then from \eqref{joint_density} and expanding $Z$:
+
+\begin{align}
+ p(\phi | \left\{c_{i1}, c_{i2}\right\}_{i=1}^n, v) &\propto \exp\left(-v \sum_{j_1=1}^N\sum_{j_2=1}^N\left(\left(1 + \phi\mathbb{I}(j_1 = j_2)\right) \prod_{k=1}^2\gamma_{j_kk}\right)\right) \prod_{i = 1}^n \left(\left(1 + \phi \mathbb{I}(c_{i1} = c_{i2})\right) \prod_{k = 1}^{2}\gamma_{c_{ik}k}\right) \label{phi_cond_1}
+\end{align}
+Now, consider the coefficients of the two occurences of $\phi$:
+
+\begin{align}
+a &=  \prod_{i = 1}^n \left(\left(1 + \phi \mathbb{I}(c_{i1} = c_{i2})\right) \prod_{k = 1}^{2}\gamma_{c_{ik}k}\right) \\
+b &=  \sum_{j_1=1}^N\sum_{j_2=1}^N\left(\left(1 + \phi\mathbb{I}(j_1 = j_2)\right) \prod_{k=1}^2\gamma_{j_kk}\right)
+\end{align}
+Beginning with $a$ from above:
+
+\begin{align}
+a &= \prod_{i = 1}^n \gamma_{c_{i1}1} \gamma_{c_{i2}2}  \left(1 + \phi \mathbb{I}(c_{i1} = c_{i2})\right) \\
+ &= \left(1 + \phi \mathbb{I}(c_{i1} = c_{i2})\right)^n \prod_{i = 1}^n \gamma_{c_{i1}1} \gamma_{c_{i2}2} \\
+ &\propto  \left(1 + \phi \mathbb{I}(c_{i1} = c_{i2})\right)^n \\
+ &=  \left(1 + \phi)\right)^{\sum_{i=1}^n  \mathbb{I}(c_{i1} = c_{i2})} \\
+ &= \sum_{r=0}^{\sum_{i=1}^n  \mathbb{I}(c_{i1} = c_{i2})} \binom{\sum_{i=1}^n  \mathbb{I}(c_{i1} = c_{i2})}{r} \phi^r \qquad (\text{from the binomial theorem})
+\end{align}
+Here $\sum_{i=1}^n  \mathbb{I}(c_{i1} = c_{i2})$ is the count of observations assigned to the same cluster in both contexts and will be called $c$.
+
+Now consider $b$:
+
+\begin{align}
+b &=  \exp\left(-v \sum_{j_1=1}^N\sum_{j_2=1}^N\left(\left(1 + \phi\mathbb{I}(j_1 = j_2)\right) \prod_{k=1}^2\gamma_{j_kk}\right)\right)
+\end{align}
+We see that for our conditional we can ignore all cases when $j_1 \neq j_2$ as $\phi$ is not present in these. This simplifies $b$ to:
+
+\begin{align}
+b &\propto \sum_{j=1}^N \gamma_{j1} \gamma_{j2} \left(1 + \phi\right) \\
+&\propto \sum_{j=1}^N \gamma_{j1} \gamma_{j2} \phi
+\end{align}
+Thus updating \eqref{phi_cond_1} accordingly gives us:
+
+\begin{align}
+p(\phi | \left\{c_{i1}, c_{i2}\right\}_{i=1}^n, v) &\propto \exp\left(-v \sum_{j=1}^N \gamma_{j1} \gamma_{j2}\phi\right)  \sum_{r=0}^c \binom{c}{r} \phi^r
+\end{align}
+We notice this has the structure similar to a mixture of Gamma distributions. We thus have:
+
+\begin{align}
+ p(\left\{c_{i1}, c_{i2}\right\}_{i=1}^n, v | \phi) &\propto  \sum_{r=0}^c \binom{c}{r} \frac{r!}{\left(v \sum_{j=1}^N \gamma_{j1} \gamma_{j2}\right)^{r+1}}  \frac{\left(v \sum_{j=1}^N \gamma_{j1} \gamma_{j2}\right)^{r+1}}{r!}\phi^r \exp\left(-v \sum_{j=1}^N \gamma_{j1} \gamma_{j2}\phi\right) \\
+&= \sum_{r=0}^c  \binom{c}{r} \frac{r!}{\left(v \sum_{j=1}^N \gamma_{j1} \gamma_{j2}\right)^{r+1}} Gamma\left(r+1, v \sum_{j=1}^N \gamma_{j1} \gamma_{j2} \right)
+\end{align}
+As we know that $p(\phi | \left\{c_{i1}, c_{i2}\right\}_{i=1}^n, v)$ must integrate over $\phi$ to 1, we know the normalising constant must be the sum of the integrals of the Gamma distributions, i.e.:
+
+\begin{align}
+Z_{\phi} &= \sum_{r=0}^c   \binom{c}{r} \frac{r!}{\left(v \sum_{j=1}^N \gamma_{j1} \gamma_{j2}\right)^{r+1}}  \int\frac{\left(v \sum_{j=1}^N \gamma_{j1} \gamma_{j2}\right)^{r+1}}{r!}\phi^r \exp\left(-v \sum_{j=1}^N \gamma_{j1} \gamma_{j2}\phi\right) d\phi_{12} \\
+&= \sum_{r=0}^c  \binom{c}{r} \frac{r!}{\left(v \sum_{j=1}^N \gamma_{j1} \gamma_{j2}\right)^{r+1}}  \label{Z_phi}
+\end{align}
+Combining these gives:
+
+\begin{align}
+p(\phi | \left\{c_{i1}, c_{i2}\right\}_{i=1}^n, v) &= \frac{1}{Z_{\phi}}  \sum_{r=0}^c  \binom{c}{r} \frac{r!}{\left(v \sum_{j=1}^N \gamma_{j1} \gamma_{j2}\right)^{r+1}} Gamma\left(r+1, v \sum_{j=1}^N \gamma_{j1} \gamma_{j2} \right)
+\end{align}
+
+\subsection{Posterior distribution}
+
+Now if we consider a prior of $Gamma(a_0, b_0)$ on the $\phi$, we have a prior probability of:
+
+\begin{align}
+p(\phi) &= \frac{b_0^{a_0}}{(a_0 - 1)!}\phi^{a_0 - 1}\exp\left(-b_0 \phi \right)
+\end{align}
+Thus our posterior conditional is:
+
+\begin{align}
+p(\phi | \cdot) &\propto p(\phi) p(\left\{c_{i1}, c_{i2}\right\}_{i=1}^n, v | \phi)  \\
+&\propto \frac{b_0^{a_0}}{(a_0 - 1)!}\phi^{a_0 - 1}\exp\left(-b_0 \phi \right)  \sum_{r=0}^c  \binom{c}{r} \frac{r!}{\left(v \sum_{j=1}^N \gamma_{j1} \gamma_{j2}\right)^{r+1}}  \frac{\left(v \sum_{j=1}^N \gamma_{j1} \gamma_{j2}\right)^{r+1}}{r!}\phi^r \exp\left(-v \sum_{j=1}^N \gamma_{j1} \gamma_{j2}\phi\right) \\
+&\propto \sum_{r=0}^c  \binom{c}{r} \phi^{r + a_0 - 1} \exp \left( \left(-v \sum_{j=1}^N \gamma_{j1} \gamma_{j2}  -b_0 \right)\phi\right) \\
+&\propto \sum_{r=0}^c  \binom{c}{r} \frac{(r + a_0 - 1)!}{ \left(v \sum_{j=1}^N \gamma_{j1} \gamma_{j2} + b_0 \right)^{r + a_0}} \frac{ \left(v \sum_{j=1}^N \gamma_{j1} \gamma_{j2} + b_0 \right)^{r + a_0}}{(r + a_0 - 1)!} \phi^{r + a_0 - 1} \exp \left( - \left(v \sum_{j=1}^N \gamma_{j1} \gamma_{j2} + b_0 \right)\phi\right) \\
+&= \sum_{r=0}^c  \binom{c}{r} \frac{(r + a_0 - 1)!}{ \left(v \sum_{j=1}^N \gamma_{j1} \gamma_{j2} + b_0 \right)^{r + a_0}} Gamma \left(r+ a_0, v \sum_{j=1}^N \gamma_{j1} \gamma_{j2} + b_0 \right)
+\end{align}
+For the normalising constant, we have, similarly to \eqref{Z_phi}:
+
+\begin{align}
+Z_{\phi}' &=\sum_{r=0}^c  \binom{c}{r} \frac{(r + a_0 - 1)!}{ \left(v \sum_{j=1}^N \gamma_{j1} \gamma_{j2} + b_0 \right)^{r + a_0}}  \int \frac{ \left(v \sum_{j=1}^N \gamma_{j1} \gamma_{j2} + b_0 \right)^{r + a_0}}{(r + a_0 - 1)!} \phi^{r + a_0 - 1} \exp \left( - \left(v \sum_{j=1}^N \gamma_{j1} \gamma_{j2} + b_0 \right)\phi\right) d\phi_{12} \\
+&= \sum_{r=0}^c \binom{c}{r} \frac{(r + a_0 - 1)!}{ \left(v \sum_{j=1}^N \gamma_{j1} \gamma_{j2} + b_0 \right)^{r + a_0}} 
+\end{align}
+Thus our final posterior on the context similarity parameter $\phi$ is:
+
+\begin{align}
+p(\phi |  \left\{c_{i1}, c_{i2}\right\}_{i=1}^n, v) &=  \frac{1}{Z_{\phi}'} \sum_{r=0}^c  \binom{c}{r} \frac{(r + a_0 - 1)!}{ \left(v \sum_{j=1}^N \gamma_{j1} \gamma_{j2} + b_0 \right)^{r + a_0}} Gamma \left(r+ a_0, v \sum_{j=1}^N \gamma_{j1} \gamma_{j2} + b_0 \right)
+\end{align}
+
+
+%\bibliographystyle{abbrv}
+\bibliographystyle{plainnat}
+\bibliography{tagmmdi_literature}
+
+\end{document}
+

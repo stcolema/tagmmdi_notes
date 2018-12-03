@@ -1,0 +1,94 @@
+\begin{thebibliography}{10}
+\providecommand{\natexlab}[1]{#1}
+\providecommand{\url}[1]{\texttt{#1}}
+\expandafter\ifx\csname urlstyle\endcsname\relax
+  \providecommand{\doi}[1]{doi: #1}\else
+  \providecommand{\doi}{doi: \begingroup \urlstyle{rm}\Url}\fi
+
+\bibitem[Crook et~al.(2018)Crook, Mulvey, Kirk, Lilley, and
+  Gatto]{CrookBayesianMixtureModelling2018a}
+Oliver~M Crook, Claire~M Mulvey, Paul D.~W. Kirk, Kathryn~S Lilley, and Laurent
+  Gatto.
+\newblock A {{Bayesian Mixture Modelling Approach For Spatial Proteomics}}.
+\newblock \emph{PLOS Computational Biology}, 14\penalty0 (11), November 2018.
+\newblock \doi{10.1101/282269}.
+
+\bibitem[Dunkley et~al.(2004)Dunkley, Watson, Griffin, Dupree, and
+  Lilley]{DunkleyLocalizationOrganelleProteins2004}
+T.~P.~J. Dunkley, R.~Watson, J.~L. Griffin, P.~Dupree, and K.~S. Lilley.
+\newblock Localization of {{Organelle Proteins}} by {{Isotope Tagging}}
+  ({{LOPIT}}).
+\newblock \emph{Molecular \& Cellular Proteomics}, 3\penalty0 (11):\penalty0
+  1128--1134, November 2004.
+\newblock ISSN 1535-9476, 1535-9484.
+\newblock \doi{10.1074/mcp.T400009-MCP200}.
+
+\bibitem[Geladaki et~al.(2018)Geladaki, Kocevar~Britovsek, Breckels, Smith,
+  Mulvey, Crook, Gatto, and Lilley]{GeladakiLOPITDCsimplerapproach2018}
+Aikaterini Geladaki, Nina Kocevar~Britovsek, Lisa~M. Breckels, Tom~S. Smith,
+  Claire~M. Mulvey, Oliver~M. Crook, Laurent Gatto, and Kathryn~S. Lilley.
+\newblock {{LOPIT}}-{{DC}}: {{A}} simpler approach to high-resolution spatial
+  proteomics.
+\newblock July 2018.
+\newblock \doi{10.1101/378364}.
+
+\bibitem[Gibson(2009)]{GibsonCellregulationdetermined2009}
+Toby~J. Gibson.
+\newblock Cell regulation: Determined to signal discrete cooperation.
+\newblock \emph{Trends in Biochemical Sciences}, 34\penalty0 (10):\penalty0
+  471--482, October 2009.
+\newblock ISSN 09680004.
+\newblock \doi{10.1016/j.tibs.2009.06.007}.
+
+\bibitem[Horgan and Kenny(2011)]{HorganOmictechnologiesgenomics2011a}
+Richard~P Horgan and Louise~C Kenny.
+\newblock `{{Omic}}' technologies: Genomics, transcriptomics, proteomics and
+  metabolomics: {{The Obstetrician}} \& {{Gynaecologist}}.
+\newblock \emph{The Obstetrician \& Gynaecologist}, 13\penalty0 (3):\penalty0
+  189--195, July 2011.
+\newblock ISSN 14672561.
+\newblock \doi{10.1576/toag.13.3.189.27672}.
+
+\bibitem[Hung and Link(2011)]{HungProteinlocalizationdisease2011a}
+M.-C. Hung and W.~Link.
+\newblock Protein localization in disease and therapy.
+\newblock \emph{Journal of Cell Science}, 124\penalty0 (20):\penalty0
+  3381--3392, October 2011.
+\newblock ISSN 0021-9533, 1477-9137.
+\newblock \doi{10.1242/jcs.089110}.
+
+\bibitem[Kau et~al.(2004)Kau, Way, and Silver]{KauNucleartransportcancer2004a}
+Tweeny~R. Kau, Jeffrey~C. Way, and Pamela~A. Silver.
+\newblock Nuclear transport and cancer: From mechanism to intervention.
+\newblock \emph{Nature Reviews Cancer}, 4:\penalty0 106, February 2004.
+
+\bibitem[Kirk et~al.(2012)Kirk, Griffin, Savage, Ghahramani, and
+  Wild]{kirkBayesianCorrelatedClustering2012}
+Paul Kirk, Jim~E. Griffin, Richard~S. Savage, Zoubin Ghahramani, and David~L.
+  Wild.
+\newblock Bayesian correlated clustering to integrate multiple datasets.
+\newblock \emph{Bioinformatics}, 28\penalty0 (24):\penalty0 3290--3297,
+  December 2012.
+\newblock ISSN 1460-2059, 1367-4803.
+\newblock \doi{10.1093/bioinformatics/bts595}.
+
+\bibitem[MacKay(2003)]{MacKayInformationTheoryInference2003}
+David J~C MacKay.
+\newblock \emph{Information {{Theory}}, {{Inference}}, and {{Learning
+  Algorithms}}}.
+\newblock September 2003.
+
+\bibitem[Siljee et~al.(2018)Siljee, Wang, Bernard, Ersoy, Zhang, Marley,
+  Von~Zastrow, Reiter, and Vaisse]{SiljeeSubcellularlocalizationMC4R2018a}
+Jacqueline~E. Siljee, Yi~Wang, Adelaide~A. Bernard, Baran~A. Ersoy, Sumei
+  Zhang, Aaron Marley, Mark Von~Zastrow, Jeremy~F. Reiter, and Christian
+  Vaisse.
+\newblock Subcellular localization of {{MC4R}} with {{ADCY3}} at neuronal
+  primary cilia underlies a common pathway for genetic predisposition to
+  obesity.
+\newblock \emph{Nature Genetics}, 50\penalty0 (2):\penalty0 180--185, February
+  2018.
+\newblock ISSN 1061-4036, 1546-1718.
+\newblock \doi{10.1038/s41588-017-0020-9}.
+
+\end{thebibliography}

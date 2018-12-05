@@ -7,4 +7,10 @@
 \BOOKMARK [1][-]{appendix.A}{MDI model}{}% 7
 \BOOKMARK [2][-]{subsection.A.1}{Conditional likelihood}{appendix.A}% 8
 \BOOKMARK [2][-]{subsection.A.2}{Posterior distribution}{appendix.A}% 9
-\BOOKMARK [1][-]{section*.2}{References}{}% 10
+\BOOKMARK [1][-]{appendix.B}{Gibbs sampler}{}% 10
+\BOOKMARK [2][-]{subsection.B.1}{Monte Carlo integration}{appendix.B}% 11
+\BOOKMARK [2][-]{subsection.B.2}{Markov chains}{appendix.B}% 12
+\BOOKMARK [2][-]{subsection.B.3}{Markov-Chain Monte Carlo methods}{appendix.B}% 13
+\BOOKMARK [3][-]{subsubsection.B.3.1}{The Metropolis-Hastings algorithm}{subsection.B.3}% 14
+\BOOKMARK [3][-]{subsubsection.B.3.2}{Gibbs sampler}{subsection.B.3}% 15
+\BOOKMARK [1][-]{section*.2}{References}{}% 16

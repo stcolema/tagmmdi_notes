@@ -1,9 +1,17 @@
-\begin{thebibliography}{10}
+\begin{thebibliography}{16}
 \providecommand{\natexlab}[1]{#1}
 \providecommand{\url}[1]{\texttt{#1}}
 \expandafter\ifx\csname urlstyle\endcsname\relax
   \providecommand{\doi}[1]{doi: #1}\else
   \providecommand{\doi}{doi: \begingroup \urlstyle{rm}\Url}\fi
+
+\bibitem[Cooper et~al.(1989)Cooper, Eckhardt, and
+  Shera]{CooperCardinalsChaosReflection1989}
+N.~G. Cooper, Roger Eckhardt, and Nancy Shera.
+\newblock \emph{From {{Cardinals}} to {{Chaos}}: {{Reflection}} on the {{Life}}
+  and {{Legacy}} of {{Stanislaw Ulam}}}.
+\newblock {CUP Archive}, February 1989.
+\newblock ISBN 978-0-521-36734-9.
 
 \bibitem[Crook et~al.(2018)Crook, Mulvey, Kirk, Lilley, and
   Gatto]{CrookBayesianMixtureModelling2018a}
@@ -32,6 +40,15 @@ Aikaterini Geladaki, Nina Kocevar~Britovsek, Lisa~M. Breckels, Tom~S. Smith,
 \newblock July 2018.
 \newblock \doi{10.1101/378364}.
 
+\bibitem[Geman and Geman(1984)]{GemanStochasticRelaxationGibbs1984}
+S.~Geman and D.~Geman.
+\newblock Stochastic {{Relaxation}}, {{Gibbs Distributions}}, and the
+  {{Bayesian Restoration}} of {{Images}}.
+\newblock \emph{IEEE Transactions on Pattern Analysis and Machine
+  Intelligence}, PAMI-6\penalty0 (6):\penalty0 721--741, November 1984.
+\newblock ISSN 0162-8828.
+\newblock \doi{10.1109/TPAMI.1984.4767596}.
+
 \bibitem[Gibson(2009)]{GibsonCellregulationdetermined2009}
 Toby~J. Gibson.
 \newblock Cell regulation: Determined to signal discrete cooperation.
@@ -39,6 +56,12 @@ Toby~J. Gibson.
   471--482, October 2009.
 \newblock ISSN 09680004.
 \newblock \doi{10.1016/j.tibs.2009.06.007}.
+
+\bibitem[Hastings()]{HastingsMonteCarloSampling}
+W~K Hastings.
+\newblock Monte {{Carlo Sampling Methods Using Markov Chains}} and {{Their
+  Applications}}.
+\newblock page~14.
 
 \bibitem[Horgan and Kenny(2011)]{HorganOmictechnologiesgenomics2011a}
 Richard~P Horgan and Louise~C Kenny.
@@ -77,6 +100,32 @@ David J~C MacKay.
 \newblock \emph{Information {{Theory}}, {{Inference}}, and {{Learning
   Algorithms}}}.
 \newblock September 2003.
+
+\bibitem[Metropolis and Ulam(1949)]{MetropolisMonteCarloMethod1949}
+Nicholas Metropolis and S.~Ulam.
+\newblock The {{Monte Carlo Method}}.
+\newblock \emph{Journal of the American Statistical Association}, 44\penalty0
+  (247):\penalty0 335, September 1949.
+\newblock ISSN 01621459.
+\newblock \doi{10.2307/2280232}.
+
+\bibitem[Metropolis et~al.(1953)Metropolis, Rosenbluth, Rosenbluth, Teller, and
+  Teller]{MetropolisEquationStateCalculations1953}
+Nicholas Metropolis, Arianna~W. Rosenbluth, Marshall~N. Rosenbluth, Augusta~H.
+  Teller, and Edward Teller.
+\newblock Equation of {{State Calculations}} by {{Fast Computing Machines}}.
+\newblock \emph{The Journal of Chemical Physics}, 21\penalty0 (6):\penalty0
+  1087--1092, June 1953.
+\newblock ISSN 0021-9606, 1089-7690.
+\newblock \doi{10.1063/1.1699114}.
+
+\bibitem[Savage et~al.(2013)Savage, Ghahramani, Griffin, Kirk, and
+  Wild]{SavageIdentifyingcancersubtypes2013a}
+Richard~S. Savage, Zoubin Ghahramani, Jim~E. Griffin, Paul Kirk, and David~L.
+  Wild.
+\newblock Identifying cancer subtypes in glioblastoma by combining genomic,
+  transcriptomic and epigenomic data.
+\newblock \emph{arXiv:1304.3577 [q-bio, stat]}, April 2013.
 
 \bibitem[Siljee et~al.(2018)Siljee, Wang, Bernard, Ersoy, Zhang, Marley,
   Von~Zastrow, Reiter, and Vaisse]{SiljeeSubcellularlocalizationMC4R2018a}

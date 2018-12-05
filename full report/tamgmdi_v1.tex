@@ -222,13 +222,13 @@ Here $\Theta$ is the entire sample space for $\theta$.
 \begin{itemize}
  \item We refer to $p(\theta | X)$ as the \emph{posterior} distribution of $\theta$ as it is the distribution associated with $\theta$ \emph{after} observing $X$.
  \item $p(\theta)$ is the \emph{prior} distribution of $\theta$ and captures our beliefs about $\theta$ before we observe $X$.
- \item $p(X | \theta)$ is the \emph{likelihood} of $X$ given $\theta$, the probability of data $X$ being generated given our model is true. It is the model we would use if we were to take a frequentist approach to the inference, the best model fit based purely on the observed data. 
+ \item $p(X | \theta)$ is the \emph{likelihood} of $X$ given $\theta$, the probability of data $X$ being generated given our model is true. It is the criterion we focus on in our model if we would use a frequentist approach to the inference; maximising this quantity in our model generates the curve that best describes the observed data. 
  \item $\int_\Theta p(X | \theta ') p(\theta ') d \theta '$ is the \emph{normalising constant}. This quantity is also referred to as the \emph{evidence} \cite{MacKayInformationTheoryInference2003} or \emph{marginal likelihood} and is normally represented by $Z$. It is referred to as the marginal likelihood as we marginalise the parameter $\theta$ by integrating over its entire sample space.
 \end{itemize}
 
 In terms of sampling the prior is very useful as it allows us to ensure that the posterior is always solvable, that we do not encounter singularities in our distribution.
 
-Our implementation uses distributions on the random variables that enforce conjugacy. This allows us to sample directly from the correct distribution for each posterior distribution.
+Our implementation uses distributions on the priors that enforce conjugacy. This allows us to sample directly from the correct distribution for each posterior distribution.
 
 \section{Multiple dataset integration}
 If we have observed paired datasets $X_1 = (x_{1,1},\ldots,x_{n,1}), X_2 = (x_{1,2},\ldots,x_{n,2})$, where observations in the $ith$ row of each dataset represent information about the same individual. We would like to cluster using information common to both datasets. One could concatenate the datasets, adding additional covariates for each individual. However, if the two datasets have different clustering structures this would reduce the signal of both clusterings and probably have one dominate. If the two datasets have the same structure but different signal-to-noise ratios this would reduce the signal in the final clustering. In both these cases independent models on each dataset would be preferable. \citet{kirkBayesianCorrelatedClustering2012} suggest a method to carry out clustering on both datasets where common information is used but two individual clusterings are outputted. This method is driven by the allocation prior:
@@ -237,6 +237,8 @@ If we have observed paired datasets $X_1 = (x_{1,1},\ldots,x_{n,1}), X_2 = (x_{1
 p(c_{i,1}, c_{i,2} | \phi ) \propto \pi_{i,1} \pi_{i,2} (1 + \phi \mathbb{I}(c_{i,1} = c_{i,2}))
 \end{align}
 Here $\phi \in \mathbb{R}_+$ controls the strength of association between datasets. $\mathbb{I}(\cdot)$ is the indicator function. \eqref{allocation_prior} states that the probability of allocating individual $i$ to component $c_{i,1}$ in dataset 1 and to component $c_{i,2}$ in dataset 2 is proportional to the proportion of these components within each dataset and up-weighted by $\phi$ if the individual has the same labelling in each dataset. Thus as $\phi$ grows the correlation between the clusterings grow and we are more likely to see the same clustering emerge from each dataset. Conversely if $\phi = 0$ we have independent mixture models. Note that \citet{kirkBayesianCorrelatedClustering2012} include the generalised case for $L$ datasets for any $L \in \mathbb{N}$.
+
+MDI has been applied to precision medicine, specifically glioblastoma sub-typing \cite{SavageIdentifyingcancersubtypes2013a}, in the past showing its potential as a tool.
 
 \section{Protein localisation}
 Protein localisation is a fundamental question as localisation to the correct location is required for interaction with its binding partners and to carry out its function \cite{GibsonCellregulationdetermined2009}. These cellular components also provide the ideal biochemical environment for the proteins to function. Aberrant localisation is associated with a multitude of diseases including many subtypes of cancer, obesity and cardiovascular disease \cite{SiljeeSubcellularlocalizationMC4R2018a}\cite{HungProteinlocalizationdisease2011a}\cite{KauNucleartransportcancer2004a}. A thorough understanding of the biology behind protein localisation is important to a better understanding of these diseases. Possible translational implications of this understanding are diagnostic tools such as blood or urine tests based on protein localisation or drugs to correct mislocalisation as part of treatment \cite{KauNucleartransportcancer2004a}\cite{HorganOmictechnologiesgenomics2011a}.
@@ -394,6 +396,83 @@ Thus our final posterior on the context similarity parameter $\phi$ is:
 p(\phi |  \left\{c_{i1}, c_{i2}\right\}_{i=1}^n, v) &=  \frac{1}{Z_{\phi}'} \sum_{r=0}^c  \binom{c}{r} \frac{(r + a_0 - 1)!}{ \left(v \sum_{j=1}^N \gamma_{j1} \gamma_{j2} + b_0 \right)^{r + a_0}} Gamma \left(r+ a_0, v \sum_{j=1}^N \gamma_{j1} \gamma_{j2} + b_0 \right)
 \end{align}
 
+\section{Gibbs sampler}
+Gibbs sampling is based on the concept of \emph{Monte Carlo integration} and \emph{Markov chains}. It is a special case of the \emph{Metropolis-Hastings algorithm}. We briefly describe the emphasized terms below before describing Gibbs sampling in more detail.
+
+\subsection{Monte Carlo integration}
+The original Monte Carlo method was developed by Stanislaw Ulam, a Polish mathematician while he worked at Los Alamos on the Manhattan Project, along with Nicholas Metropolis \cite{CooperCardinalsChaosReflection1989} as a means to solving integrals by use of random number generation \cite{MetropolisMonteCarloMethod1949}. Suppose there is some complex integral we which to solve on some interval, $(a,b)$:
+
+\begin{align}
+\int_a^b h(x) dx
+\end{align}
+If we can decompose $h(x)$ into the product of some more simple function $f(x)$ and a probability density $p(x)$ where both are defined over $(a,b)$, we can then state:
+
+\begin{align} \label{monte_carlo_basis}
+\int_a^bh(x)dx = \int_a^bf(x)p(x)dx = \mathbb{E}_{p(x)}\left[f(x)\right]
+\end{align}
+We also assume that we can approximate this expectation of $f(x)$ over $p(x)$ by drawing $N$ random variables $x = (x_1,\ldots,x_N)$ from $p(x)$ (by the Law of Large Numbers); thus \eqref{monte_carlo_basis} becomes:
+
+\begin{align} \label{monte_carlo_integration}
+\int_a^bh(x)dx = \mathbb{E}_{p(x)}\left[f(x)\right] \approx \frac{1}{N}\sum_{i=1}^Nf(x_i)
+\end{align}
+This is \emph{Monte Carlo integration}.
+
+\subsection{Markov chains}
+Consider a random variable $X$ observed at discrete times $t = (t_0,\ldots,t_n)$, with the observation at $t_i$ denoted $X(t_i)$. Let $S$ be the state space of possible values $X$ can take. $X$ is said to have the \emph{Markov property} if the transition probabilities between states depend only on the current state, i.e. for any state $s_k \in S$:
+
+\begin{align}
+\mathbb{Pr}(X(t_{n+1}) = s_j | X(t_0) = s_k, \ldots, X(t_n) = s_i) = \mathbb{Pr}(X(t_{n+1}) = s_j | X(t_n) = s_i) 
+\end{align}
+Thus prediction depends only on the information in the present; the process is said to be memory-less as the past does not affect future outcomes. In this case we refer to $X$ as a \emph{Markov process}. A \emph{Markov chain} refers to a sequence of random variables $(X_0,\ldots,X_n)$ generated by a Markov process.
+
+We define the $n$-step transition probability $p_{ij}^n$ as the probability that the process is in state $j$ given it was in state $i$ $n$ steps ago, i.e.:
+
+\begin{align}
+p_{ij}^n = \mathbb{Pr}(X(t_{i+n} = s_j | X(t_i) = s_i)
+\end{align}
+A Markov chain is said to be \emph{irreducible} if $p_{ij}^n > 0 \; \forall \; i,j,n \in \mathbb{N}$. This means that there always exists a possible path from any state $s_i$ to every other state $s_j$. If this is true we say that the states \emph{communicate}. If the number of steps between two states is not required to be the multiple of some integer than we say that the chain is \emph{aperiodic}.
+
+For some state $s \in S$ denote $ \mathbb{Pr}(X(t_{n+1}) = s)$ by $\pi_s$. The chain has the \emph{reversible} property if for any states $x, y \in S$ the \emph{detailed balance} holds:
+
+\begin{align}
+ \mathbb{Pr}(X(t_{n+1}) = x | X(t_n) = y)  \pi_x  =  \mathbb{Pr}(X(t_{n+1}) = y | X(t_n) = x) \pi_y
+\end{align}
+This is sufficient condition for a unique, stationary distribution, i.e. for the probability vector of being in any given state for the process is independent of the initial condition.
+
+\subsection{Markov-Chain Monte Carlo methods}
+Markov-Chain Monte Carlo (MCMC) methods developed as a method to obtain samples from some complex distribution $p(x)$ for the decomposition suggested in \eqref{monte_carlo_basis}. Our goal in the following is to draw samples from some distribution $p(\theta)$ where we have some distribution $f(\theta)$ such that:
+
+\begin{align}
+p(\theta) = \frac{f(\theta)}{K} 
+\end{align}
+For some constant $K$ where $K$ may not be known and is often difficult to compute.
+
+\subsubsection{The Metropolis-Hastings algorithm}
+The Metropolis-Hastings algorithm \cite{HastingsMonteCarloSampling} is an extension to the original Metropolis algorithm which allows for asymmetry in state probabilities (i.e. that $p_{ij} \neq p_{ji}$). The Metropolis algorithm \cite{MetropolisMonteCarloMethod1949} \cite{MetropolisEquationStateCalculations1953} generates a sequence of draws from $p(\theta)$ using the following steps:
+
+\begin{enumerate}
+ \item Initialise with some arbitrary value $\theta_0$ with the condition that $f(\theta_0) > 0$ and also choose some probability density $q(\theta_1|\theta_2)$ as the \emph{jumping distribution} or \emph{proposal density}. For the Metropolis algorithm we demand that this be symmetric (i.e. $q(\theta_1 | \theta_2) = q(\theta_2 | \theta_1)$).
+ \item For each iteration, $t$:
+ \begin{enumerate}
+   \item Using the current value $\theta_{t-1}$, sample a \emph{candidate point}, $\theta^*$, from  $q(\theta^* | \theta_{t-1})$.
+   \item Calculate the \emph{acceptance ratio} for the new value $\theta^*$:
+    \begin{align}
+    \alpha = \frac{p(\theta^*)}{p(\theta_{t-1})} = \frac{f(\theta^*)}{f(\theta_{t-1})}
+    \end{align}
+    Note that as the proportionality constant is the same for all $\theta$ that this is an equivalence rather than proportional relationship.
+    \item Accept the new value $\theta^*$ with probability $\min(\alpha, 1)$. Generate a number $u$ from the uniform distribution on $[0,1]$ and accept if $\alpha \geq u$, else reject.
+  \end{enumerate}
+\end{enumerate}
+This generates a Markov chain $(\theta_0,\ldots,\theta_k,\ldots, \theta_n)$ as each iteration is conditionally independent of all others given the sample from the iteration preceding it. A stationary distribution is reached after a \emph{burn-in} period of $k$ steps (for some $k \in \mathbb{N}$) and all following samples come from $p(\theta)$ (i.e. the vector $(\theta_{k+1},\ldots,\theta_n)$ are samples from $p(\theta)$). Knowing $k$ is a non-trivial issue; we often assume some arbitrary large number of burn-in iterations erring on the side of caution. The samples generated are highly correlated with other samples from within a close range of iterations. To avoid recording this duplicate information, often only every $lth$ sample is recorded (called \emph{thinning}) for some small $l$ (normally in the range $[25, 50]$).
+
+\citet{HastingsMonteCarloSampling} extends this method to allow asymmetric proposal densities, in which case our acceptance ratio changes to:
+
+\begin{align} \label{metropolis_hastings_alpha}
+\alpha = \min\left(\frac{f(\theta^*) q(\theta^*|\theta_{t-1})}{f(\theta_{t-1})q(\theta_{t-1}|\theta^*)}, 1\right)
+\end{align}
+
+\subsubsection{Gibbs sampler}
+\citet{GemanStochasticRelaxationGibbs1984} use a special case of the Metropolis-Hastings algorithm, taking $\alpha = 1 \; \forall \; \theta^*$, accepting all proposed values.
 
 %\bibliographystyle{abbrv}
 \bibliographystyle{plainnat}

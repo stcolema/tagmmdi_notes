@@ -206,7 +206,7 @@ Given some data $X = (x_1, \ldots, x_n)$, we assume a number of unobserved proce
 \begin{align}
 p(x_i) = \sum_{k=1}^K \pi_k f(x_i | \theta_k)
 \end{align}
-We carry out Bayesian inference of this model using a Markov-Chain Monte Carlo (MCMC) method. Our implementation uses a Gibbs sampler, sampling first the component parameters, $\theta_k$, and associated weights, $\pi_k$, from the associated distributions and then sampling component membership using the rejection method on the vector of weighted allocation probabilities.
+We carry out Bayesian inference of this model using a Markov-Chain Monte Carlo (MCMC) method. Our implementation uses a Gibbs sampler, sampling first the component parameters, $\theta_k$, and associated weights, $\pi_k$, from the associated distributions and then sampling component membership.
 
 Basically:
 \begin{enumerate}
@@ -281,6 +281,14 @@ Similar to the method outlined in \ref{mixture_models}, this model iterates over
 The proteins allocated as outliers contribute to the mixing proportions but not the component parameters. One of the advantages associated with tagm models is that they quantify the uncertainty of the allocation. This distribution of allocation probability across the $K$ organelles allows greater interpretation of the allocation and as \citet{CrookBayesianMixtureModelling2018a} show can lead to the concept of multiple membership.
 
 \section{GO terms}
+Gene ontology terms describe characteristics of gene-products in three non-overlapping areas of molecular biology \cite{GeneOntologyConsortiumGeneOntologyGO2004}.
+
+\begin{itemize}
+ \item Molecular function: biochemical activities at the molecular level such as catalytic or binding activity. Examples of broad functional terms are ‘enzyme’, ‘transporter’ or ‘ligand’. Examples of narrower functional terms are ‘adenylate cyclase’ or ‘Toll receptor ligand’ \cite{AshburnerGeneOntologytool2000}.
+ \item Biological processes: a biological objective to which the gene or gene product contributes. A process is accomplished via one or more ordered assemblies of molecular functions \cite{AshburnerGeneOntologytool2000}. Examples of broad (high level) biological process terms are ‘cell growth and maintenance’ or ‘signal transduction’. Examples of more specific (lower level) process terms are ‘translation’, ‘pyrimidine metabolism’ or ‘cAMP biosynthesis’ \cite{AshburnerGeneOntologytool2000}.
+ \item Cellular component: the location within the cell where a gene product is active, i.e. the component it localises to.
+\end{itemize}
+As one can see in the examples provided by \citet{AshburnerGeneOntologytool2000}, there is a hierarchy within the terms - the terms may be described using a directed acyclic graph. In our implementation we ignore this hierarchy and treat the terms as a matrix of binary variables. This simplifying assumption is made for the sake of computational complexity. We choose GO terms as an additional dataset as they contain the same proteins as our MS data (i.e. can be used within the MDI framework), are freely available and are expected to provide some additional information regarding the prediction of localisation, based on the results of \citet{BreckelsLearningHeterogeneousData2016a}. The GO terms are a summary dataset in some way - they are not experiment specific and are expected to contain a lower signal-to-noise ratio for protein localisation then the MS data.
 
 \section{TAGMMDI}
 
@@ -291,12 +299,12 @@ For multiple dataset integration (\textbf{MDI}) in the case of $n$ observations 
 \begin{align}
 p(\left\{c_{i1}, c_{i2}\right\}_{i=1}^n, v) \propto \gamma_{c_{i1}1} \gamma_{c_{i2}2} \left(1 + \phi \mathbb{I}(c_{i1} = c_{i2})\right)  \label{general_model}
 \end{align}
-We assume priors of $\gamma_{1,l},\ldots,\gamma_{n,l} \distas{i.i.d} Gamma(\alpha_l/K_l,1)\, \forall \, l \in \{1,2\}$ where $K_l$ is the number of clusters in the $lth$ dataset. Similarly $\phi \sim Gamma(a, b)$.
+We assume priors of $\gamma_{1l},\ldots,\gamma_{nl} \distas{i.i.d} Gamma(\alpha_l/K_l,1)\, \forall \, l \in \{1,2\}$ where $K_l$ is the number of clusters in the $lth$ dataset. Similarly $\phi \sim Gamma(a, b)$.
 
-From /\eqref{general_model} we calculate the normalising constant $Z$, and find:
+From \eqref{general_model} we calculate the normalising constant $Z$, and find:
 
 \begin{align}
-Z = \sum_{j_1=1}^{K_1}\sum_{j_2=1}^{K_2} \gamma_{c_{i1}1} \gamma_{c_{i2}2} \left(1 + \phi \mathbb{I}(j_1 = j_2)\right) \label{normal_const}
+Z = \sum_{k_1=1}^{K_1}\sum_{k_2=1}^{K_2} \gamma_{c_{i1}1} \gamma_{c_{i2}2} \left(1 + \phi \mathbb{I}(k_1 = k_2)\right) \label{normal_const}
 \end{align}
 The joint density is hence:
 
@@ -315,15 +323,15 @@ Where $Z$ remains as in \eqref{normal_const}.
 Consider the conditional probability of $\phi$, then from \eqref{joint_density} and expanding $Z$:
 
 \begin{align}
- p(\phi | \left\{c_{i1}, c_{i2}\right\}_{i=1}^n, v) &\propto \exp\left(-v \sum_{j_1=1}^N\sum_{j_2=1}^N\left(\left(1 + \phi\mathbb{I}(j_1 = j_2)\right) \prod_{k=1}^2\gamma_{j_kk}\right)\right) \prod_{i = 1}^n \left(\left(1 + \phi \mathbb{I}(c_{i1} = c_{i2})\right) \prod_{k = 1}^{2}\gamma_{c_{ik}k}\right) \label{phi_cond_1}
+ p(\phi | \left\{c_{i1}, c_{i2}\right\}_{i=1}^n, v) &\propto \exp\left(-v \sum_{k_1=1}^{K_1}\sum_{k_2=1}^{K_2}\left(\left(1 + \phi\mathbb{I}(j_1 = j_2)\right) \prod_{l=1}^2\gamma_{k_ll}\right)\right) \prod_{i = 1}^n \left(\left(1 + \phi \mathbb{I}(c_{i1} = c_{i2})\right) \prod_{l = 1}^{2}\gamma_{c_{il}l}\right) \label{phi_cond_1}
 \end{align}
-Now, consider the coefficients of the two occurences of $\phi$:
+We would like to transform this quantity into a density function we recognise. Consider the two occurrences of $\phi$:
 
 \begin{align}
-a &=  \prod_{i = 1}^n \left(\left(1 + \phi \mathbb{I}(c_{i1} = c_{i2})\right) \prod_{k = 1}^{2}\gamma_{c_{ik}k}\right) \\
-b &=  \sum_{j_1=1}^N\sum_{j_2=1}^N\left(\left(1 + \phi\mathbb{I}(j_1 = j_2)\right) \prod_{k=1}^2\gamma_{j_kk}\right)
+a &=  \prod_{i = 1}^n \left(\left(1 + \phi \mathbb{I}(c_{i1} = c_{i2})\right) \prod_{l = 1}^{2}\gamma_{c_{il}l}\right)  \label{a} \\
+b &=  \sum_{k_1=1}^{K_1}\sum_{k_2=1}^{K_2}\left(\left(1 + \phi\mathbb{I}(k_1 = k_2)\right) \prod_{l=1}^2\gamma_{k_ll}\right) \label{b}
 \end{align}
-Beginning with $a$ from above:
+Beginning with \eqref{a}:
 
 \begin{align}
 a &= \prod_{i = 1}^n \gamma_{c_{i1}1} \gamma_{c_{i2}2}  \left(1 + \phi \mathbb{I}(c_{i1} = c_{i2})\right) \\
@@ -334,23 +342,23 @@ a &= \prod_{i = 1}^n \gamma_{c_{i1}1} \gamma_{c_{i2}2}  \left(1 + \phi \mathbb{I
 \end{align}
 Here $\sum_{i=1}^n  \mathbb{I}(c_{i1} = c_{i2})$ is the count of observations assigned to the same cluster in both contexts and will be called $c$.
 
-Now consider $b$:
+Now consider \eqref{b}:
 
-\begin{align}
-b &=  \exp\left(-v \sum_{j_1=1}^N\sum_{j_2=1}^N\left(\left(1 + \phi\mathbb{I}(j_1 = j_2)\right) \prod_{k=1}^2\gamma_{j_kk}\right)\right)
+\begin{align} \label{b_likelihood}
+b &=  \sum_{k_1=1}^{K_1}\sum_{k_2=1}^{K_2}\left(\left(1 + \phi\mathbb{I}(k_1 = k_2)\right) \prod_{l=1}^2\gamma_{k_ll}\right)
 \end{align}
-We see that for our conditional we can ignore all cases when $j_1 \neq j_2$ as $\phi$ is not present in these. This simplifies $b$ to:
+We see that for our conditional we can ignore all cases when $j_1 \neq j_2$ as $\phi$ is not present in these. Letting $K_{min} = \min(K_1,K_2)$, \eqref{b_likelihood} simplifies to:
 
 \begin{align}
-b &\propto \sum_{j=1}^N \gamma_{j1} \gamma_{j2} \left(1 + \phi\right) \\
-&\propto \sum_{j=1}^N \gamma_{j1} \gamma_{j2} \phi
+b &\propto \sum_{k=1}^{K_{min}}\gamma_{k1} \gamma_{k2} \left(1 + \phi\right) \\
+&\propto \sum_{k=1}^{K_{min}} \gamma_{k1} \gamma_{k2} \phi
 \end{align}
 Thus updating \eqref{phi_cond_1} accordingly gives us:
 
 \begin{align}
-p(\phi | \left\{c_{i1}, c_{i2}\right\}_{i=1}^n, v) &\propto \exp\left(-v \sum_{j=1}^N \gamma_{j1} \gamma_{j2}\phi\right)  \sum_{r=0}^c \binom{c}{r} \phi^r
+p(\phi | \left\{c_{i1}, c_{i2}\right\}_{i=1}^n, v) &\propto \exp\left(-v \sum_{k=1}^{K_{min}}\gamma_{k1} \gamma_{k2}\phi\right)  \sum_{r=0}^c \binom{c}{r} \phi^r
 \end{align}
-We notice this has the structure similar to a mixture of Gamma distributions. We thus have:
+We notice this has the structure similar to a mixture of Gamma distributions. We thus multiply the equation by 1 to have:
 
 \begin{align}
  p(\left\{c_{i1}, c_{i2}\right\}_{i=1}^n, v | \phi) &\propto  \sum_{r=0}^c \binom{c}{r} \frac{r!}{\left(v \sum_{j=1}^N \gamma_{j1} \gamma_{j2}\right)^{r+1}}  \frac{\left(v \sum_{j=1}^N \gamma_{j1} \gamma_{j2}\right)^{r+1}}{r!}\phi^r \exp\left(-v \sum_{j=1}^N \gamma_{j1} \gamma_{j2}\phi\right) \\
@@ -359,13 +367,13 @@ We notice this has the structure similar to a mixture of Gamma distributions. We
 As we know that $p(\phi | \left\{c_{i1}, c_{i2}\right\}_{i=1}^n, v)$ must integrate over $\phi$ to 1, we know the normalising constant must be the sum of the integrals of the Gamma distributions, i.e.:
 
 \begin{align}
-Z_{\phi} &= \sum_{r=0}^c   \binom{c}{r} \frac{r!}{\left(v \sum_{j=1}^N \gamma_{j1} \gamma_{j2}\right)^{r+1}}  \int\frac{\left(v \sum_{j=1}^N \gamma_{j1} \gamma_{j2}\right)^{r+1}}{r!}\phi^r \exp\left(-v \sum_{j=1}^N \gamma_{j1} \gamma_{j2}\phi\right) d\phi_{12} \\
-&= \sum_{r=0}^c  \binom{c}{r} \frac{r!}{\left(v \sum_{j=1}^N \gamma_{j1} \gamma_{j2}\right)^{r+1}}  \label{Z_phi}
+Z_{\phi} &= \sum_{r=0}^c   \binom{c}{r} \frac{r!}{\left(v \sum_{k=1}^{K_{min}} \gamma_{k1} \gamma_{k2}\right)^{r+1}}  \int\frac{\left(v \sum_{k=1}^{K_{min}} \gamma_{k1} \gamma_{k2}\right)^{r+1}}{r!}\phi^r \exp\left(-v \sum_{k=1}^{K_{min}} \gamma_{k1} \gamma_{k2}\phi\right) d\phi \\
+&= \sum_{r=0}^c  \binom{c}{r} \frac{r!}{\left(v \sum_{k=1}^{K_{min}} \gamma_{k1} \gamma_{k2}\right)^{r+1}}  \label{Z_phi}
 \end{align}
 Combining these gives:
 
 \begin{align}
-p(\phi | \left\{c_{i1}, c_{i2}\right\}_{i=1}^n, v) &= \frac{1}{Z_{\phi}}  \sum_{r=0}^c  \binom{c}{r} \frac{r!}{\left(v \sum_{j=1}^N \gamma_{j1} \gamma_{j2}\right)^{r+1}} Gamma\left(r+1, v \sum_{j=1}^N \gamma_{j1} \gamma_{j2} \right)
+p(\phi | \left\{c_{i1}, c_{i2}\right\}_{i=1}^n, v) &= \frac{1}{Z_{\phi}}  \sum_{r=0}^c  \binom{c}{r} \frac{r!}{\left(v \sum_{k=1}^{K_{min}} \gamma_{k1} \gamma_{k2}\right)^{r+1}} Gamma\left(r+1, v \sum_{k=1}^{K_{min}} \gamma_{k1} \gamma_{k2} \right)
 \end{align}
 
 \subsection{Posterior distribution}
@@ -377,27 +385,33 @@ p(\phi) &= \frac{b_0^{a_0}}{(a_0 - 1)!}\phi^{a_0 - 1}\exp\left(-b_0 \phi \right)
 \end{align}
 Thus our posterior conditional is:
 
+%  \frac{r!}{\left(v \sum_{k=1}^{K_{min}} \gamma_{k1} \gamma_{k2}\right)^{r+1}}  \frac{\left(v \sum_{k=1}^{K_{min}} \gamma_{k1} \gamma_{k2}\right)^{r+1}}{r!}
+
 \begin{align}
 p(\phi | \cdot) &\propto p(\phi) p(\left\{c_{i1}, c_{i2}\right\}_{i=1}^n, v | \phi)  \\
-&\propto \frac{b_0^{a_0}}{(a_0 - 1)!}\phi^{a_0 - 1}\exp\left(-b_0 \phi \right)  \sum_{r=0}^c  \binom{c}{r} \frac{r!}{\left(v \sum_{j=1}^N \gamma_{j1} \gamma_{j2}\right)^{r+1}}  \frac{\left(v \sum_{j=1}^N \gamma_{j1} \gamma_{j2}\right)^{r+1}}{r!}\phi^r \exp\left(-v \sum_{j=1}^N \gamma_{j1} \gamma_{j2}\phi\right) \\
-&\propto \sum_{r=0}^c  \binom{c}{r} \phi^{r + a_0 - 1} \exp \left( \left(-v \sum_{j=1}^N \gamma_{j1} \gamma_{j2}  -b_0 \right)\phi\right) \\
-&\propto \sum_{r=0}^c  \binom{c}{r} \frac{(r + a_0 - 1)!}{ \left(v \sum_{j=1}^N \gamma_{j1} \gamma_{j2} + b_0 \right)^{r + a_0}} \frac{ \left(v \sum_{j=1}^N \gamma_{j1} \gamma_{j2} + b_0 \right)^{r + a_0}}{(r + a_0 - 1)!} \phi^{r + a_0 - 1} \exp \left( - \left(v \sum_{j=1}^N \gamma_{j1} \gamma_{j2} + b_0 \right)\phi\right) \\
-&= \sum_{r=0}^c  \binom{c}{r} \frac{(r + a_0 - 1)!}{ \left(v \sum_{j=1}^N \gamma_{j1} \gamma_{j2} + b_0 \right)^{r + a_0}} Gamma \left(r+ a_0, v \sum_{j=1}^N \gamma_{j1} \gamma_{j2} + b_0 \right)
+&\propto \frac{b_0^{a_0}}{(a_0 - 1)!}\phi^{a_0 - 1}\exp\left(-b_0 \phi \right)  \sum_{r=0}^c  \binom{c}{r}\phi^r \exp\left(-v \sum_{k=1}^{K_{min}} \gamma_{k1} \gamma_{k2}\phi\right) \\
+&\propto \sum_{r=0}^c  \binom{c}{r} \phi^{r + a_0 - 1} \exp \left( \left(-v \sum_{k=1}^{K_{min}} \gamma_{k1} \gamma_{k2}  -b_0 \right)\phi\right)
 \end{align}
-For the normalising constant, we have, similarly to \eqref{Z_phi}:
+We now use the same trick as with the likelihood to move towards the shape of a Gamma density function, and multiply by 1:
 
 \begin{align}
-Z_{\phi}' &=\sum_{r=0}^c  \binom{c}{r} \frac{(r + a_0 - 1)!}{ \left(v \sum_{j=1}^N \gamma_{j1} \gamma_{j2} + b_0 \right)^{r + a_0}}  \int \frac{ \left(v \sum_{j=1}^N \gamma_{j1} \gamma_{j2} + b_0 \right)^{r + a_0}}{(r + a_0 - 1)!} \phi^{r + a_0 - 1} \exp \left( - \left(v \sum_{j=1}^N \gamma_{j1} \gamma_{j2} + b_0 \right)\phi\right) d\phi_{12} \\
-&= \sum_{r=0}^c \binom{c}{r} \frac{(r + a_0 - 1)!}{ \left(v \sum_{j=1}^N \gamma_{j1} \gamma_{j2} + b_0 \right)^{r + a_0}} 
+p(\phi | \cdot) &\propto \sum_{r=0}^c  \binom{c}{r} \frac{(r + a_0 - 1)!}{ \left(v \sum_{k=1}^{K_{min}} \gamma_{k1} \gamma_{k2} + b_0 \right)^{r + a_0}} \frac{ \left(v \sum_{k=1}^{K_{min}} \gamma_{k1} \gamma_{k2} + b_0 \right)^{r + a_0}}{(r + a_0 - 1)!} \phi^{r + a_0 - 1} \exp \left( - \left(v \sum_{k=1}^{K_{min}} \gamma_{k1} \gamma_{k2} + b_0 \right)\phi\right) \\
+&= \sum_{r=0}^c  \binom{c}{r} \frac{(r + a_0 - 1)!}{ \left(v \sum_{k=1}^{K_{min}} \gamma_{k1} \gamma_{k2} + b_0 \right)^{r + a_0}} Gamma \left(r+ a_0, v \sum_{k=1}^{K_{min}} \gamma_{k1} \gamma_{k2} + b_0 \right)
 \end{align}
-Thus our final posterior on the context similarity parameter $\phi$ is:
+Again we have a mixture of Gamma densities. For the normalising constant, we have, similarly to \eqref{Z_phi}:
 
 \begin{align}
-p(\phi |  \left\{c_{i1}, c_{i2}\right\}_{i=1}^n, v) &=  \frac{1}{Z_{\phi}'} \sum_{r=0}^c  \binom{c}{r} \frac{(r + a_0 - 1)!}{ \left(v \sum_{j=1}^N \gamma_{j1} \gamma_{j2} + b_0 \right)^{r + a_0}} Gamma \left(r+ a_0, v \sum_{j=1}^N \gamma_{j1} \gamma_{j2} + b_0 \right)
+Z_{\phi}' &=\sum_{r=0}^c  \binom{c}{r} \frac{(r + a_0 - 1)!}{ \left(v \sum_{k=1}^{K_{min}} \gamma_{k1} \gamma_{k2} + b_0 \right)^{r + a_0}}  \int \frac{ \left(v \sum_{k=1}^{K_{min}} \gamma_{k1} \gamma_{k2} + b_0 \right)^{r + a_0}}{(r + a_0 - 1)!} \phi^{r + a_0 - 1} \exp \left( - \left(v \sum_{k=1}^{K_{min}} \gamma_{k1} \gamma_{k2} + b_0 \right)\phi\right) d\phi_{12} \\
+&= \sum_{r=0}^c \binom{c}{r} \frac{(r + a_0 - 1)!}{ \left(v \sum_{k=1}^{K_{min}} \gamma_{k1} \gamma_{k2} + b_0 \right)^{r + a_0}} 
+\end{align}
+Thus the posterior distribution of the context similarity parameter $\phi$ is:
+
+\begin{align}
+p(\phi |  \left\{c_{i1}, c_{i2}\right\}_{i=1}^n, v) &=  \frac{1}{Z_{\phi}'} \sum_{r=0}^c  \binom{c}{r} \frac{(r + a_0 - 1)!}{ \left(v \sum_{k=1}^{K_{min}} \gamma_{k1} \gamma_{k2} + b_0 \right)^{r + a_0}} Gamma \left(r+ a_0, v \sum_{k=1}^{K_{min}} \gamma_{k1} \gamma_{k2} + b_0 \right)
 \end{align}
 
 \section{Gibbs sampler}
-Gibbs sampling is based on the concept of \emph{Monte Carlo integration} and \emph{Markov chains}. It is a special case of the \emph{Metropolis-Hastings algorithm}. We briefly describe the emphasized terms below before describing Gibbs sampling in more detail.
+Gibbs sampling is based on the concept of \emph{Monte Carlo integration} and \emph{Markov chains}. It is a special case of the \emph{Metropolis-Hastings algorithm}. Gibbs sampling is used to sample directly from the posterior distribution of the model's random variables. We briefly describe the emphasized terms below before describing Gibbs sampling in more detail.
 
 \subsection{Monte Carlo integration}
 The original Monte Carlo method was developed by Stanislaw Ulam, a Polish mathematician while he worked at Los Alamos on the Manhattan Project, along with Nicholas Metropolis \cite{CooperCardinalsChaosReflection1989} as a means to solving integrals by use of random number generation \cite{MetropolisMonteCarloMethod1949}. Suppose there is some complex integral we which to solve on some interval, $(a,b)$:
@@ -473,6 +487,8 @@ This generates a Markov chain $(\theta_0,\ldots,\theta_k,\ldots, \theta_n)$ as e
 
 \subsubsection{Gibbs sampler}
 \citet{GemanStochasticRelaxationGibbs1984} use a special case of the Metropolis-Hastings algorithm, taking $\alpha = 1 \; \forall \; \theta^*$, accepting all proposed values.
+
+These methods are useful in a Bayesian context as we are interested in a rather complex distribution, the posterior, and know two simpler quantities, the prior and the likelihood, that the posterior is proportional to. Thus with a sufficient burn-in period we can use MCMC methods to sample directly from the posterior distribution without directly calculating the normalising constant.
 
 %\bibliographystyle{abbrv}
 \bibliographystyle{plainnat}

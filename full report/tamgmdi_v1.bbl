@@ -1,9 +1,36 @@
-\begin{thebibliography}{16}
+\begin{thebibliography}{19}
 \providecommand{\natexlab}[1]{#1}
 \providecommand{\url}[1]{\texttt{#1}}
 \expandafter\ifx\csname urlstyle\endcsname\relax
   \providecommand{\doi}[1]{doi: #1}\else
   \providecommand{\doi}{doi: \begingroup \urlstyle{rm}\Url}\fi
+
+\bibitem[Ashburner et~al.(2000)Ashburner, Ball, Blake, Botstein, Butler,
+  Cherry, Davis, Dolinski, Dwight, Eppig, Harris, Hill, {Issel-Tarver},
+  Kasarskis, Lewis, Matese, Richardson, Ringwald, Rubin, and
+  Sherlock]{AshburnerGeneOntologytool2000}
+Michael Ashburner, Catherine~A. Ball, Judith~A. Blake, David Botstein, Heather
+  Butler, J.~Michael Cherry, Allan~P. Davis, Kara Dolinski, Selina~S. Dwight,
+  Janan~T. Eppig, Midori~A. Harris, David~P. Hill, Laurie {Issel-Tarver},
+  Andrew Kasarskis, Suzanna Lewis, John~C. Matese, Joel~E. Richardson, Martin
+  Ringwald, Gerald~M. Rubin, and Gavin Sherlock.
+\newblock Gene {{Ontology}}: Tool for the unification of biology.
+\newblock \emph{Nature Genetics}, 25\penalty0 (1):\penalty0 25--29, May 2000.
+\newblock ISSN 1061-4036.
+\newblock \doi{10.1038/75556}.
+
+\bibitem[Breckels et~al.(2016)Breckels, Holden, Wojnar, Mulvey, Christoforou,
+  Groen, Trotter, Kohlbacher, Lilley, and
+  Gatto]{BreckelsLearningHeterogeneousData2016a}
+Lisa~M. Breckels, Sean~B. Holden, David Wojnar, Claire~M. Mulvey, Andy
+  Christoforou, Arnoud Groen, Matthew W.~B. Trotter, Oliver Kohlbacher,
+  Kathryn~S. Lilley, and Laurent Gatto.
+\newblock Learning from {{Heterogeneous Data Sources}}: {{An Application}} in
+  {{Spatial Proteomics}}.
+\newblock \emph{PLOS Computational Biology}, 12\penalty0 (5):\penalty0
+  e1004920, May 2016.
+\newblock ISSN 1553-7358.
+\newblock \doi{10.1371/journal.pcbi.1004920}.
 
 \bibitem[Cooper et~al.(1989)Cooper, Eckhardt, and
   Shera]{CooperCardinalsChaosReflection1989}
@@ -48,6 +75,15 @@ S.~Geman and D.~Geman.
   Intelligence}, PAMI-6\penalty0 (6):\penalty0 721--741, November 1984.
 \newblock ISSN 0162-8828.
 \newblock \doi{10.1109/TPAMI.1984.4767596}.
+
+\bibitem[{Gene Ontology
+  Consortium}(2004)]{GeneOntologyConsortiumGeneOntologyGO2004}
+{Gene Ontology Consortium}.
+\newblock The {{Gene Ontology}} ({{GO}}) database and informatics resource.
+\newblock \emph{Nucleic Acids Research}, 32\penalty0 (90001):\penalty0
+  258D--261, January 2004.
+\newblock ISSN 1362-4962.
+\newblock \doi{10.1093/nar/gkh036}.
 
 \bibitem[Gibson(2009)]{GibsonCellregulationdetermined2009}
 Toby~J. Gibson.

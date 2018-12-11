@@ -1,4 +1,4 @@
-\begin{thebibliography}{19}
+\begin{thebibliography}{20}
 \providecommand{\natexlab}[1]{#1}
 \providecommand{\url}[1]{\texttt{#1}}
 \expandafter\ifx\csname urlstyle\endcsname\relax
@@ -154,6 +154,15 @@ Nicholas Metropolis, Arianna~W. Rosenbluth, Marshall~N. Rosenbluth, Augusta~H.
   1087--1092, June 1953.
 \newblock ISSN 0021-9606, 1089-7690.
 \newblock \doi{10.1063/1.1699114}.
+
+\bibitem[{Nieto-Barajas} et~al.(2004){Nieto-Barajas}, Pr\"unster, and
+  Walker]{Nieto-BarajasNormalizedrandommeasures2004}
+Luis~E. {Nieto-Barajas}, Igor Pr\"unster, and Stephen~G. Walker.
+\newblock Normalized random measures driven by increasing additive processes.
+\newblock \emph{The Annals of Statistics}, 32\penalty0 (6):\penalty0
+  2343--2360, December 2004.
+\newblock ISSN 0090-5364.
+\newblock \doi{10.1214/009053604000000625}.
 
 \bibitem[Savage et~al.(2013)Savage, Ghahramani, Griffin, Kirk, and
   Wild]{SavageIdentifyingcancersubtypes2013a}

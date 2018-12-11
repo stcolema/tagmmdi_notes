@@ -399,7 +399,7 @@ The joint density is hence:
 \begin{align}
 p(\left\{c_{i1}, c_{i2}\right\}_{i=1}^n| \phi) = \frac{1}{Z} \prod_{i = 1}^n  \gamma_{c_{i1}1} \gamma_{c_{i2}2} \left(1 + \phi \mathbb{I}(c_{i1} = c_{i2})\right) \label{joint_density_no_v}
 \end{align}
-We introduce a strategic latent variable $v$ such that the form is:
+As in \citet{Nieto-BarajasNormalizedrandommeasures2004}, we introduce a strategic latent variable $v$ such that the form is:
 
 \begin{align}
 p(\left\{c_{i1}, c_{i2}\right\}_{i=1}^n, v) = \frac{v^{n-1} \exp(-vZ)}{(n-1)!} \prod_{i = 1}^n \left(\left(1 + \phi \mathbb{I}(c_{i1} = c_{i2})\right) \prod_{l = 1}^{2}\gamma_{c_{il}l}\right) \label{joint_density}
@@ -446,11 +446,11 @@ Thus updating \eqref{phi_cond_1} accordingly gives us:
 \begin{align}
 p(\phi | \left\{c_{i1}, c_{i2}\right\}_{i=1}^n, v) &\propto \exp\left(-v \sum_{k=1}^{K_{min}}\gamma_{k1} \gamma_{k2}\phi\right)  \sum_{r=0}^c \binom{c}{r} \phi^r
 \end{align}
-We notice this has the structure similar to a mixture of Gamma distributions. We thus multiply the equation by 1 to have:
+We notice this has the structure similar to a mixture of Gamma distributions with each distribution having a shape of $r$ and a rate of $-v\sum_{k=1}^{K_{min}}\gamma_{k1} \gamma_{k2}$. We thus multiply the equation by 1 to have:
 
 \begin{align}
- p(\left\{c_{i1}, c_{i2}\right\}_{i=1}^n, v | \phi) &\propto  \sum_{r=0}^c \binom{c}{r} \frac{r!}{\left(v \sum_{j=1}^N \gamma_{j1} \gamma_{j2}\right)^{r+1}}  \frac{\left(v \sum_{j=1}^N \gamma_{j1} \gamma_{j2}\right)^{r+1}}{r!}\phi^r \exp\left(-v \sum_{j=1}^N \gamma_{j1} \gamma_{j2}\phi\right) \\
-&= \sum_{r=0}^c  \binom{c}{r} \frac{r!}{\left(v \sum_{j=1}^N \gamma_{j1} \gamma_{j2}\right)^{r+1}} Gamma\left(r+1, v \sum_{j=1}^N \gamma_{j1} \gamma_{j2} \right)
+ p(\left\{c_{i1}, c_{i2}\right\}_{i=1}^n, v | \phi) &\propto  \sum_{r=0}^c \binom{c}{r} \frac{r!}{\left(v \sum_{k=1}^{K_{min}} \gamma_{k1} \gamma_{k2}\right)^{r+1}}  \frac{\left(v \sum_{k=1}^{K_{min}} \gamma_{k1} \gamma_{k2}\right)^{r+1}}{r!}\phi^r \exp\left(-v \sum_{k=1}^{K_{min}} \gamma_{k1} \gamma_{k2}\phi\right) \\
+&= \sum_{r=0}^c  \binom{c}{r} \frac{r!}{\left(v \sum_{k=1}^{K_{min}} \gamma_{k1} \gamma_{k2}\right)^{r+1}} Gamma\left(r+1, v \sum_{k=1}^{K_{min}} \gamma_{k1} \gamma_{k2} \right)
 \end{align}
 As we know that $p(\phi | \left\{c_{i1}, c_{i2}\right\}_{i=1}^n, v)$ must integrate over $\phi$ to 1, we know the normalising constant must be the sum of the integrals of the Gamma distributions, i.e.:
 
@@ -498,6 +498,7 @@ Thus the posterior distribution of the context similarity parameter $\phi$ is:
 p(\phi |  \left\{c_{i1}, c_{i2}\right\}_{i=1}^n, v) &=  \frac{1}{Z_{\phi}'} \sum_{r=0}^c  \binom{c}{r} \frac{(r + a_0 - 1)!}{ \left(v \sum_{k=1}^{K_{min}} \gamma_{k1} \gamma_{k2} + b_0 \right)^{r + a_0}} Gamma \left(r+ a_0, v \sum_{k=1}^{K_{min}} \gamma_{k1} \gamma_{k2} + b_0 \right)
 \end{align}
 
+\newpage
 %\bibliographystyle{abbrv}
 \bibliographystyle{plainnat}
 \bibliography{tagmmdi_literature}

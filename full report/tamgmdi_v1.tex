@@ -302,7 +302,7 @@ Each individual's membership probabilities are conditionally independent of the 
 \begin{align}
 p(c_i|c_{-i}, \theta_1,\ldots,\theta_K, \pi_1,\ldots,\pi_K) = p(c_i| \theta_1,\ldots,\theta_K, \pi_1,\ldots,\pi_K)
 \end{align}
-Where $c_{-i} = (c_1, \ldots, c_{i-1}, c_{i+1}, \ldots, c_n)$. Thus our problem is \emph{embarrassingly parallel}. This is part of the reason we use this method rather than a \emph{collapsed Gibbs sampler}, which instead of sampling the parameters each iteration marginalises them (i.e. integrates over them by taking the expected value) and updates them as each individual's allocation is updated. This method tends to reduce the number of iterations required before stationarity is reached \cite{LiuCollapsedGibbsSampler1994}, but each iteration is slower and the method is more difficult to implement.
+Where $c_{-i} = (c_1, \ldots, c_{i-1}, c_{i+1}, \ldots, c_n)$. Thus our problem is \emph{embarrassingly parallel}. This is part of the reason we use this method rather than a \emph{collapsed Gibbs sampler}. Instead of sampling the parameters each iteration a collapsed Gibbs sampler marginalises them (i.e. integrates over them) and updates them as each individual's allocation is updated. This method tends to reduce the number of iterations required before stationarity is reached \cite{LiuCollapsedGibbsSampler1994}, but each iteration is slower and the method is more difficult to implement.
 
 The distribution we sample from for each parameter, $\theta$, is updated after observing data $X$ using Bayes' theorem:
 
@@ -439,7 +439,7 @@ Now consider \eqref{b}:
 \begin{align} \label{b_likelihood}
 b &=  \sum_{k_1=1}^{K_1}\sum_{k_2=1}^{K_2}\left(\left(1 + \phi\mathbb{I}(k_1 = k_2)\right) \prod_{l=1}^2\gamma_{k_ll}\right)
 \end{align}
-We see that for our conditional we can ignore all cases when $j_1 \neq j_2$ as $\phi$ is not present in these. Letting $K_{min} = \min(K_1,K_2)$, \eqref{b_likelihood} simplifies to:
+We see that for our conditional we can ignore all cases when $k_1 \neq k_2$ as $\phi$ is not present in these. Letting $K_{min} = \min(K_1,K_2)$, \eqref{b_likelihood} simplifies to:
 
 \begin{align}
 b &\propto \sum_{k=1}^{K_{min}}\gamma_{k1} \gamma_{k2} \left(1 + \phi\right) \\

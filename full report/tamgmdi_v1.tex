@@ -448,7 +448,7 @@ Thus updating \eqref{phi_cond_1} accordingly gives us:
 \begin{align}
 p(\phi | \left\{c_{i1}, c_{i2}\right\}_{i=1}^n, v) &\propto \exp\left(-v \sum_{k=1}^{K_{min}}\gamma_{k1} \gamma_{k2}\phi\right)  \sum_{r=0}^c \binom{c}{r} \phi^r
 \end{align}
-We notice this has the structure similar to a mixture of Gamma distributions with each distribution having a shape of $r$ and a rate of $-v\sum_{k=1}^{K_{min}}\gamma_{k1} \gamma_{k2}$. We thus multiply the equation by 1 to have:
+We notice this has the structure similar to a mixture of Gamma distributions with each distribution having a shape of $r-1$ and a rate of $-v\sum_{k=1}^{K_{min}}\gamma_{k1} \gamma_{k2}$. We thus multiply the equation by 1 to have:
 
 \begin{align}
  p(\left\{c_{i1}, c_{i2}\right\}_{i=1}^n, v | \phi) &\propto  \sum_{r=0}^c \binom{c}{r} \frac{r!}{\left(v \sum_{k=1}^{K_{min}} \gamma_{k1} \gamma_{k2}\right)^{r+1}}  \frac{\left(v \sum_{k=1}^{K_{min}} \gamma_{k1} \gamma_{k2}\right)^{r+1}}{r!}\phi^r \exp\left(-v \sum_{k=1}^{K_{min}} \gamma_{k1} \gamma_{k2}\phi\right) \\

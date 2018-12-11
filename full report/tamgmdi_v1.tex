@@ -178,7 +178,9 @@ tagmmdi is a Bayesian method for semi-supervised prediction using paired dataset
 
 To implement MDI we require that each dataset share common members of the population in the same order, i.e. observation $i$ in dataset 1 corresponds to observation $i$ in dataset 2 for all $i \in (1, \ldots, n)$ for $n \in \mathbb{N}$ observations.
 
-TAGM is implemented as part of the pRoloc package available from Bioconductor for R.
+TAGM is implemented as part of the pRoloc package for R available from Bioconductor (see \url{https://bioconductor.org/packages/release/bioc/html/pRoloc.html}).
+
+The code associated with this report is available at \url{https://github.com/stcolema/tagmmdi/} where instructions on running samples and installing the associated R package can also be found.
 
 \end{abstract}
 
@@ -196,10 +198,10 @@ We use the following symbols throughout this piece.
  \item $K_l \in \mathbb{N}$: the number of components in dataset $l$ for some $l \leq L$. If $L = 1$ we do not include the subscript;
  \item $c_{il} \in \{1,\ldots,K_l\}$: the latent clustering variable for the $i$th observation in the $l$th dataset;
  \item $Z \in \mathbb{R}$: a relevant normalising constant;
- \item $\phi \in \mathbb{R} \: | \: \phi > 0$: the context similarity parameter, a measure of the similarity between datasets 1 and 2;
  \item $\mathbb{R}_+ = \{x \in \mathbb{R} | x > 0\};$
+ \item $\phi \in \mathbb{R}_+$: the context similarity parameter, a measure of the similarity between datasets 1 and 2;
  \item $\pi_j \in [0, 1] \subset \mathbb{R}$: the component proportions within the dataset for some $j \leq K$; and
- \item $\gamma_{jl} \in \mathbb{R}  \: | \: \gamma_{jl} > 0$: the component weights for the $j$th component in dataset $l$.
+ \item $\gamma_{jl} \in \mathbb{R}_+$: the component weights for the $j$th component in dataset $l$.
 \end{itemize}
 
 \section{Gibbs sampler}
@@ -269,7 +271,7 @@ The Metropolis-Hastings algorithm \cite{HastingsMonteCarloSampling} is an extens
     \item Accept the new value $\theta^*$ with probability $\min(\alpha, 1)$. Generate a number $u$ from the uniform distribution on $[0,1]$ and accept if $\alpha \geq u$, else reject.
   \end{enumerate}
 \end{enumerate}
-This generates a Markov chain $(\theta_0,\ldots,\theta_k,\ldots, \theta_n)$ as each iteration is conditionally independent of all others given the sample from the iteration preceding it. A stationary distribution is reached after a \emph{burn-in} period of $k$ steps (for some $k \in \mathbb{N}$) and all following samples come from $p(\theta)$ (i.e. the vector $(\theta_{k+1},\ldots,\theta_n)$ are samples from $p(\theta)$). Knowing $k$ is a non-trivial issue; we often assume some arbitrary large number of burn-in iterations erring on the side of caution. The samples generated are highly correlated with other samples from within a close range of iterations. To avoid recording this duplicate information, often only every $lth$ sample is recorded (called \emph{thinning}) for some small $l$ (normally in the range $[25, 50]$).
+This generates a Markov chain $(\theta_0,\ldots,\theta_k,\ldots, \theta_n)$ as each iteration is conditionally independent of all others given the sample from the iteration preceding it. A stationary distribution is reached after a \emph{burn-in} period of $k$ steps (for some $k \in \mathbb{N}$) and all following samples come from $p(\theta)$ (i.e. the vector $(\theta_{k+1},\ldots,\theta_n)$ are samples from $p(\theta)$). Knowing $k$ is a non-trivial issue; we often assume some arbitrary large number of burn-in iterations erring on the side of caution. The samples generated are highly correlated with other samples from within a close range of iterations. To avoid recording this duplicate information, often only every $l$th sample is recorded (called \emph{thinning}) for some small $l$ (normally in the range $[25, 50]$).
 
 \citet{HastingsMonteCarloSampling} extends this method to allow asymmetric proposal densities, in which case our acceptance ratio changes to:
 
@@ -320,7 +322,7 @@ In terms of sampling the prior is very useful as it allows us to ensure that the
 Our implementation uses distributions on the priors that enforce conjugacy. This allows us to sample directly from the correct distribution for each posterior distribution.
 
 \section{Multiple dataset integration}
-If we have observed paired datasets $X_1 = (x_{1,1},\ldots,x_{n,1}), X_2 = (x_{1,2},\ldots,x_{n,2})$, where observations in the $ith$ row of each dataset represent information about the same individual. We would like to cluster using information common to both datasets. One could concatenate the datasets, adding additional covariates for each individual. However, if the two datasets have different clustering structures this would reduce the signal of both clusterings and probably have one dominate. If the two datasets have the same structure but different signal-to-noise ratios this would reduce the signal in the final clustering. In both these cases independent models on each dataset would be preferable. \citet{kirkBayesianCorrelatedClustering2012} suggest a method to carry out clustering on both datasets where common information is used but two individual clusterings are outputted. This method is driven by the allocation prior:
+If we have observed paired datasets $X_1 = (x_{1,1},\ldots,x_{n,1}), X_2 = (x_{1,2},\ldots,x_{n,2})$, where observations in the $i$th row of each dataset represent information about the same individual. We would like to cluster using information common to both datasets. One could concatenate the datasets, adding additional covariates for each individual. However, if the two datasets have different clustering structures this would reduce the signal of both clusterings and probably have one dominate. If the two datasets have the same structure but different signal-to-noise ratios this would reduce the signal in the final clustering. In both these cases independent models on each dataset would be preferable. \citet{kirkBayesianCorrelatedClustering2012} suggest a method to carry out clustering on both datasets where common information is used but two individual clusterings are outputted. This method is driven by the allocation prior:
 
 \begin{align} \label{allocation_prior}
 p(c_{i,1}, c_{i,2} | \phi ) \propto \pi_{i,1} \pi_{i,2} (1 + \phi \mathbb{I}(c_{i,1} = c_{i,2}))
@@ -389,7 +391,7 @@ For multiple dataset integration (\textbf{MDI}) in the case of $n$ observations 
 \begin{align}
 p(\left\{c_{i1}, c_{i2}\right\}_{i=1}^n, v) \propto \gamma_{c_{i1}1} \gamma_{c_{i2}2} \left(1 + \phi \mathbb{I}(c_{i1} = c_{i2})\right)  \label{general_model}
 \end{align}
-We assume priors of $\gamma_{1l},\ldots,\gamma_{nl} \distas{i.i.d} Gamma(\alpha_l/K_l,1)\, \forall \, l \in \{1,2\}$ where $K_l$ is the number of clusters in the $lth$ dataset. Similarly $\phi \sim Gamma(a, b)$.
+We assume priors of $\gamma_{1l},\ldots,\gamma_{nl} \distas{i.i.d} Gamma(\alpha_l/K_l,1)\, \forall \, l \in \{1,2\}$ where $K_l$ is the number of clusters in the $l$th dataset. Similarly $\phi \sim Gamma(a, b)$.
 
 From \eqref{general_model} we calculate the normalising constant $Z$, and find:
 

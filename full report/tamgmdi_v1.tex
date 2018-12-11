@@ -204,17 +204,17 @@ We use the following symbols throughout this piece.
 Gibbs sampling is based on the concept of \emph{Monte Carlo integration} and \emph{Markov chains}. It is a special case of the \emph{Metropolis-Hastings algorithm}. Gibbs sampling is used to sample directly from the posterior distribution of the model's random variables. We briefly describe the emphasized terms below before describing Gibbs sampling in more detail.
 
 \subsection{Monte Carlo integration}
-The original Monte Carlo method was developed by Stanislaw Ulam, a Polish mathematician while he worked at Los Alamos on the Manhattan Project, along with Nicholas Metropolis \cite{CooperCardinalsChaosReflection1989} as a means to solving integrals by use of random number generation \cite{MetropolisMonteCarloMethod1949}. Suppose there is some complex integral we which to solve on some interval, $(a,b)$:
+The original Monte Carlo method was developed by Stanislaw Ulam, a Polish mathematician while he worked at Los Alamos on the Manhattan Project, along with Nicholas Metropolis \cite{CooperCardinalsChaosReflection1989} as a means to solving integrals by use of random number generation \cite{MetropolisMonteCarloMethod1949}. Suppose there is some complex integral we wish to solve on some interval, $(a,b)$:
 
 \begin{align}
 \int_a^b h(x) dx
 \end{align}
-If we can decompose $h(x)$ into the product of some more simple function $f(x)$ and a probability density $p(x)$ where both are defined over $(a,b)$, we can then state:
+If we can decompose $h(x)$ into the product of some more simple function $f(x)$ and a probability density $p(x)$ where both are defined over $(a,b)$ we can then state:
 
 \begin{align} \label{monte_carlo_basis}
 \int_a^bh(x)dx = \int_a^bf(x)p(x)dx = \mathbb{E}_{p(x)}\left[f(x)\right]
 \end{align}
-We also assume that we can approximate this expectation of $f(x)$ over $p(x)$ by drawing $N$ random variables $x = (x_1,\ldots,x_N)$ from $p(x)$ (by the Law of Large Numbers); thus \eqref{monte_carlo_basis} becomes:
+We assume that we can approximate this expectation of $f(x)$ over $p(x)$ by drawing $N$ random variables $x = (x_1,\ldots,x_N)$ from $p(x)$ (by the Law of Large Numbers); thus \eqref{monte_carlo_basis} becomes:
 
 \begin{align} \label{monte_carlo_integration}
 \int_a^bh(x)dx = \mathbb{E}_{p(x)}\left[f(x)\right] \approx \frac{1}{N}\sum_{i=1}^Nf(x_i)
@@ -222,7 +222,7 @@ We also assume that we can approximate this expectation of $f(x)$ over $p(x)$ by
 This is \emph{Monte Carlo integration}.
 
 \subsection{Markov chains}
-Consider a random variable $X$ observed at discrete times $t = (t_0,\ldots,t_n)$, with the observation at $t_i$ denoted $X(t_i)$. Let $S$ be the state space of possible values $X$ can take. $X$ is said to have the \emph{Markov property} if the transition probabilities between states depend only on the current state, i.e. for any state $s_k \in S$:
+Consider a random variable $X$ observed at discrete times $t = (t_0,\ldots,t_n)$, with the observation at $t_i$ denoted $X(t_i)$. Let $S$ be the state space of possible values $X$ can take. $X$ is said to have the \emph{Markov property} if the transition probabilities between states depend only on the current state, i.e. for any states $s_i, s_j, s_k \in S$:
 
 \begin{align}
 \mathbb{Pr}(X(t_{n+1}) = s_j | X(t_0) = s_k, \ldots, X(t_n) = s_i) = \mathbb{Pr}(X(t_{n+1}) = s_j | X(t_n) = s_i) 
@@ -286,7 +286,7 @@ Given some data $X = (x_1, \ldots, x_n)$, we assume a number of unobserved proce
 \begin{align}
 p(x_i) = \sum_{k=1}^K \pi_k f(x_i | \theta_k)
 \end{align}
-We carry out Bayesian inference of this model using a Markov-Chain Monte Carlo (MCMC) method. Our implementation uses a Gibbs sampler, sampling first the component parameters, $\theta_k$, and associated weights, $\pi_k$, from the associated distributions and then sampling component membership.
+We carry out Bayesian inference of this model using MCMC methods. Specifically we use a Gibbs sampler. We sample first the component parameters, $\theta_k$, and associated weights, $\pi_k$, from the associated distributions and then sample component membership.
 
 Basically:
 \begin{enumerate}
@@ -298,7 +298,7 @@ Each individual's membership probabilities are conditionally independent of the 
 \begin{align}
 p(c_i|c_{-i}, \theta_1,\ldots,\theta_K, \pi_1,\ldots,\pi_K) = p(c_i| \theta_1,\ldots,\theta_K, \pi_1,\ldots,\pi_K)
 \end{align}
-Where $c_{-i} = (c_1, \ldots, c_{i-1}, c_{i+1}, \ldots, c_n)$.
+Where $c_{-i} = (c_1, \ldots, c_{i-1}, c_{i+1}, \ldots, c_n)$. Thus our problem is \emph{embarrassingly parallel}. This is part of the reason we use this method rather than a \emph{collapsed Gibbs sampler}.
 
 The distribution we sample from for each parameter, $\theta$, is updated after observing data $X$ using Bayes' theorem:
 

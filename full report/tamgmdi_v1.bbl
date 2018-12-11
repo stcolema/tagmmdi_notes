@@ -1,4 +1,4 @@
-\begin{thebibliography}{20}
+\begin{thebibliography}{26}
 \providecommand{\natexlab}[1]{#1}
 \providecommand{\url}[1]{\texttt{#1}}
 \expandafter\ifx\csname urlstyle\endcsname\relax
@@ -19,8 +19,8 @@ Michael Ashburner, Catherine~A. Ball, Judith~A. Blake, David Botstein, Heather
 \newblock ISSN 1061-4036.
 \newblock \doi{10.1038/75556}.
 
-\bibitem[Breckels et~al.(2016)Breckels, Holden, Wojnar, Mulvey, Christoforou,
-  Groen, Trotter, Kohlbacher, Lilley, and
+\bibitem[Breckels et~al.(2016{\natexlab{a}})Breckels, Holden, Wojnar, Mulvey,
+  Christoforou, Groen, Trotter, Kohlbacher, Lilley, and
   Gatto]{BreckelsLearningHeterogeneousData2016a}
 Lisa~M. Breckels, Sean~B. Holden, David Wojnar, Claire~M. Mulvey, Andy
   Christoforou, Arnoud Groen, Matthew W.~B. Trotter, Oliver Kohlbacher,
@@ -28,9 +28,21 @@ Lisa~M. Breckels, Sean~B. Holden, David Wojnar, Claire~M. Mulvey, Andy
 \newblock Learning from {{Heterogeneous Data Sources}}: {{An Application}} in
   {{Spatial Proteomics}}.
 \newblock \emph{PLOS Computational Biology}, 12\penalty0 (5):\penalty0
-  e1004920, May 2016.
+  e1004920, May 2016{\natexlab{a}}.
 \newblock ISSN 1553-7358.
 \newblock \doi{10.1371/journal.pcbi.1004920}.
+
+\bibitem[Breckels et~al.(2016{\natexlab{b}})Breckels, Mulvey, Lilley, and
+  Gatto]{Breckelsbioconductorworkflowprocessing2016}
+Lisa~Marie Breckels, Claire~Mairead Mulvey, Kathryn~Susan Lilley, and Laurent
+  Gatto.
+\newblock A bioconductor workflow for processing and analysing spatial
+  proteomics data, 2016{\natexlab{b}}.
+
+\bibitem[Bryan()]{BryanExcusemeyou}
+Jennifer Bryan.
+\newblock Excuse me, do you have a moment to talk about version control?
+\newblock \doi{10.7287/peerj.preprints.3159v2}.
 
 \bibitem[Cooper et~al.(1989)Cooper, Eckhardt, and
   Shera]{CooperCardinalsChaosReflection1989}
@@ -57,6 +69,15 @@ T.~P.~J. Dunkley, R.~Watson, J.~L. Griffin, P.~Dupree, and K.~S. Lilley.
   1128--1134, November 2004.
 \newblock ISSN 1535-9476, 1535-9484.
 \newblock \doi{10.1074/mcp.T400009-MCP200}.
+
+\bibitem[Eddelbuettel and Fran{\c
+  c}ois(2011)]{EddelbuettelRcppSeamlessIntegration2011}
+Dirk Eddelbuettel and Romain Fran{\c c}ois.
+\newblock {\textbf{Rcpp}} : {{Seamless}} {{{\emph{R}}}} and
+  {{{\emph{C}}}}{\emph{++}} {{Integration}}.
+\newblock \emph{Journal of Statistical Software}, 40\penalty0 (8), 2011.
+\newblock ISSN 1548-7660.
+\newblock \doi{10.18637/jss.v040.i08}.
 
 \bibitem[Geladaki et~al.(2018)Geladaki, Kocevar~Britovsek, Breckels, Smith,
   Mulvey, Crook, Gatto, and Lilley]{GeladakiLOPITDCsimplerapproach2018}
@@ -131,6 +152,13 @@ Paul Kirk, Jim~E. Griffin, Richard~S. Savage, Zoubin Ghahramani, and David~L.
 \newblock ISSN 1460-2059, 1367-4803.
 \newblock \doi{10.1093/bioinformatics/bts595}.
 
+\bibitem[Liu(1994)]{LiuCollapsedGibbsSampler1994}
+Jun~S Liu.
+\newblock The {{Collapsed Gibbs Sampler}} in {{Bayesian Computations}} with
+  {{Applications}} to a {{Gene Regulation Problem}}.
+\newblock \emph{Journal of the American Statistical Association}, 89\penalty0
+  (427):\penalty0 958--966, September 1994.
+
 \bibitem[MacKay(2003)]{MacKayInformationTheoryInference2003}
 David J~C MacKay.
 \newblock \emph{Information {{Theory}}, {{Inference}}, and {{Learning
@@ -164,6 +192,15 @@ Luis~E. {Nieto-Barajas}, Igor Pr\"unster, and Stephen~G. Walker.
 \newblock ISSN 0090-5364.
 \newblock \doi{10.1214/009053604000000625}.
 
+\bibitem[Sanderson and
+  Curtin(2016)]{SandersonArmadillotemplatebasedlibrary2016}
+Conrad Sanderson and Ryan Curtin.
+\newblock Armadillo: A template-based {{C}}++ library for linear algebra.
+\newblock \emph{The Journal of Open Source Software}, 1\penalty0 (2):\penalty0
+  26, June 2016.
+\newblock ISSN 2475-9066.
+\newblock \doi{10.21105/joss.00026}.
+
 \bibitem[Savage et~al.(2013)Savage, Ghahramani, Griffin, Kirk, and
   Wild]{SavageIdentifyingcancersubtypes2013a}
 Richard~S. Savage, Zoubin Ghahramani, Jim~E. Griffin, Paul Kirk, and David~L.
@@ -184,5 +221,10 @@ Jacqueline~E. Siljee, Yi~Wang, Adelaide~A. Bernard, Baran~A. Ersoy, Sumei
   2018.
 \newblock ISSN 1061-4036, 1546-1718.
 \newblock \doi{10.1038/s41588-017-0020-9}.
+
+\bibitem[Team(2016)]{RStudioTeamRStudioIntegratedDevelopment2016}
+RStudio Team.
+\newblock {{RStudio}}: {{Integrated Development Environment}} for {{R}}.
+\newblock RStudio, Inc., 2016.
 
 \end{thebibliography}

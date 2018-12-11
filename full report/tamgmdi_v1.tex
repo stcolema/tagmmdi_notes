@@ -178,7 +178,7 @@ tagmmdi is a Bayesian method for semi-supervised prediction using paired dataset
 
 To implement MDI we require that each dataset share common members of the population in the same order, i.e. observation $i$ in dataset 1 corresponds to observation $i$ in dataset 2 for all $i \in (1, \ldots, n)$ for $n \in \mathbb{N}$ observations.
 
-TAGM is implemented as part of the pRoloc package for R available from Bioconductor (see \url{https://bioconductor.org/packages/release/bioc/html/pRoloc.html}).
+TAGM is implemented as part of the pRoloc package for R available from Bioconductor \cite{Breckelsbioconductorworkflowprocessing2016}.
 
 The code associated with this report is available at \url{https://github.com/stcolema/tagmmdi/} where instructions on running samples and installing the associated R package can also be found.
 
@@ -302,7 +302,7 @@ Each individual's membership probabilities are conditionally independent of the 
 \begin{align}
 p(c_i|c_{-i}, \theta_1,\ldots,\theta_K, \pi_1,\ldots,\pi_K) = p(c_i| \theta_1,\ldots,\theta_K, \pi_1,\ldots,\pi_K)
 \end{align}
-Where $c_{-i} = (c_1, \ldots, c_{i-1}, c_{i+1}, \ldots, c_n)$. Thus our problem is \emph{embarrassingly parallel}. This is part of the reason we use this method rather than a \emph{collapsed Gibbs sampler}.
+Where $c_{-i} = (c_1, \ldots, c_{i-1}, c_{i+1}, \ldots, c_n)$. Thus our problem is \emph{embarrassingly parallel}. This is part of the reason we use this method rather than a \emph{collapsed Gibbs sampler}, which instead of sampling the parameters each iteration marginalises them (i.e. integrates over them by taking the expected value) and updates them as each individual's allocation is updated. This method tends to reduce the number of iterations required before stationarity is reached \cite{LiuCollapsedGibbsSampler1994}, but each iteration is slower and the method is more difficult to implement.
 
 The distribution we sample from for each parameter, $\theta$, is updated after observing data $X$ using Bayes' theorem:
 
@@ -502,6 +502,12 @@ Thus the posterior distribution of the context similarity parameter $\phi$ is:
 p(\phi |  \left\{c_{i1}, c_{i2}\right\}_{i=1}^n, v) &=  \frac{1}{Z_{\phi}'} \sum_{r=0}^c  \binom{c}{r} \frac{(r + a_0 - 1)!}{ \left(v \sum_{k=1}^{K_{min}} \gamma_{k1} \gamma_{k2} + b_0 \right)^{r + a_0}} Gamma \left(r+ a_0, v \sum_{k=1}^{K_{min}} \gamma_{k1} \gamma_{k2} + b_0 \right)
 \end{align}
 
+\section*{Acknowledgments}
+Thanks are due to my supervisors Paul Kirk (primary) and Laurent Gatto (secondary) as well as their PhD student Oliver M Crook who was very free with his time in explaining concepts to me. The project was designed and overseen by Paul who also took the time to run through my code on a few occasions which is an intimidating task for the unwary. All the people at the MRC Biostatistics Unit, Cambridge University made my stay there very pleasant as well as educational.
+
+With regards to software this project was massively enabled by RStudio \cite{RStudioTeamRStudioIntegratedDevelopment2016} and GitHub. \citet{EddelbuettelRcppSeamlessIntegration2011} deserve special mention for the development of Rcpp which made integrating the Gibbs sampler from C++ far easier. The C++ is almost entirely coded using objects and functions from Armadillo \cite{SandersonArmadillotemplatebasedlibrary2016}.
+
+The advice from \citet{BryanExcusemeyou} was much appreciated and saved an awful lot of time. 
 \newpage
 %\bibliographystyle{abbrv}
 \bibliographystyle{plainnat}

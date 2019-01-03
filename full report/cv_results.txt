@@ -1,0 +1,14 @@
+F-test on variance:
+Root: 0.378
+Fly: 0.761
+Mouse: 0.861
+
+T-test:
+Root: 0.572
+Fly: 0.573
+Mouse: 0.947
+
+Benjamini-Hochberg corrected p-values:
+Root: 0.859
+Fly: 0.859
+Mouse: 0.947

@@ -357,7 +357,7 @@ Where:
  \item $\epsilon$ is the outlier component weight;
  \item $M$ is the global mean used as the mean in the outlier distribution;
  \item $V$ is half the global covariance, used in the outlier distribution;
- \item $f(\cdot)$ is the probability density function for the Normal distribution; and 
+ \item $f(\cdot)$ is the probability density function for the multivariate normal distribution; and 
  \item $g(\cdot)$ is the probability density function for a t-distribution.
 \end{itemize}
 Similar to the method outlined in \ref{mixture_models}, this model iterates over these steps:
@@ -382,9 +382,77 @@ Gene ontology terms describe characteristics of gene-products in three non-overl
 As one can see in the examples provided by \citet{AshburnerGeneOntologytool2000}, there is a hierarchy within the terms - the terms may be described using a directed acyclic graph. In our implementation we ignore this hierarchy and treat the terms as a matrix of binary variables. This simplifying assumption is made for the sake of computational complexity. We choose GO terms as an additional dataset as they contain the same proteins as our MS data (i.e. can be used within the MDI framework), are freely available and are expected to provide some additional information regarding the prediction of localisation based on the results of \citet{BreckelsLearningHeterogeneousData2016a}. The GO terms are a summary dataset in some way - they are not experiment specific and not cell-type specific, and hence are expected to contain a lower signal-to-noise ratio for protein localisation then the MS data.
 
 \section{TAGMMDI}
+Within each dataset we assume a common prior for each mixture. We overfit a mixture of Dirichlet models on the GO term dataset (i.e. we set the number of cluster to an arbitrarily high number).
+
+\begin{figure}[h]
+\caption{Boxplot of results of cross-validation.}
+\includegraphics[scale=0.9]{cv_results}
+\centering
+\label{fig:cv_results}
+\end{figure}
+
+\ctable[
+cap = Parameters, botcap,
+caption = {Results of cross-validation with a burn-in of 5,000 iterations and a total of 15,000 iterations.},
+label = nowidth,
+pos = !htb,
+label = cv_results
+] {lcccc} {
+\tnote[a]{Correction to $p$-value is by the Benjamini-Hochberg method.}
+}{ \FL
+Organism & $p$-value & Adjusted $p$-value\tmark[a] \ML
+\emph{Arabidopsis} & 0.572 & 0.859 \NN
+\emph{Drosophila} & 0.573 & 0.859 \NN
+Mouse & 0.947 & 0.947 \LL
+}
+
+
 %MDI for two datasets extended to use a TAGM model on at least one of the datasets. Allows semi-supervised prediction.
 
 \appendix
+\section{Conjugate priors}
+We use conjugate priors to have the closed form of the distributions to sample from. For the multivariate normal distribution of unknown mean and variance this is a normal-inverse-Wishart (NIW) with 4 associated prior parameters:
+\begin{itemize}
+ \item $\mu_0$ - prior on the mean, a $p$-vector where $p$ is the number of features in the data;
+ \item $\lambda_0$ - the shrinkage on the variance, a positive real number;
+ \item $\nu_0$ - the degrees of freedom in the inverse-Wishart, a positive integer; and 
+ \item $\Psi_0$ - the inverse scale matrix for the inverse-Wishart distribution, a positive definite $p \times p$ matrix.
+\end{itemize}
+For the Categorical distribution this is a Dirichlet with prior concentration parameter $\alpha_0$.
+
+\subsection{Continuous}
+For the continuous dataset we use a mixture of multivariate Gaussian models with each mixture defined by parameters $\mu$ adn $\Sigma$, the mean and covariance respectively. After observing a sample of $n$ individuals allocated to mixture component $k$ we update the associated parameters, $\mu$ and $\Sigma$, by drawing from the NIW. That is:
+
+\begin{align}
+(\mu, \Sigma) \sim \text{NIW}(\mu_n, \lambda_n, \Psi_n, \nu_n)
+\end{align}
+The pdf of this is:
+
+\begin{align}
+f(\mu, \Sigma | \mu_n, \lambda_n, \Psi_n, \nu_n) = \mathcal{N}\left(\mu | \mu_n, \frac{1}{\lambda_n}\Sigma\right)\mathcal{W}^{-1}\left(\Sigma | \Psi_n, \nu_n \right)
+\end{align}
+To calculate the updated hyperparameters for the sample, first let:
+
+\begin{align}
+\bar{x} &= \frac{1}{n}\sum_{i=1}^n x_i \\
+S &= \sum_{i=1}^n (x_i - \bar{x})(x_i - \bar{x})^T
+\end{align}
+Then update the hyperparameters using:
+
+\begin{align}
+\mu_n &= \frac{\lambda_0 \mu_0 + n \bar{x}}{\lambda_0 + n} \\
+\lambda_n &= \lambda_0 + n \\
+\nu_n &= \nu_0 + n \\
+\Psi_n &= \Psi_0 + S + \frac{\lambda_0 n}{\lambda_0 + n}(\bar{x} - \mu_0) (\bar{x} - \mu_0)^T
+\end{align}
+
+\subsection{Categorical}
+To obtain the posterior distribution in the categorical data we update our Dirichlet prior for each mixture by adding the count of the individuals allocated to said mixture. That is for a prior concentration parameter $\alpha_0$, for a mixture $k$ we update as so:
+
+\begin{align}
+\alpha_{nk} = \alpha_0 + \sum_{i=1}^n \mathbb{I}(c_i = k)
+\end{align}
+
 \section{MDI model}
 For multiple dataset integration (\textbf{MDI}) in the case of $n$ observations in 2 datasets (also referred to as \emph{contexts}):
 
@@ -410,8 +478,31 @@ p(\left\{c_{i1}, c_{i2}\right\}_{i=1}^n, v) = \frac{v^{n-1} \exp(-vZ)}{(n-1)!} \
 \end{align}
 Where $Z$ remains as in \eqref{normal_const}.
 
-\subsection{Conditional likelihood}
+\subsection{$v$}
+From \eqref{joint_density} we can see the conditional for the strategic latent variable $v$ is:
 
+\begin{align}
+p(v | \{c_{i1}, c_{i2}\}_{i=1}^n) \propto \frac{v^{n-1}\exp(-vZ)}{(n-1)!}
+\end{align}
+We recognise this as the pdf for a Gamma distribution with shape $n$ and rate $Z$, i.e. $v \sim Gamma(n, Z)$.
+
+\subsection{$\gamma_{kl}$}
+If we expand $Z$ in \eqref{joint_density} we can derive the conditional for the component weights, $\gamma_{kl}$:
+
+\begin{align}
+p(\gamma_{kl} | \left\{c_{i1}, c_{i2}\right\}_{i=1}^n) &\propto \exp\left(-v \gamma_{kl} \sum_{k_{l'}=1}^{K_{l'}} \gamma_{c_{il'}l'} \left(1 + \phi \mathbb{I}(k_l = k_{l'})\right)\right) \prod_{i = 1}^n \left(\left(1 + \phi \mathbb{I}(c_{i1} = c_{i2})\right) \prod_{l = 1}^{2}\gamma_{c_{il}l}\right) \mathbb{I}(c_{il} = k) \\
+&\propto \exp\left(-v \gamma_{kl} \sum_{k_{l'}=1}^{K_{l'}} \gamma_{c_{il'}l'} \left(1 + \phi \mathbb{I}(k_l = k_{l'})\right)\right) \prod_{i=1}^n \left(1 + \phi \mathbb{I}(c_{i1} = c_{i2})\right) \mathbb{I}(c_{il} = k) \gamma_{kl} \\
+& \propto \exp\left(-v \gamma_{kl} \sum_{k_{l'}=1}^{K_{l'}} \gamma_{c_{il'}l'} \left(1 + \phi \mathbb{I}(k_l = k_{l'})\right)\right) \gamma_{kl}^{\sum_{i=1}^n \mathbb{I}(c_{il} = k)}
+\end{align}
+Where $l' \in \{1,2\} \land l' \neq l$. Thus $\gamma_{kl} \sim Gamma(a_{\gamma}, b_{\gamma})$ where:
+
+\begin{align}
+a_{\gamma} &= 1 + \sum_{i=1}^n \mathbb{I}(c_{il} = k) \\
+b_{\gamma} &= v \sum_{k_{l'}=1}^{K_{l'}} \gamma_{c_{il'}l'} \left(1 + \phi \mathbb{I}(k_l = k_{l'})\right)
+\end{align}
+
+\subsection{$\phi$ and associated derivations}
+\subsubsection{Conditional probability}
 Consider the conditional probability of $\phi$, then from \eqref{joint_density} and expanding $Z$:
 
 \begin{align}
@@ -468,7 +559,7 @@ Combining these gives:
 p(\phi | \left\{c_{i1}, c_{i2}\right\}_{i=1}^n, v) &= \frac{1}{Z_{\phi}}  \sum_{r=0}^c  \binom{c}{r} \frac{r!}{\left(v \sum_{k=1}^{K_{min}} \gamma_{k1} \gamma_{k2}\right)^{r+1}} Gamma\left(r+1, v \sum_{k=1}^{K_{min}} \gamma_{k1} \gamma_{k2} \right)
 \end{align}
 
-\subsection{Posterior distribution}
+\subsubsection{Posterior distribution}
 
 Now if we consider a prior of $Gamma(a_0, b_0)$ on the $\phi$, we have a prior probability of:
 

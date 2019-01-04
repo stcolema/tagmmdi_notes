@@ -1,4 +1,4 @@
-\begin{thebibliography}{26}
+\begin{thebibliography}{30}
 \providecommand{\natexlab}[1]{#1}
 \providecommand{\url}[1]{\texttt{#1}}
 \expandafter\ifx\csname urlstyle\endcsname\relax
@@ -18,6 +18,13 @@ Michael Ashburner, Catherine~A. Ball, Judith~A. Blake, David Botstein, Heather
 \newblock \emph{Nature Genetics}, 25\penalty0 (1):\penalty0 25--29, May 2000.
 \newblock ISSN 1061-4036.
 \newblock \doi{10.1038/75556}.
+
+\bibitem[Benjamini and Hochberg(1995)]{BenjaminiControllingFalseDiscovery1995}
+Yoav Benjamini and Yosef Hochberg.
+\newblock Controlling the {{False Discovery Rate}}: {{A Practical}} and
+  {{Powerful Approach}} to {{Multiple Testing}}.
+\newblock \emph{Journal of the Royal Statistical Society. Series B
+  (Methodological)}, 57:\penalty0 289--300, 1995.
 
 \bibitem[Breckels et~al.(2016{\natexlab{a}})Breckels, Holden, Wojnar, Mulvey,
   Christoforou, Groen, Trotter, Kohlbacher, Lilley, and
@@ -43,6 +50,17 @@ Lisa~Marie Breckels, Claire~Mairead Mulvey, Kathryn~Susan Lilley, and Laurent
 Jennifer Bryan.
 \newblock Excuse me, do you have a moment to talk about version control?
 \newblock \doi{10.7287/peerj.preprints.3159v2}.
+
+\bibitem[Christoforou et~al.(2016)Christoforou, Mulvey, Breckels, Geladaki,
+  Hurrell, Hayward, Naake, Gatto, Viner, Arias, and
+  Lilley]{Christoforoudraftmapmouse2016a}
+Andy Christoforou, Claire~M. Mulvey, Lisa~M. Breckels, Aikaterini Geladaki,
+  Tracey Hurrell, Penelope~C. Hayward, Thomas Naake, Laurent Gatto, Rosa Viner,
+  Alfonso~Martinez Arias, and Kathryn~S. Lilley.
+\newblock A draft map of the mouse pluripotent stem cell spatial proteome.
+\newblock \emph{Nature Communications}, 7\penalty0 (1), December 2016.
+\newblock ISSN 2041-1723.
+\newblock \doi{10.1038/ncomms9992}.
 
 \bibitem[Cooper et~al.(1989)Cooper, Eckhardt, and
   Shera]{CooperCardinalsChaosReflection1989}
@@ -113,6 +131,17 @@ Toby~J. Gibson.
   471--482, October 2009.
 \newblock ISSN 09680004.
 \newblock \doi{10.1016/j.tibs.2009.06.007}.
+
+\bibitem[Groen et~al.(2014)Groen, {Sancho-Andr\'es}, Breckels, Gatto, Aniento,
+  and Lilley]{GroenIdentificationTransGolgiNetwork2014a}
+Arnoud~J. Groen, Gloria {Sancho-Andr\'es}, Lisa~M. Breckels, Laurent Gatto,
+  Fernando Aniento, and Kathryn~S. Lilley.
+\newblock Identification of {{Trans}}-{{Golgi Network Proteins}} in
+  {{{\emph{Arabidopsis}}}}{\emph{ thaliana}} {{Root Tissue}}.
+\newblock \emph{Journal of Proteome Research}, 13\penalty0 (2):\penalty0
+  763--776, February 2014.
+\newblock ISSN 1535-3893, 1535-3907.
+\newblock \doi{10.1021/pr4008464}.
 
 \bibitem[Hastings()]{HastingsMonteCarloSampling}
 W~K Hastings.
@@ -221,6 +250,17 @@ Jacqueline~E. Siljee, Yi~Wang, Adelaide~A. Bernard, Baran~A. Ersoy, Sumei
   2018.
 \newblock ISSN 1061-4036, 1546-1718.
 \newblock \doi{10.1038/s41588-017-0020-9}.
+
+\bibitem[Tan et~al.(2009)Tan, Dvinge, Christoforou, Bertone, Martinez~Arias,
+  and Lilley]{TanMappingOrganelleProteins2009a}
+Denise J.~L. Tan, Heidi Dvinge, Andrew Christoforou, Paul Bertone, Alfonso
+  Martinez~Arias, and Kathryn~S. Lilley.
+\newblock Mapping {{Organelle Proteins}} and {{Protein Complexes}} in
+  {{{\emph{Drosophila}}}}{\emph{ melanogaster}}.
+\newblock \emph{Journal of Proteome Research}, 8\penalty0 (6):\penalty0
+  2667--2678, June 2009.
+\newblock ISSN 1535-3893, 1535-3907.
+\newblock \doi{10.1021/pr800866n}.
 
 \bibitem[Team(2016)]{RStudioTeamRStudioIntegratedDevelopment2016}
 RStudio Team.

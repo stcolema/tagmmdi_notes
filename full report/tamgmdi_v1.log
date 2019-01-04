@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.19 (MiKTeX 2.9.6700 64-bit) (preloaded format=pdflatex 2018.6.11)  3 JAN 2019 11:58
+This is pdfTeX, Version 3.14159265-2.6-1.40.19 (MiKTeX 2.9.6700 64-bit) (preloaded format=pdflatex 2018.6.11)  4 JAN 2019 12:27
 entering extended mode
 **./tamgmdi_v1.tex
 (tamgmdi_v1.tex
@@ -2674,24 +2674,29 @@ Overfull \hbox (2.18848pt too wide) in paragraph at lines 300--301
 di-tion-ally in-de-pen-dent of the other mem-
  []
 
-[5] [6] [7]
-<cv_results.jpeg, id=221, 463.7325pt x 332.74312pt>
+[5] [6] [7] [8]
+<tan_psm_edit.jpg, id=232, 621.07031pt x 332.74312pt>
+File: tan_psm_edit.jpg Graphic file (type jpg)
+<use tan_psm_edit.jpg>
+Package pdftex.def Info: tan_psm_edit.jpg  used on input line 389.
+(pdftex.def)             Requested size: 558.95811pt x 299.46603pt.
+
+Overfull \hbox (117.94038pt too wide) in paragraph at lines 389--392
+ [][] 
+ []
+
+<cv_results.jpeg, id=238, 463.7325pt x 332.74312pt>
 File: cv_results.jpeg Graphic file (type jpg)
 <use cv_results.jpeg>
-Package pdftex.def Info: cv_results.jpeg  used on input line 389.
+Package pdftex.def Info: cv_results.jpeg  used on input line 397.
 (pdftex.def)             Requested size: 417.35538pt x 299.46603pt.
-
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
-[8] [9 <./cv_results.jpeg>] [10]
+[9 <./tan_psm_edit.jpg>] [10 <./cv_results.jpeg>] [11]
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `math shift' on input line 481.
-
-
-Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `math shift' on input line 481.
+(hyperref)                removing `math shift' on input line 489.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
@@ -2699,78 +2704,78 @@ Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
 
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `\gamma' on input line 489.
+(hyperref)                removing `math shift' on input line 497.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `subscript' on input line 489.
+(hyperref)                removing `\gamma' on input line 497.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `math shift' on input line 489.
-
-
-Overfull \hbox (64.00919pt too wide) detected at line 496
-[]
- []
-
-[11]
-
-Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `math shift' on input line 504.
+(hyperref)                removing `subscript' on input line 497.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `\phi' on input line 504.
+(hyperref)                removing `math shift' on input line 497.
 
 
-Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `math shift' on input line 504.
-
-
-Overfull \hbox (50.54396pt too wide) detected at line 510
+Overfull \hbox (64.00919pt too wide) detected at line 504
 []
  []
 
 [12]
-Overfull \hbox (13.21393pt too wide) detected at line 549
+
+Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
+(hyperref)                removing `math shift' on input line 512.
+
+
+Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
+(hyperref)                removing `\phi' on input line 512.
+
+
+Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
+(hyperref)                removing `math shift' on input line 512.
+
+
+Overfull \hbox (50.54396pt too wide) detected at line 518
 []
  []
 
 [13]
-Overfull \hbox (73.32217pt too wide) detected at line 583
-[]
- []
-
-
-Overfull \hbox (94.7346pt too wide) detected at line 589
+Overfull \hbox (13.21393pt too wide) detected at line 557
 []
  []
 
 [14]
-Overfull \hbox (11.03781pt too wide) detected at line 594
+Overfull \hbox (73.32217pt too wide) detected at line 591
 []
  []
 
-[15] (tamgmdi_v1.bbl [16] [17]) [18]
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 607.
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 607.
+
+Overfull \hbox (94.7346pt too wide) detected at line 597
+[]
+ []
+
+
+Overfull \hbox (11.03781pt too wide) detected at line 602
+[]
+ []
+
+[15] [16] (tamgmdi_v1.bbl [17] [18]) [19]
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 615.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 615.
  (tamgmdi_v1.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 607.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 607.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 615.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 615.
 Package rerunfilecheck Info: File `tamgmdi_v1.out' has not changed.
-(rerunfilecheck)             Checksum: CAEAEEA47B8C5EC02300E010AE72D464;1391.
-
-
-LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
-
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 607.
+(rerunfilecheck)             Checksum: E5C73CB168B7298019451970E3CECD43;1391.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 615.
  ) 
 Here is how much of TeX's memory you used:
- 46460 strings out of 492973
- 1029731 string characters out of 3135932
- 1205163 words of memory out of 3000000
- 49508 multiletter control sequences out of 15000+200000
+ 46486 strings out of 492973
+ 1030586 string characters out of 3135932
+ 1203163 words of memory out of 3000000
+ 49527 multiletter control sequences out of 15000+200000
  584541 words of font info for 162 fonts, out of 3000000 for 9000
  1141 hyphenation exceptions out of 8191
  73i,16n,127p,1058b,1071s stack positions out of 5000i,500n,10000p,200000b,50000s
@@ -2785,9 +2790,9 @@ ram Files/MiKTeX 2.9/fonts/type1/urw/helvetic/uhvr8a.pfb><C:/Program Files/MiKT
 eX 2.9/fonts/type1/urw/palatino/uplb8a.pfb><C:/Program Files/MiKTeX 2.9/fonts/t
 ype1/urw/palatino/uplr8a.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/urw/palat
 ino/uplri8a.pfb>
-Output written on tamgmdi_v1.pdf (18 pages, 277174 bytes).
+Output written on tamgmdi_v1.pdf (19 pages, 364634 bytes).
 PDF statistics:
- 409 PDF objects out of 1000 (max. 8388607)
- 147 named destinations out of 1000 (max. 500000)
- 194 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 431 PDF objects out of 1000 (max. 8388607)
+ 153 named destinations out of 1000 (max. 500000)
+ 199 words of extra memory for PDF output out of 10000 (max. 10000000)
 

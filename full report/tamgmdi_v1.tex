@@ -382,7 +382,15 @@ Gene ontology terms describe characteristics of gene-products in three non-overl
 As one can see in the examples provided by \citet{AshburnerGeneOntologytool2000}, there is a hierarchy within the terms - the terms may be described using a directed acyclic graph. In our implementation we ignore this hierarchy and treat the terms as a matrix of binary variables. This simplifying assumption is made for the sake of computational complexity. We choose GO terms as an additional dataset as they contain the same proteins as our MS data (i.e. can be used within the MDI framework), are freely available and are expected to provide some additional information regarding the prediction of localisation based on the results of \citet{BreckelsLearningHeterogeneousData2016a}. The GO terms are a summary dataset in some way - they are not experiment specific and not cell-type specific, and hence are expected to contain a lower signal-to-noise ratio for protein localisation then the MS data.
 
 \section{TAGMMDI}
-Within each dataset we assume a common prior for each mixture. We overfit a mixture of Dirichlet models on the GO term dataset (i.e. we set the number of cluster to an arbitrarily high number).
+Within each dataset we assume a common prior for each mixture. For the MS data with some known labels we fit a TAGM model where $K$ is equal to the number of organelles present in the training data. These points are held fixed in their allocation across all iterations and the associated component is considered to represent allocation to the associated organelle. We overfit a mixture of Dirichlet models on the GO term dataset (i.e. we set the number of cluster to an arbitrarily high number). MDI is applied and the output of interest for prediction is the posterior similarity matrix. As each component represents a specific organelle, proteins with a greater frequency of allocation to the same component are predicted to localise to the associated organelle.
+
+\begin{figure}[h]
+\caption{Posterior similarity matrix of data from \citet{TanMappingOrganelleProteins2009a}.}
+\includegraphics[scale=0.9]{tan_psm_edit}
+\centering
+\label{fig:tan_psms}
+\end{figure}
+To test the robustness of the model, we compare the improvement in prediction compared to the standalone TAGM model under the quadratic loss function. We compare the improvement in prediction from including the GO terms on data from \emph{Arabidopsis} \cite{GroenIdentificationTransGolgiNetwork2014a}, \emph{Drosophila}\cite{TanMappingOrganelleProteins2009a} and mouse stem cells \cite{Christoforoudraftmapmouse2016a}. Within the known proteins we carry out cross validation, holding out $20\%$ of the data as a validation set for 10 separate folds of 15,000 iterations with a burn-in of 5,000. We test for a difference in the variance and mean of the vector of resulting loss values for TAGM and TAGM-MDI and show them in \ref{fig:cv_results}. The results of the tests are shown in \ref{table:cv_results}.
 
 \begin{figure}[h]
 \caption{Boxplot of results of cross-validation.}
@@ -393,12 +401,12 @@ Within each dataset we assume a common prior for each mixture. We overfit a mixt
 
 \ctable[
 cap = Parameters, botcap,
-caption = {Results of cross-validation with a burn-in of 5,000 iterations and a total of 15,000 iterations.},
-label = nowidth,
+caption = {Results of cross-validation.},
+%label = nowidth,
 pos = !htb,
-label = cv_results
+label = table:cv_results
 ] {lcccc} {
-\tnote[a]{Correction to $p$-value is by the Benjamini-Hochberg method.}
+\tnote[a]{Correction to $p$-value is according to the method from \citet{BenjaminiControllingFalseDiscovery1995}.}
 }{ \FL
 Organism & $p$-value & Adjusted $p$-value\tmark[a] \ML
 \emph{Arabidopsis} & 0.572 & 0.859 \NN

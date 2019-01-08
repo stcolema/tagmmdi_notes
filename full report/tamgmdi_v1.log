@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.19 (MiKTeX 2.9.6700 64-bit) (preloaded format=pdflatex 2018.6.11)  8 JAN 2019 12:44
+This is pdfTeX, Version 3.14159265-2.6-1.40.19 (MiKTeX 2.9.6700 64-bit) (preloaded format=pdflatex 2018.6.11)  8 JAN 2019 19:06
 entering extended mode
 **./tamgmdi_v1.tex
 (tamgmdi_v1.tex
@@ -2675,13 +2675,13 @@ di-tion-ally in-de-pen-dent of the other mem-
  []
 
 [5] [6] [7] [8]
-<tan_psm_edit.jpg, id=236, 621.07031pt x 332.74312pt>
+<tan_psm_edit.jpg, id=234, 621.07031pt x 332.74312pt>
 File: tan_psm_edit.jpg Graphic file (type jpg)
 <use tan_psm_edit.jpg>
 Package pdftex.def Info: tan_psm_edit.jpg  used on input line 389.
 (pdftex.def)             Requested size: 558.95811pt x 299.46603pt.
 
-Overfull \hbox (117.94038pt too wide) in paragraph at lines 389--392
+Overfull \hbox (117.94038pt too wide) in paragraph at lines 389--390
  [][] 
  []
 
@@ -2694,130 +2694,101 @@ Package pdftex.def Info: cv_results.jpeg  used on input line 397.
 LaTeX Warning: `h' float specifier changed to `ht'.
 
 
-Underfull \hbox (badness 10000) in alignment at lines 413--413
+Underfull \hbox (badness 10000) in alignment at lines 415--415
 [][]
  []
 
-
-Underfull \hbox (badness 1838) in paragraph at lines 413--413
-[]\OT1/ppl/m/n/10.95 Table 1: |[][]Re-sults of cross-
- []
-
-
-Underfull \hbox (badness 3623) in paragraph at lines 413--413
-\OT1/ppl/m/n/10.95 for tests for dif-fer-ence in
- []
-
-
-Underfull \hbox (badness 1062) in paragraph at lines 413--413
-\OT1/ppl/m/n/10.95 mean and vari-ance of loss
- []
-
-
-Underfull \hbox (badness 1755) in paragraph at lines 413--413
-\OT1/ppl/m/n/10.95 value for folds for TAGM
- []
-
-
-Overfull \hbox (0.1035pt too wide) in paragraph at lines 419--420
-[]\OT1/ppl/m/n/10.95 We rec-om-mend test-ing the method on dif-fer-ent aux-il-i
-ary datasets such as Protein-Protein
- []
-
 [9 <./tan_psm_edit.jpg>]
-<tan_tan_unsupervised_with_prediction_edit.jpg, id=260, 556.32843pt x 332.74312
+<tan_tan_unsupervised_with_prediction_edit.jpg, id=257, 556.32843pt x 332.74312
 pt>
 File: tan_tan_unsupervised_with_prediction_edit.jpg Graphic file (type jpg)
 <use tan_tan_unsupervised_with_prediction_edit.jpg>
 Package pdftex.def Info: tan_tan_unsupervised_with_prediction_edit.jpg  used on
- input line 423.
+ input line 425.
 (pdftex.def)             Requested size: 500.69096pt x 299.46603pt.
 
-Overfull \hbox (59.67323pt too wide) in paragraph at lines 423--426
+Overfull \hbox (59.67323pt too wide) in paragraph at lines 425--426
  [][] 
  []
-
-
-LaTeX Warning: `h' float specifier changed to `ht'.
 
 [10 <./cv_results.jpeg>] [11 <./tan_tan_unsupervised_with_prediction_edit.jpg>]
 [12]
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `math shift' on input line 500.
+(hyperref)                removing `math shift' on input line 504.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `math shift' on input line 500.
+(hyperref)                removing `math shift' on input line 504.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `math shift' on input line 508.
+(hyperref)                removing `math shift' on input line 512.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `\gamma' on input line 508.
+(hyperref)                removing `\gamma' on input line 512.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `subscript' on input line 508.
+(hyperref)                removing `subscript' on input line 512.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `math shift' on input line 508.
+(hyperref)                removing `math shift' on input line 512.
 
 
-Overfull \hbox (64.00919pt too wide) detected at line 515
+Overfull \hbox (64.00919pt too wide) detected at line 519
 []
  []
 
 [13]
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `math shift' on input line 523.
+(hyperref)                removing `math shift' on input line 527.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `\phi' on input line 523.
+(hyperref)                removing `\phi' on input line 527.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `math shift' on input line 523.
+(hyperref)                removing `math shift' on input line 527.
 
 
-Overfull \hbox (50.54396pt too wide) detected at line 529
+Overfull \hbox (50.54396pt too wide) detected at line 533
 []
  []
 
 [14]
-Overfull \hbox (13.21393pt too wide) detected at line 568
+Overfull \hbox (13.21393pt too wide) detected at line 572
 []
  []
 
 [15]
-Overfull \hbox (73.32217pt too wide) detected at line 602
+Overfull \hbox (73.32217pt too wide) detected at line 606
 []
  []
 
 
-Overfull \hbox (94.7346pt too wide) detected at line 608
+Overfull \hbox (94.7346pt too wide) detected at line 612
 []
  []
 
 [16]
-Overfull \hbox (11.03781pt too wide) detected at line 613
+Overfull \hbox (11.03781pt too wide) detected at line 617
 []
  []
 
 [17] (tamgmdi_v1.bbl [18] [19]) [20]
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 628.
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 628.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 632.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 632.
  (tamgmdi_v1.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 628.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 628.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 632.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 632.
 Package rerunfilecheck Info: File `tamgmdi_v1.out' has not changed.
-(rerunfilecheck)             Checksum: D4DA49FB01F0630979EE5999B49DDFA1;1440.
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 628.
+(rerunfilecheck)             Checksum: 70145210D4B38B371FC58B5D9EE4BAFF;1456.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 632.
  ) 
 Here is how much of TeX's memory you used:
  46494 strings out of 492973
@@ -2838,9 +2809,9 @@ ram Files/MiKTeX 2.9/fonts/type1/urw/helvetic/uhvr8a.pfb><C:/Program Files/MiKT
 eX 2.9/fonts/type1/urw/palatino/uplb8a.pfb><C:/Program Files/MiKTeX 2.9/fonts/t
 ype1/urw/palatino/uplr8a.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/urw/palat
 ino/uplri8a.pfb>
-Output written on tamgmdi_v1.pdf (20 pages, 459578 bytes).
+Output written on tamgmdi_v1.pdf (20 pages, 460321 bytes).
 PDF statistics:
- 444 PDF objects out of 1000 (max. 8388607)
+ 445 PDF objects out of 1000 (max. 8388607)
  156 named destinations out of 1000 (max. 500000)
  212 words of extra memory for PDF output out of 10000 (max. 10000000)
 

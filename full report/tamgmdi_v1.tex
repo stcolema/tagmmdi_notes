@@ -385,22 +385,24 @@ As one can see in the examples provided by \citet{AshburnerGeneOntologytool2000}
 Within each dataset we assume a common prior for each mixture. For the MS data with some known labels we fit a TAGM model where $K$ is equal to the number of organelles present in the training data. These points are held fixed in their allocation across all iterations and the associated component is considered to represent allocation to the associated organelle. We overfit a mixture of Dirichlet models on the GO term dataset (i.e. we set the number of cluster to an arbitrarily high number). MDI is applied and the output of interest for prediction is the posterior similarity matrix. As each component represents a specific organelle, proteins with a greater frequency of allocation to the same component are predicted to localise to the associated organelle.
 
 \begin{figure}[h]
-\caption{Posterior similarity matrix of data from \citet{TanMappingOrganelleProteins2009a}.}
-\includegraphics[scale=0.9]{tan_psm_edit}
 \centering
+\includegraphics[scale=0.9]{tan_psm_edit}
+\caption{Posterior similarity matrix of data from \citet{TanMappingOrganelleProteins2009a}.}
 \label{fig:tan_psms}
 \end{figure}
 To test the robustness of the model, we compare the improvement in prediction compared to the standalone TAGM model under the quadratic loss function. We compare the improvement in prediction from including the GO terms on data from \emph{Arabidopsis} \cite{GroenIdentificationTransGolgiNetwork2014a}, \emph{Drosophila}\cite{TanMappingOrganelleProteins2009a} and mouse stem cells \cite{Christoforoudraftmapmouse2016a}. Within the known proteins we carry out cross validation, holding out $20\%$ of the data as a validation set for 10 separate folds of 15,000 iterations with a burn-in of 5,000. We test for a difference in the variance and mean of the vector of resulting loss values for TAGM and TAGM-MDI and show them in figure \ref{fig:cv_results}. The results of the tests are shown in table \ref{table:cv_results}.
 
 \begin{figure}[h]
-\caption{Boxplot of results of cross-validation.}
-\includegraphics[scale=0.9]{cv_results}
 \centering
+\includegraphics[scale=0.9]{cv_results}
+\caption{Boxplot of results of cross-validation.}
 \label{fig:cv_results}
 \end{figure}
 \ctable[
-cap = Parameters, botcap,
+botcap,
+%cap = Parameters,
 caption = {Results of cross-validation showing $p$-values for tests for difference in mean and variance of loss value for folds for TAGM compared to TAGMMDI.},
+mincapwidth=12cm,
 %label = nowidth,
 pos = !htb,
 label = table:cv_results
@@ -413,18 +415,20 @@ Mouse & 0.861 & 0.947 \LL
 }
 Based on the lack of significant results we did not apply any multiple test correction \cite{BenjaminiControllingFalseDiscovery1995} as it was deemed unnecessary.
 
-\section{Further work}
-Currently the R package \emph{tagmmdi} is being updated by O. Crook to be integrated into the \emph{Bioconductor} repository as part of the \emph{pRoloc} suite.
+\section{Conclusions and further work}
+Compare to the vanilla TAGM model we see that TAGMMDI does significantly differ in table \ref{table:cv_results}. It is worth commenting that there is no disimprovement either, so if the computational cost is not a limit use of TAGMMDI models will not offer any risk. We suggest that with a carefully chosen secondary dataset we could acquire information about our subclusters as categorical data is normally more interpretable than continuous data. We state this as the categories are normally human defined whereas continuous data, as a matrix of quantitative measurements, can be slightly dense. This applies less so in the supervised case investigated here, but certainly holds for many unsupervised cases and could reveal information about the subclusters even in the supervised case. We recommend testing the method on different auxiliary datasets such as Protein-Protein Interactions (PPI) to further test its capabilities.
 
-We recommend testing the method on different auxiliary datasets such as Protein-Protein Interactions (PPI) to further test its capabilities. This method can also use a second continuous dataset, so it could be used to test the strength of association between replicates or to investigate for new organelles (perhaps by running the second dataset with an unsupervised mixture of Gaussians). The possibility for this later concept is investigated briefly in figure   \ref{fig:g_g_psm}.
+The functions in \emph{tagmmdi} also allow use of a second continuous dataset. This could be used to test the strength of association between replicates or to investigate for new organelles (perhaps by running the second dataset with an unsupervised mixture of Gaussians). The possibility for this later concept is investigated briefly in figure \ref{fig:g_g_psm}.
 
 \begin{figure}[h]
-\caption{Posterior similarity matrix of data from \citet{TanMappingOrganelleProteins2009a} for one dataset with a TAGM model as in figure  \ref{fig:tan_psms} and the second with an over-fitted Gaussian mixture model for which $K=17$. The PSM is for the latter. Class predictions are from the TAGM model.}
-\includegraphics[scale=0.9]{tan_tan_unsupervised_with_prediction_edit}
 \centering
+\includegraphics[scale=0.9]{tan_tan_unsupervised_with_prediction_edit}
+\caption{Posterior similarity matrix of data from \citet{TanMappingOrganelleProteins2009a} for one dataset with a TAGM model as in figure  \ref{fig:tan_psms} and the second with an over-fitted Gaussian mixture model for which $K=17$. The PSM is for the latter. Class predictions are from the TAGM model.}
 \label{fig:g_g_psm}
 \end{figure}
 One can see that different organelles show strong sub-clusters. This suggests investigating this question and developing extensions to \emph{tagmmdi} for this purpose.
+
+Currently the R package \emph{tagmmdi} is being updated by O. Crook to be integrated into the \emph{Bioconductor} repository as part of the \emph{pRoloc} suite.
 
 Different MCMC methods such as a collapsed Gibbs sampler or Hamiltonian MCMC might lower the computational cost.
 
@@ -615,7 +619,7 @@ p(\phi |  \left\{c_{i1}, c_{i2}\right\}_{i=1}^n, v) &=  \frac{1}{Z_{\phi}'} \sum
 \section*{Acknowledgments}
 Thanks are due to my supervisors Paul Kirk (primary) and Laurent Gatto (secondary) as well as their PhD student Oliver M Crook who was very free with his time in explaining concepts to me. The project was designed and overseen by Paul who also took the time to run through my code on a few occasions which is an intimidating task for the unwary. All the people at the MRC Biostatistics Unit, Cambridge University made my stay there very pleasant as well as educational.
 
-Thanks also to Aalt-Jan van Dijk for agreeing to supervise me from Wagenignen, thereby enabling this project.
+Thanks also to Aalt-Jan van Dijk for agreeing to supervise me from Wagenignen thereby enabling this project.
 
 With regards to software this project was massively enabled by RStudio \cite{RStudioTeamRStudioIntegratedDevelopment2016} and GitHub. \citet{EddelbuettelRcppSeamlessIntegration2011} deserve special mention for the development of Rcpp which made integrating the Gibbs sampler from C++ far easier. The C++ is almost entirely coded using objects and functions from Armadillo \cite{SandersonArmadillotemplatebasedlibrary2016}.
 

@@ -390,7 +390,7 @@ Within each dataset we assume a common prior for each mixture. For the MS data w
 \centering
 \label{fig:tan_psms}
 \end{figure}
-To test the robustness of the model, we compare the improvement in prediction compared to the standalone TAGM model under the quadratic loss function. We compare the improvement in prediction from including the GO terms on data from \emph{Arabidopsis} \cite{GroenIdentificationTransGolgiNetwork2014a}, \emph{Drosophila}\cite{TanMappingOrganelleProteins2009a} and mouse stem cells \cite{Christoforoudraftmapmouse2016a}. Within the known proteins we carry out cross validation, holding out $20\%$ of the data as a validation set for 10 separate folds of 15,000 iterations with a burn-in of 5,000. We test for a difference in the variance and mean of the vector of resulting loss values for TAGM and TAGM-MDI and show them in \ref{fig:cv_results}. The results of the tests are shown in \ref{table:cv_results}.
+To test the robustness of the model, we compare the improvement in prediction compared to the standalone TAGM model under the quadratic loss function. We compare the improvement in prediction from including the GO terms on data from \emph{Arabidopsis} \cite{GroenIdentificationTransGolgiNetwork2014a}, \emph{Drosophila}\cite{TanMappingOrganelleProteins2009a} and mouse stem cells \cite{Christoforoudraftmapmouse2016a}. Within the known proteins we carry out cross validation, holding out $20\%$ of the data as a validation set for 10 separate folds of 15,000 iterations with a burn-in of 5,000. We test for a difference in the variance and mean of the vector of resulting loss values for TAGM and TAGM-MDI and show them in figure \ref{fig:cv_results}. The results of the tests are shown in table \ref{table:cv_results}.
 
 \begin{figure}[h]
 \caption{Boxplot of results of cross-validation.}
@@ -398,28 +398,39 @@ To test the robustness of the model, we compare the improvement in prediction co
 \centering
 \label{fig:cv_results}
 \end{figure}
-
 \ctable[
 cap = Parameters, botcap,
-caption = {Results of cross-validation.},
+caption = {Results of cross-validation showing $p$-values for tests for difference in mean and variance of loss value for folds for TAGM compared to TAGMMDI.},
 %label = nowidth,
 pos = !htb,
 label = table:cv_results
-] {lcccc} {
-\tnote[a]{Correction to $p$-value is according to the method from \citet{BenjaminiControllingFalseDiscovery1995}.}
+] {lcc} {
 }{ \FL
-Organism & $p$-value & Adjusted $p$-value\tmark[a] \ML
-\emph{Arabidopsis} & 0.572 & 0.859 \NN
-\emph{Drosophila} & 0.573 & 0.859 \NN
-Mouse & 0.947 & 0.947 \LL
+Organism & F-test & t-test \ML
+\emph{Arabidopsis} & 0.378 & 0.572 \NN
+\emph{Drosophila} & 0.761 & 0.573  \NN
+Mouse & 0.861 & 0.947 \LL
 }
+Based on the lack of significant results we did not apply any multiple test correction \cite{BenjaminiControllingFalseDiscovery1995} as it was deemed unnecessary.
 
+\section{Further work}
+Currently the R package \emph{tagmmdi} is being updated by O. Crook to be integrated into the \emph{Bioconductor} repository as part of the \emph{pRoloc} suite.
 
-%MDI for two datasets extended to use a TAGM model on at least one of the datasets. Allows semi-supervised prediction.
+We recommend testing the method on different auxiliary datasets such as Protein-Protein Interactions (PPI) to further test its capabilities. This method can also use a second continuous dataset, so it could be used to test the strength of association between replicates or to investigate for new organelles (perhaps by running the second dataset with an unsupervised mixture of Gaussians). The possibility for this later concept is investigated briefly in figure   \ref{fig:g_g_psm}.
+
+\begin{figure}[h]
+\caption{Posterior similarity matrix of data from \citet{TanMappingOrganelleProteins2009a} for one dataset with a TAGM model as in figure  \ref{fig:tan_psms} and the second with an over-fitted Gaussian mixture model for which $K=17$. The PSM is for the latter. Class predictions are from the TAGM model.}
+\includegraphics[scale=0.9]{tan_tan_unsupervised_with_prediction_edit}
+\centering
+\label{fig:g_g_psm}
+\end{figure}
+One can see that different organelles show strong sub-clusters. This suggests investigating this question and developing extensions to \emph{tagmmdi} for this purpose.
+
+Different MCMC methods such as a collapsed Gibbs sampler or Hamiltonian MCMC might lower the computational cost.
 
 \appendix
 \section{Conjugate priors}
-We use conjugate priors to have the closed form of the distributions to sample from. For the multivariate normal distribution of unknown mean and variance this is a normal-inverse-Wishart (NIW) with 4 associated prior parameters:
+We use conjugate priors to make sampling easier. For the multivariate normal distribution of unknown mean and variance the conjugate prior is a normal-inverse-Wishart (NIW) with 4 associated prior parameters:
 \begin{itemize}
  \item $\mu_0$ - prior on the mean, a $p$-vector where $p$ is the number of features in the data;
  \item $\lambda_0$ - the shrinkage on the variance, a positive real number;
@@ -603,6 +614,8 @@ p(\phi |  \left\{c_{i1}, c_{i2}\right\}_{i=1}^n, v) &=  \frac{1}{Z_{\phi}'} \sum
 
 \section*{Acknowledgments}
 Thanks are due to my supervisors Paul Kirk (primary) and Laurent Gatto (secondary) as well as their PhD student Oliver M Crook who was very free with his time in explaining concepts to me. The project was designed and overseen by Paul who also took the time to run through my code on a few occasions which is an intimidating task for the unwary. All the people at the MRC Biostatistics Unit, Cambridge University made my stay there very pleasant as well as educational.
+
+Thanks also to Aalt-Jan van Dijk for agreeing to supervise me from Wagenignen, thereby enabling this project.
 
 With regards to software this project was massively enabled by RStudio \cite{RStudioTeamRStudioIntegratedDevelopment2016} and GitHub. \citet{EddelbuettelRcppSeamlessIntegration2011} deserve special mention for the development of Rcpp which made integrating the Gibbs sampler from C++ far easier. The C++ is almost entirely coded using objects and functions from Armadillo \cite{SandersonArmadillotemplatebasedlibrary2016}.
 

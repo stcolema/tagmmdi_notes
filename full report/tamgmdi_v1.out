@@ -10,13 +10,14 @@
 \BOOKMARK [1][-]{section.5}{T-augmented Gaussian mixture models}{}% 10
 \BOOKMARK [1][-]{section.6}{GO terms}{}% 11
 \BOOKMARK [1][-]{section.7}{TAGMMDI}{}% 12
-\BOOKMARK [1][-]{appendix.A}{Conjugate priors}{}% 13
-\BOOKMARK [2][-]{subsection.A.1}{Continuous}{appendix.A}% 14
-\BOOKMARK [2][-]{subsection.A.2}{Categorical}{appendix.A}% 15
-\BOOKMARK [1][-]{appendix.B}{MDI model}{}% 16
-\BOOKMARK [2][-]{subsection.B.1}{v}{appendix.B}% 17
-\BOOKMARK [2][-]{subsection.B.2}{kl}{appendix.B}% 18
-\BOOKMARK [2][-]{subsection.B.3}{ and associated derivations}{appendix.B}% 19
-\BOOKMARK [3][-]{subsubsection.B.3.1}{Conditional probability}{subsection.B.3}% 20
-\BOOKMARK [3][-]{subsubsection.B.3.2}{Posterior distribution}{subsection.B.3}% 21
-\BOOKMARK [1][-]{section*.6}{References}{}% 22
+\BOOKMARK [1][-]{section.8}{Further work}{}% 13
+\BOOKMARK [1][-]{appendix.A}{Conjugate priors}{}% 14
+\BOOKMARK [2][-]{subsection.A.1}{Continuous}{appendix.A}% 15
+\BOOKMARK [2][-]{subsection.A.2}{Categorical}{appendix.A}% 16
+\BOOKMARK [1][-]{appendix.B}{MDI model}{}% 17
+\BOOKMARK [2][-]{subsection.B.1}{v}{appendix.B}% 18
+\BOOKMARK [2][-]{subsection.B.2}{kl}{appendix.B}% 19
+\BOOKMARK [2][-]{subsection.B.3}{ and associated derivations}{appendix.B}% 20
+\BOOKMARK [3][-]{subsubsection.B.3.1}{Conditional probability}{subsection.B.3}% 21
+\BOOKMARK [3][-]{subsubsection.B.3.2}{Posterior distribution}{subsection.B.3}% 22
+\BOOKMARK [1][-]{section*.7}{References}{}% 23

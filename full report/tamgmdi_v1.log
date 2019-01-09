@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.19 (MiKTeX 2.9.6700 64-bit) (preloaded format=pdflatex 2018.6.11)  9 JAN 2019 18:57
+This is pdfTeX, Version 3.14159265-2.6-1.40.19 (MiKTeX 2.9.6700 64-bit) (preloaded format=pdflatex 2018.6.11)  9 JAN 2019 19:05
 entering extended mode
 **./tamgmdi_v1.tex
 (tamgmdi_v1.tex
@@ -2802,7 +2802,7 @@ Here is how much of TeX's memory you used:
  49534 multiletter control sequences out of 15000+200000
  583067 words of font info for 159 fonts, out of 3000000 for 9000
  1141 hyphenation exceptions out of 8191
- 73i,12n,127p,1058b,947s stack positions out of 5000i,500n,10000p,200000b,50000s
+ 73i,12n,127p,1066b,947s stack positions out of 5000i,500n,10000p,200000b,50000s
 {C:/Program Files/MiKTeX 2.9/fonts/enc/dvips/base/8r.enc}<C:/Program Files/Mi
 KTeX 2.9/fonts/type1/public/amsfonts/cm/cmex10.pfb><C:/Program Files/MiKTeX 2.9
 /fonts/type1/public/amsfonts/cm/cmmi10.pfb><C:/Program Files/MiKTeX 2.9/fonts/t
@@ -2814,7 +2814,7 @@ ram Files/MiKTeX 2.9/fonts/type1/urw/helvetic/uhvr8a.pfb><C:/Program Files/MiKT
 eX 2.9/fonts/type1/urw/palatino/uplb8a.pfb><C:/Program Files/MiKTeX 2.9/fonts/t
 ype1/urw/palatino/uplr8a.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/urw/palat
 ino/uplri8a.pfb>
-Output written on tamgmdi_v1.pdf (20 pages, 460682 bytes).
+Output written on tamgmdi_v1.pdf (20 pages, 460681 bytes).
 PDF statistics:
  449 PDF objects out of 1000 (max. 8388607)
  157 named destinations out of 1000 (max. 500000)

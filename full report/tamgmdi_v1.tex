@@ -204,10 +204,12 @@ We use the following symbols throughout this piece.
  \item $\gamma_{jl} \in \mathbb{R}_+$: the component weights for the $j$th component in dataset $l$.
 \end{itemize}
 
-\section{Gibbs sampler}
+\section{Theory}
+We explain some of the concepts upon which the tagmmdi model is built and briefly describe how the datasets used to produce the results are created.
+\subsection{Gibbs sampler}
 Gibbs sampling is based on the concept of \emph{Monte Carlo integration} and \emph{Markov chains}. It is a special case of the \emph{Metropolis-Hastings algorithm}. Gibbs sampling is used to sample directly from the posterior distribution of the model's random variables. We briefly describe the emphasized terms below before describing Gibbs sampling in more detail.
 
-\subsection{Monte Carlo integration}
+\subsubsection{Monte Carlo integration}
 The original Monte Carlo method was developed by Stanislaw Ulam, a Polish mathematician while he worked at Los Alamos on the Manhattan Project, along with Nicholas Metropolis \cite{CooperCardinalsChaosReflection1989} as a means to solving integrals by use of random number generation \cite{MetropolisMonteCarloMethod1949}. Suppose there is some complex integral we wish to solve on some interval, $(a,b)$:
 
 \begin{align}
@@ -225,7 +227,7 @@ We assume that we can approximate this expectation of $f(x)$ over $p(x)$ by draw
 \end{align}
 This is \emph{Monte Carlo integration}.
 
-\subsection{Markov chains}
+\subsubsection{Markov chains}
 Consider a random variable $X$ observed at discrete times $t = (t_0,\ldots,t_n)$, with the observation at $t_i$ denoted $X(t_i)$. Let $S$ be the state space of possible values $X$ can take. $X$ is said to have the \emph{Markov property} if the transition probabilities between states depend only on the current state, i.e. for any states $s_i, s_j, s_k \in S$:
 
 \begin{align}
@@ -245,9 +247,9 @@ For some state $s \in S$ denote $ \mathbb{Pr}(X(t_{n+1}) = s)$ by $\pi_s$. The c
 \begin{align}
  \mathbb{Pr}(X(t_{n+1}) = x | X(t_n) = y)  \pi_x  =  \mathbb{Pr}(X(t_{n+1}) = y | X(t_n) = x) \pi_y
 \end{align}
-This is sufficient condition for a unique, stationary distribution, i.e. for the probability vector of being in any given state for the process is independent of the initial condition.
+This is sufficient condition for a unique, stationary distribution. That is the probability of being in any given state for the process is independent of the starting condition given sufficient time.
 
-\subsection{Markov-Chain Monte Carlo methods}
+\subsubsection{Markov-Chain Monte Carlo methods}
 Markov-Chain Monte Carlo (MCMC) methods developed as a method to obtain samples from some complex distribution $p(x)$ for the decomposition suggested in \eqref{monte_carlo_basis}. Our goal in the following is to draw samples from some distribution $p(\theta)$ where we have some distribution $f(\theta)$ such that:
 
 \begin{align}
@@ -255,8 +257,7 @@ p(\theta) = \frac{f(\theta)}{K}
 \end{align}
 For some constant $K$ where $K$ may not be known and is often difficult to compute.
 
-\subsubsection{The Metropolis-Hastings algorithm}
-The Metropolis-Hastings algorithm \cite{HastingsMonteCarloSampling} is an extension to the original Metropolis algorithm which allows for asymmetry in state probabilities (i.e. that $p_{ij} \neq p_{ji}$). The Metropolis algorithm \cite{MetropolisMonteCarloMethod1949} \cite{MetropolisEquationStateCalculations1953} generates a sequence of draws from $p(\theta)$ using the following steps:
+The Metropolis-Hastings algorithm \cite{HastingsMonteCarloSampling} is a popular MCMC algorithm. It is an extension to the original Metropolis algorithm which allows for asymmetry in state probabilities (i.e. that $p_{ij} \neq p_{ji}$). The Metropolis algorithm \cite{MetropolisMonteCarloMethod1949} \cite{MetropolisEquationStateCalculations1953} generates a sequence of draws from $p(\theta)$ using the following steps:
 
 \begin{enumerate}
  \item Initialise with some arbitrary value $\theta_0$ with the condition that $f(\theta_0) > 0$ and also choose some probability density $q(\theta_1|\theta_2)$ as the \emph{jumping distribution} or \emph{proposal density}. For the Metropolis algorithm we demand that this be symmetric (i.e. $q(\theta_1 | \theta_2) = q(\theta_2 | \theta_1)$).
@@ -279,12 +280,11 @@ This generates a Markov chain $(\theta_0,\ldots,\theta_k,\ldots, \theta_n)$ as e
 \alpha = \min\left(\frac{f(\theta^*) q(\theta^*|\theta_{t-1})}{f(\theta_{t-1})q(\theta_{t-1}|\theta^*)}, 1\right)
 \end{align}
 
-\subsubsection{Gibbs sampler}
-\citet{GemanStochasticRelaxationGibbs1984} use a special case of the Metropolis-Hastings algorithm, taking $\alpha = 1 \; \forall \; \theta^*$, accepting all proposed values.
+\citet{GemanStochasticRelaxationGibbs1984} use a special case of the Metropolis-Hastings algorithm, taking $\alpha = 1 \; \forall \; \theta^*$, accepting all proposed values. This is known as a \emph{Gibbs sampler}.
 
-These methods are useful in a Bayesian context as we are interested in a rather complex distribution, the posterior, and know two simpler quantities, the prior and the likelihood, that the posterior is proportional to. Thus with a sufficient burn-in period we can use MCMC methods to sample directly from the posterior distribution without directly calculating the normalising constant.
+These methods are useful in a Bayesian context as we are interested in a rather complex distribution, the posterior, and know two simpler quantities, the prior and the likelihood, that the posterior is proportional to (as shown in \eqref{Bayes_theorem}). Thus with a sufficient burn-in period we can use MCMC methods to sample directly from the posterior distribution without directly calculating the normalising constant.
 
-\section{Mixture models} \label{mixture_models}
+\subsection{Mixture models} \label{mixture_models}
 Given some data $X = (x_1, \ldots, x_n)$, we assume a number of unobserved processes generate the data, and membership to a process for individual $i$ is represented using the latent variable $c_i$. It is assumed that each of the $K$ processes can be modelled by a parametric distribution, $f(\cdot)$ with associated parameters $\theta$ and that the full model density is then the weighted sum of these probability density functions where the weights are the component proportions, $\pi_k$:
 
 \begin{align}
@@ -321,7 +321,52 @@ In terms of sampling the prior is very useful as it allows us to ensure that the
 
 Our implementation uses distributions on the priors that enforce conjugacy. This allows us to sample directly from the correct distribution for each posterior distribution.
 
-\section{Multiple dataset integration}
+\subsection{Conjugate priors}
+We use \emph{conjugate priors} to make sampling easier. Conjugate priors are a family of distributions such that for a likelihood of a given distribution the posterior is of the same family as the prior. As a consequence we obtain a closed, tractable integral for the posterior.
+
+ For the multivariate normal distribution of unknown mean and variance the conjugate prior is a normal-inverse-Wishart (NIW) with 4 associated prior parameters:
+\begin{itemize}
+ \item $\mu_0$ - prior on the mean, a $p$-vector where $p$ is the number of features in the data;
+ \item $\lambda_0$ - the shrinkage on the variance, a positive real number;
+ \item $\nu_0$ - the degrees of freedom in the inverse-Wishart, a positive integer; and 
+ \item $\Psi_0$ - the inverse scale matrix for the inverse-Wishart distribution, a positive definite $p \times p$ matrix.
+\end{itemize}
+For the Categorical distribution this is a Dirichlet with prior concentration parameter $\alpha_0$.
+
+\subsubsection{Continuous}
+For the continuous dataset we use a mixture of multivariate Gaussian models with each mixture defined by parameters $\mu$ adn $\Sigma$, the mean and covariance respectively. After observing a sample of $n$ individuals allocated to mixture component $k$ we update the associated parameters, $\mu$ and $\Sigma$, by drawing from the NIW. That is:
+
+\begin{align}
+(\mu, \Sigma) \sim \text{NIW}(\mu_n, \lambda_n, \Psi_n, \nu_n)
+\end{align}
+The pdf of this is:
+
+\begin{align}
+f(\mu, \Sigma | \mu_n, \lambda_n, \Psi_n, \nu_n) = \mathcal{N}\left(\mu | \mu_n, \frac{1}{\lambda_n}\Sigma\right)\mathcal{W}^{-1}\left(\Sigma | \Psi_n, \nu_n \right)
+\end{align}
+To calculate the updated hyperparameters for the sample, first let:
+
+\begin{align}
+\bar{x} &= \frac{1}{n}\sum_{i=1}^n x_i \\
+S &= \sum_{i=1}^n (x_i - \bar{x})(x_i - \bar{x})^T
+\end{align}
+Then update the hyperparameters using:
+
+\begin{align}
+\mu_n &= \frac{\lambda_0 \mu_0 + n \bar{x}}{\lambda_0 + n} \\
+\lambda_n &= \lambda_0 + n \\
+\nu_n &= \nu_0 + n \\
+\Psi_n &= \Psi_0 + S + \frac{\lambda_0 n}{\lambda_0 + n}(\bar{x} - \mu_0) (\bar{x} - \mu_0)^T
+\end{align}
+
+\subsubsection{Categorical}
+To obtain the posterior distribution in the categorical data we update our Dirichlet prior for each mixture by adding the count of the individuals allocated to said mixture. That is for a prior concentration parameter $\alpha_0$, for a mixture $k$ we update as so:
+
+\begin{align}
+\alpha_{nk} = \alpha_0 + \sum_{i=1}^n \mathbb{I}(c_i = k)
+\end{align}
+
+\subsection{Multiple dataset integration}
 If we have observed paired datasets $X_1 = (x_{1,1},\ldots,x_{n,1}), X_2 = (x_{1,2},\ldots,x_{n,2})$, where observations in the $i$th row of each dataset represent information about the same individual. We would like to cluster using information common to both datasets. One could concatenate the datasets, adding additional covariates for each individual. However, if the two datasets have different clustering structures this would reduce the signal of both clusterings and probably have one dominate. If the two datasets have the same structure but different signal-to-noise ratios this would reduce the signal in the final clustering. In both these cases independent models on each dataset would be preferable. \citet{kirkBayesianCorrelatedClustering2012} suggest a method to carry out clustering on both datasets where common information is used but two individual clusterings are outputted. This method is driven by the allocation prior:
 
 \begin{align} \label{allocation_prior}
@@ -331,7 +376,7 @@ Here $\phi \in \mathbb{R}_+$ controls the strength of association between datase
 
 MDI has been applied to precision medicine, specifically glioblastoma sub-typing \cite{SavageIdentifyingcancersubtypes2013a}, in the past showing its potential as a tool.
 
-\section{Protein localisation}
+\subsection{Protein localisation}
 Protein localisation is a fundamental question as localisation to the correct location is required for interaction with its binding partners and to carry out its function \cite{GibsonCellregulationdetermined2009}. These cellular components also provide the ideal biochemical environment for the proteins to function. Aberrant localisation is associated with a multitude of diseases including many subtypes of cancer, obesity and cardiovascular disease \cite{SiljeeSubcellularlocalizationMC4R2018a}\cite{HungProteinlocalizationdisease2011a}\cite{KauNucleartransportcancer2004a}. A thorough understanding of the biology behind protein localisation is important to a better understanding of these diseases. Possible translational implications of this understanding are diagnostic tools such as blood or urine tests based on protein localisation or drugs to correct mislocalisation as part of treatment \cite{KauNucleartransportcancer2004a}\cite{HorganOmictechnologiesgenomics2011a}.
 
 The protein localisation data is produced using synchronous precursor selection (SPS)-based MS$^3$ technology using the LOPIT and \emph{hyper}LOPIT pipelines \cite{GeladakiLOPITDCsimplerapproach2018}\cite{DunkleyLocalizationOrganelleProteins2004}. In summary:
@@ -343,7 +388,7 @@ The protein localisation data is produced using synchronous precursor selection 
 \end{enumerate}
 Thus for each fraction we have a description of the proteins present. The normalised incidence of the protein across fractions is found to follow a specific pattern unique to each organelle's associated proteins. From pre-exiting microscopy experiments we have some proteins with known associations to certain organelles. This allows use of supervised and semi-supervised methods to predict the localisation of the unlabelled data.
 
-\section{T-augmented Gaussian mixture models}
+\subsection{T-augmented Gaussian mixture models}
 T-augmented Gaussian mixture (TAGM) models are a semi-supervised prediction method using Gaussian mixture models (i.e. models as described in \ref{mixture_models} where the distribution $f$ is restricted to the Normal distribution) with a t-distribution as a ``junk'' or outlier distribution. The model is defined:
 
 \begin{align} \label{tagm_model}
@@ -371,7 +416,7 @@ Similar to the method outlined in \ref{mixture_models}, this model iterates over
 \end{enumerate}
 The proteins allocated as outliers contribute to the mixing proportions but not the component parameters. One of the advantages associated with tagm models is that they quantify the uncertainty of the allocation. This distribution of allocation probability across the $K$ organelles allows greater interpretation of the allocation and as \citet{CrookBayesianMixtureModelling2018a} show can lead to the concept of multiple membership.
 
-\section{GO terms}
+\subsection{GO terms}
 Gene ontology terms describe characteristics of gene-products in three non-overlapping areas of molecular biology \cite{GeneOntologyConsortiumGeneOntologyGO2004}.
 
 \begin{itemize}
@@ -381,16 +426,17 @@ Gene ontology terms describe characteristics of gene-products in three non-overl
 \end{itemize}
 As one can see in the examples provided by \citet{AshburnerGeneOntologytool2000}, there is a hierarchy within the terms - the terms may be described using a directed acyclic graph. In our implementation we ignore this hierarchy and treat the terms as a matrix of binary variables. This simplifying assumption is made for the sake of computational complexity. We choose GO terms as an additional dataset as they contain the same proteins as our MS data (i.e. can be used within the MDI framework), are freely available and are expected to provide some additional information regarding the prediction of localisation based on the results of \citet{BreckelsLearningHeterogeneousData2016a}. The GO terms are a summary dataset in some way - they are not experiment specific and not cell-type specific, and hence are expected to contain a lower signal-to-noise ratio for protein localisation then the MS data.
 
-\section{TAGMMDI}
+\subsection{tagmmdi}
 Within each dataset we assume a common prior for each mixture. For the MS data with some known labels we fit a TAGM model where $K$ is equal to the number of organelles present in the training data. These points are held fixed in their allocation across all iterations and the associated component is considered to represent allocation to the associated organelle. We overfit a mixture of Dirichlet models on the GO term dataset (i.e. we set the number of cluster to an arbitrarily high number). MDI is applied and the output of interest for prediction is the posterior similarity matrix. As each component represents a specific organelle, proteins with a greater frequency of allocation to the same component are predicted to localise to the associated organelle.
 
+\section{Results}
 \begin{figure}[h]
 \centering
 \includegraphics[scale=0.9]{tan_psm_edit}
 \caption{Posterior similarity matrix of data from \citet{TanMappingOrganelleProteins2009a}.}
 \label{fig:tan_psms}
 \end{figure}
-To test the robustness of the model, we compare the improvement in prediction compared to the standalone TAGM model under the quadratic loss function. We compare the improvement in prediction from including the GO terms on data from \emph{Arabidopsis} \cite{GroenIdentificationTransGolgiNetwork2014a}, \emph{Drosophila}\cite{TanMappingOrganelleProteins2009a} and mouse stem cells \cite{Christoforoudraftmapmouse2016a}. Within the known proteins we carry out cross validation, holding out $20\%$ of the data as a validation set for 10 separate folds of 15,000 iterations with a burn-in of 5,000. We test for a difference in the variance and mean of the vector of resulting loss values for TAGM and TAGM-MDI and show them in figure \ref{fig:cv_results}. The results of the tests are shown in table \ref{table:cv_results}.
+To test the robustness of the tagmmdi model, we compare the improvement in prediction compared to the standalone TAGM model under the quadratic loss function. We compare the improvement in prediction from including the GO terms on data from \emph{Arabidopsis} \cite{GroenIdentificationTransGolgiNetwork2014a}, \emph{Drosophila}\cite{TanMappingOrganelleProteins2009a} and mouse stem cells \cite{Christoforoudraftmapmouse2016a}. Within the known proteins we carry out cross validation, holding out $20\%$ of the data as a validation set for 10 separate folds of 15,000 iterations with a burn-in of 5,000. We test for a difference in the variance and mean of the vector of resulting loss values for TAGM and tagmmdi and show them in figure \ref{fig:cv_results}. The results of the tests are shown in table \ref{table:cv_results}.
 
 \begin{figure}[h]
 \centering
@@ -401,7 +447,7 @@ To test the robustness of the model, we compare the improvement in prediction co
 \ctable[
 botcap,
 %cap = Parameters,
-caption = {Results of cross-validation showing $p$-values for tests for difference in mean and variance of loss value for folds for TAGM compared to TAGMMDI.},
+caption = {Results of cross-validation showing $p$-values for tests for difference in mean and variance of loss value for folds for TAGM compared to tagmmdi.},
 mincapwidth=12cm,
 %label = nowidth,
 pos = !htb,
@@ -415,8 +461,31 @@ Mouse & 0.861 & 0.947 \LL
 }
 Based on the lack of significant results we did not apply any multiple test correction \cite{BenjaminiControllingFalseDiscovery1995} as it was deemed unnecessary.
 
+All results were produced using the versions of software and hardware as shown in table \ref{table:hardware}.
+\ctable[
+botcap,
+%cap = Parameters,
+caption = {Description of relevant computer hardware and software.},
+%mincapwidth=12cm,
+%label = nowidth,
+pos = !htb,
+label = table:hardware
+] {ll} {
+}{ \FL
+Object & Details \ML
+Model & LENOVO ideapad 110-17ACL\NN
+Processor & AMD A8-7410 APU with AMD Radeon R5 Graphics 2.20 GHz \NN
+Available RAM & 6.91GB \NN
+OS & Windows 10 Home v 1803 \NN
+R version & 3.5.1 \NN
+Rstudio version & 1.1.456 \NN
+Rcpp version & 0.12.18 \NN
+ARMA version & 9.100.5 \LL
+}
+
+
 \section{Conclusions and further work}
-Compare to the vanilla TAGM model we see that TAGMMDI does significantly differ in table \ref{table:cv_results}. It is worth commenting that there is no disimprovement either, so if the computational cost is not a limit use of TAGMMDI models will not offer any risk. We suggest that with a carefully chosen secondary dataset we could acquire information about our subclusters as categorical data is normally more interpretable than continuous data. We state this as the categories are normally human defined whereas continuous data, as a matrix of quantitative measurements, can be slightly dense. This applies less so in the supervised case investigated here, but certainly holds for many unsupervised cases and could reveal information about the subclusters even in the supervised case. We recommend testing the method on different auxiliary datasets such as Protein-Protein Interactions (PPI) to further test its capabilities.
+Compare to the vanilla TAGM model we see that tagmmdi does significantly differ in table \ref{table:cv_results}. It is worth commenting that there is no disimprovement either, so if the computational cost is not a limit use of tagmmdi models will not offer any risk. We suggest that with a carefully chosen secondary dataset we could acquire information about our subclusters as categorical data is normally more interpretable than continuous data. We state this as the categories are normally human defined whereas continuous data, as a matrix of quantitative measurements, can be slightly dense. This applies less so in the supervised case investigated here, but certainly holds for many unsupervised cases and could reveal information about the subclusters even in the supervised case. We recommend testing the method on different auxiliary datasets such as Protein-Protein Interactions (PPI) to further test its capabilities.
 
 The functions in \emph{tagmmdi} also allow use of a second continuous dataset. This could be used to test the strength of association between replicates or to investigate for new organelles (perhaps by running the second dataset with an unsupervised mixture of Gaussians). The possibility for this later concept is investigated briefly in figure \ref{fig:g_g_psm}.
 
@@ -433,51 +502,9 @@ Currently the R package \emph{tagmmdi} is being updated by O. Crook to be integr
 Different MCMC methods such as a collapsed Gibbs sampler or Hamiltonian MCMC might lower the computational cost.
 
 \appendix
-\section{Conjugate priors}
-We use conjugate priors to make sampling easier. For the multivariate normal distribution of unknown mean and variance the conjugate prior is a normal-inverse-Wishart (NIW) with 4 associated prior parameters:
-\begin{itemize}
- \item $\mu_0$ - prior on the mean, a $p$-vector where $p$ is the number of features in the data;
- \item $\lambda_0$ - the shrinkage on the variance, a positive real number;
- \item $\nu_0$ - the degrees of freedom in the inverse-Wishart, a positive integer; and 
- \item $\Psi_0$ - the inverse scale matrix for the inverse-Wishart distribution, a positive definite $p \times p$ matrix.
-\end{itemize}
-For the Categorical distribution this is a Dirichlet with prior concentration parameter $\alpha_0$.
-
-\subsection{Continuous}
-For the continuous dataset we use a mixture of multivariate Gaussian models with each mixture defined by parameters $\mu$ adn $\Sigma$, the mean and covariance respectively. After observing a sample of $n$ individuals allocated to mixture component $k$ we update the associated parameters, $\mu$ and $\Sigma$, by drawing from the NIW. That is:
-
-\begin{align}
-(\mu, \Sigma) \sim \text{NIW}(\mu_n, \lambda_n, \Psi_n, \nu_n)
-\end{align}
-The pdf of this is:
-
-\begin{align}
-f(\mu, \Sigma | \mu_n, \lambda_n, \Psi_n, \nu_n) = \mathcal{N}\left(\mu | \mu_n, \frac{1}{\lambda_n}\Sigma\right)\mathcal{W}^{-1}\left(\Sigma | \Psi_n, \nu_n \right)
-\end{align}
-To calculate the updated hyperparameters for the sample, first let:
-
-\begin{align}
-\bar{x} &= \frac{1}{n}\sum_{i=1}^n x_i \\
-S &= \sum_{i=1}^n (x_i - \bar{x})(x_i - \bar{x})^T
-\end{align}
-Then update the hyperparameters using:
-
-\begin{align}
-\mu_n &= \frac{\lambda_0 \mu_0 + n \bar{x}}{\lambda_0 + n} \\
-\lambda_n &= \lambda_0 + n \\
-\nu_n &= \nu_0 + n \\
-\Psi_n &= \Psi_0 + S + \frac{\lambda_0 n}{\lambda_0 + n}(\bar{x} - \mu_0) (\bar{x} - \mu_0)^T
-\end{align}
-
-\subsection{Categorical}
-To obtain the posterior distribution in the categorical data we update our Dirichlet prior for each mixture by adding the count of the individuals allocated to said mixture. That is for a prior concentration parameter $\alpha_0$, for a mixture $k$ we update as so:
-
-\begin{align}
-\alpha_{nk} = \alpha_0 + \sum_{i=1}^n \mathbb{I}(c_i = k)
-\end{align}
 
 \section{MDI model}
-For multiple dataset integration (\textbf{MDI}) in the case of $n$ observations in 2 datasets (also referred to as \emph{contexts}):
+For MDI in the case of $n$ observations in 2 datasets (also referred to as \emph{contexts}):
 
 \begin{align}
 p(\left\{c_{i1}, c_{i2}\right\}_{i=1}^n, v) \propto \gamma_{c_{i1}1} \gamma_{c_{i2}2} \left(1 + \phi \mathbb{I}(c_{i1} = c_{i2})\right)  \label{general_model}
@@ -624,6 +651,7 @@ Thanks also to Aalt-Jan van Dijk for agreeing to supervise me from Wagenignen th
 With regards to software this project was massively enabled by RStudio \cite{RStudioTeamRStudioIntegratedDevelopment2016} and GitHub. \citet{EddelbuettelRcppSeamlessIntegration2011} deserve special mention for the development of Rcpp which made integrating the Gibbs sampler from C++ far easier. The C++ is almost entirely coded using objects and functions from Armadillo \cite{SandersonArmadillotemplatebasedlibrary2016}.
 
 The advice from \citet{BryanExcusemeyou} was much appreciated and saved an awful lot of time. 
+
 \newpage
 %\bibliographystyle{abbrv}
 \bibliographystyle{plainnat}

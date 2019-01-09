@@ -1,23 +1,23 @@
-\BOOKMARK [1][-]{section.1}{Gibbs sampler}{}% 1
-\BOOKMARK [2][-]{subsection.1.1}{Monte Carlo integration}{section.1}% 2
-\BOOKMARK [2][-]{subsection.1.2}{Markov chains}{section.1}% 3
-\BOOKMARK [2][-]{subsection.1.3}{Markov-Chain Monte Carlo methods}{section.1}% 4
-\BOOKMARK [3][-]{subsubsection.1.3.1}{The Metropolis-Hastings algorithm}{subsection.1.3}% 5
-\BOOKMARK [3][-]{subsubsection.1.3.2}{Gibbs sampler}{subsection.1.3}% 6
-\BOOKMARK [1][-]{section.2}{Mixture models}{}% 7
-\BOOKMARK [1][-]{section.3}{Multiple dataset integration}{}% 8
-\BOOKMARK [1][-]{section.4}{Protein localisation}{}% 9
-\BOOKMARK [1][-]{section.5}{T-augmented Gaussian mixture models}{}% 10
-\BOOKMARK [1][-]{section.6}{GO terms}{}% 11
-\BOOKMARK [1][-]{section.7}{TAGMMDI}{}% 12
-\BOOKMARK [1][-]{section.8}{Conclusions and further work}{}% 13
-\BOOKMARK [1][-]{appendix.A}{Conjugate priors}{}% 14
-\BOOKMARK [2][-]{subsection.A.1}{Continuous}{appendix.A}% 15
-\BOOKMARK [2][-]{subsection.A.2}{Categorical}{appendix.A}% 16
-\BOOKMARK [1][-]{appendix.B}{MDI model}{}% 17
-\BOOKMARK [2][-]{subsection.B.1}{v}{appendix.B}% 18
-\BOOKMARK [2][-]{subsection.B.2}{kl}{appendix.B}% 19
-\BOOKMARK [2][-]{subsection.B.3}{ and associated derivations}{appendix.B}% 20
-\BOOKMARK [3][-]{subsubsection.B.3.1}{Conditional probability}{subsection.B.3}% 21
-\BOOKMARK [3][-]{subsubsection.B.3.2}{Posterior distribution}{subsection.B.3}% 22
-\BOOKMARK [1][-]{section*.7}{References}{}% 23
+\BOOKMARK [1][-]{section.1}{Theory}{}% 1
+\BOOKMARK [2][-]{subsection.1.1}{Gibbs sampler}{section.1}% 2
+\BOOKMARK [3][-]{subsubsection.1.1.1}{Monte Carlo integration}{subsection.1.1}% 3
+\BOOKMARK [3][-]{subsubsection.1.1.2}{Markov chains}{subsection.1.1}% 4
+\BOOKMARK [3][-]{subsubsection.1.1.3}{Markov-Chain Monte Carlo methods}{subsection.1.1}% 5
+\BOOKMARK [2][-]{subsection.1.2}{Mixture models}{section.1}% 6
+\BOOKMARK [2][-]{subsection.1.3}{Conjugate priors}{section.1}% 7
+\BOOKMARK [3][-]{subsubsection.1.3.1}{Continuous}{subsection.1.3}% 8
+\BOOKMARK [3][-]{subsubsection.1.3.2}{Categorical}{subsection.1.3}% 9
+\BOOKMARK [2][-]{subsection.1.4}{Multiple dataset integration}{section.1}% 10
+\BOOKMARK [2][-]{subsection.1.5}{Protein localisation}{section.1}% 11
+\BOOKMARK [2][-]{subsection.1.6}{T-augmented Gaussian mixture models}{section.1}% 12
+\BOOKMARK [2][-]{subsection.1.7}{GO terms}{section.1}% 13
+\BOOKMARK [2][-]{subsection.1.8}{tagmmdi}{section.1}% 14
+\BOOKMARK [1][-]{section.2}{Results}{}% 15
+\BOOKMARK [1][-]{section.3}{Conclusions and further work}{}% 16
+\BOOKMARK [1][-]{appendix.A}{MDI model}{}% 17
+\BOOKMARK [2][-]{subsection.A.1}{v}{appendix.A}% 18
+\BOOKMARK [2][-]{subsection.A.2}{kl}{appendix.A}% 19
+\BOOKMARK [2][-]{subsection.A.3}{ and associated derivations}{appendix.A}% 20
+\BOOKMARK [3][-]{subsubsection.A.3.1}{Conditional probability}{subsection.A.3}% 21
+\BOOKMARK [3][-]{subsubsection.A.3.2}{Posterior distribution}{subsection.A.3}% 22
+\BOOKMARK [1][-]{section*.8}{References}{}% 23

@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.19 (MiKTeX 2.9.6700 64-bit) (preloaded format=pdflatex 2018.6.11)  9 JAN 2019 19:05
+This is pdfTeX, Version 3.14159265-2.6-1.40.19 (MiKTeX 2.9.6700 64-bit) (preloaded format=pdflatex 2018.6.11)  10 JAN 2019 13:17
 entering extended mode
 **./tamgmdi_v1.tex
 (tamgmdi_v1.tex
@@ -2643,17 +2643,17 @@ LaTeX Font Info:    Font shape `OMS/ppl/m/n' in size <10.95> not available
 
 {C:/Users/steph/AppData/Local/MiKTeX/2.9/pdftex/config/pdftex.map}]
 LaTeX Font Info:    Font shape `OT1/ppl/bx/n' in size <14.4> not available
-(Font)              Font shape `OT1/ppl/b/n' tried instead on input line 207.
-LaTeX Font Info:    Font shape `OT1/phv/bx/n' in size <14.4> not available
-(Font)              Font shape `OT1/phv/b/n' tried instead on input line 207.
-LaTeX Font Info:    Font shape `OT1/ppl/bx/n' in size <10.95> not available
 (Font)              Font shape `OT1/ppl/b/n' tried instead on input line 212.
-LaTeX Font Info:    Font shape `OT1/phv/bx/n' in size <10.95> not available
+LaTeX Font Info:    Font shape `OT1/phv/bx/n' in size <14.4> not available
 (Font)              Font shape `OT1/phv/b/n' tried instead on input line 212.
+LaTeX Font Info:    Font shape `OT1/ppl/bx/n' in size <10.95> not available
+(Font)              Font shape `OT1/ppl/b/n' tried instead on input line 217.
+LaTeX Font Info:    Font shape `OT1/phv/bx/n' in size <10.95> not available
+(Font)              Font shape `OT1/phv/b/n' tried instead on input line 217.
 
-Overfull \hbox (2.09087pt too wide) in paragraph at lines 213--214
+Overfull \hbox (6.09842pt too wide) in paragraph at lines 218--219
 \OT1/ppl/m/n/10.95 cian while he worked at Los Alamos on the Man-hat-tan Projec
-t, along with Nicholas Metropo-
+t. Along with Nicholas Metropo-
  []
 
 [2]
@@ -2669,48 +2669,48 @@ Missing character: There is no r in font fplmbb!
 Missing character: There is no r in font fplmbb!
 Missing character: There is no r in font fplmbb!
  [3] [4]
-Overfull \hbox (2.18848pt too wide) in paragraph at lines 300--301
+Overfull \hbox (2.18848pt too wide) in paragraph at lines 307--308
 \OT1/ppl/m/n/10.95 Each in-di-vid-ual's mem-ber-ship prob-a-bil-i-ties are con-
 di-tion-ally in-de-pen-dent of the other mem-
  []
 
 [5] [6] [7] [8] [9]
-<tan_psm_edit.jpg, id=248, 621.07031pt x 332.74312pt>
+<tan_psm_edit.jpg, id=250, 621.07031pt x 332.74312pt>
 File: tan_psm_edit.jpg Graphic file (type jpg)
 <use tan_psm_edit.jpg>
-Package pdftex.def Info: tan_psm_edit.jpg  used on input line 435.
+Package pdftex.def Info: tan_psm_edit.jpg  used on input line 442.
 (pdftex.def)             Requested size: 558.95811pt x 299.46603pt.
 
-Overfull \hbox (117.94038pt too wide) in paragraph at lines 435--436
+Overfull \hbox (117.94038pt too wide) in paragraph at lines 442--443
  [][] 
  []
 
 [10 <./tan_psm_edit.jpg>]
-<cv_results.jpeg, id=262, 463.7325pt x 332.74312pt>
+<cv_results.jpeg, id=264, 463.7325pt x 332.74312pt>
 File: cv_results.jpeg Graphic file (type jpg)
 <use cv_results.jpeg>
-Package pdftex.def Info: cv_results.jpeg  used on input line 443.
+Package pdftex.def Info: cv_results.jpeg  used on input line 450.
 (pdftex.def)             Requested size: 417.35538pt x 299.46603pt.
 
-Underfull \hbox (badness 10000) in alignment at lines 461--461
+Underfull \hbox (badness 10000) in alignment at lines 468--468
 [][]
  []
 
 
-Underfull \hbox (badness 10000) in alignment at lines 484--484
+Underfull \hbox (badness 10000) in alignment at lines 491--491
 [][]
  []
 
 [11 <./cv_results.jpeg>]
-<tan_tan_unsupervised_with_prediction_edit.jpg, id=277, 556.32843pt x 332.74312
+<tan_tan_unsupervised_with_prediction_edit.jpg, id=279, 556.32843pt x 332.74312
 pt>
 File: tan_tan_unsupervised_with_prediction_edit.jpg Graphic file (type jpg)
 <use tan_tan_unsupervised_with_prediction_edit.jpg>
 Package pdftex.def Info: tan_tan_unsupervised_with_prediction_edit.jpg  used on
- input line 494.
+ input line 501.
 (pdftex.def)             Requested size: 500.69096pt x 299.46603pt.
 
-Overfull \hbox (59.67323pt too wide) in paragraph at lines 494--495
+Overfull \hbox (59.67323pt too wide) in paragraph at lines 501--502
  [][] 
  []
 
@@ -2720,89 +2720,89 @@ LaTeX Warning: `h' float specifier changed to `ht'.
 [12]
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `math shift' on input line 531.
+(hyperref)                removing `math shift' on input line 538.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `math shift' on input line 531.
+(hyperref)                removing `math shift' on input line 538.
 
 [13 <./tan_tan_unsupervised_with_prediction_edit.jpg>]
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `math shift' on input line 539.
+(hyperref)                removing `math shift' on input line 546.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `\gamma' on input line 539.
+(hyperref)                removing `\gamma' on input line 546.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `subscript' on input line 539.
+(hyperref)                removing `subscript' on input line 546.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `math shift' on input line 539.
+(hyperref)                removing `math shift' on input line 546.
 
 
-Overfull \hbox (64.00919pt too wide) detected at line 546
+Overfull \hbox (64.00919pt too wide) detected at line 553
 []
  []
 
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `math shift' on input line 554.
+(hyperref)                removing `math shift' on input line 561.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `\phi' on input line 554.
+(hyperref)                removing `\phi' on input line 561.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `math shift' on input line 554.
+(hyperref)                removing `math shift' on input line 561.
 
 
-Overfull \hbox (50.54396pt too wide) detected at line 560
+Overfull \hbox (50.54396pt too wide) detected at line 567
 []
  []
 
 [14]
-Overfull \hbox (13.21393pt too wide) detected at line 599
+Overfull \hbox (13.21393pt too wide) detected at line 606
 []
  []
 
 [15]
-Overfull \hbox (73.32217pt too wide) detected at line 633
+Overfull \hbox (73.32217pt too wide) detected at line 640
 []
  []
 
 [16]
-Overfull \hbox (94.7346pt too wide) detected at line 639
+Overfull \hbox (94.7346pt too wide) detected at line 646
 []
  []
 
 
-Overfull \hbox (11.03781pt too wide) detected at line 644
+Overfull \hbox (11.03781pt too wide) detected at line 651
 []
  []
 
 [17] (tamgmdi_v1.bbl [18] [19]) [20]
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 660.
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 660.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 667.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 667.
  (tamgmdi_v1.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 660.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 660.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 667.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 667.
 Package rerunfilecheck Info: File `tamgmdi_v1.out' has not changed.
 (rerunfilecheck)             Checksum: B8A0B3CE57EAE78A4BFAF3754B1DB638;1534.
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 660.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 667.
  ) 
 Here is how much of TeX's memory you used:
- 46497 strings out of 492973
- 1031009 string characters out of 3135932
+ 46499 strings out of 492973
+ 1031035 string characters out of 3135932
  1205163 words of memory out of 3000000
  49534 multiletter control sequences out of 15000+200000
  583067 words of font info for 159 fonts, out of 3000000 for 9000
  1141 hyphenation exceptions out of 8191
- 73i,12n,127p,1066b,947s stack positions out of 5000i,500n,10000p,200000b,50000s
+ 73i,12n,127p,1082b,947s stack positions out of 5000i,500n,10000p,200000b,50000s
 {C:/Program Files/MiKTeX 2.9/fonts/enc/dvips/base/8r.enc}<C:/Program Files/Mi
 KTeX 2.9/fonts/type1/public/amsfonts/cm/cmex10.pfb><C:/Program Files/MiKTeX 2.9
 /fonts/type1/public/amsfonts/cm/cmmi10.pfb><C:/Program Files/MiKTeX 2.9/fonts/t
@@ -2814,9 +2814,9 @@ ram Files/MiKTeX 2.9/fonts/type1/urw/helvetic/uhvr8a.pfb><C:/Program Files/MiKT
 eX 2.9/fonts/type1/urw/palatino/uplb8a.pfb><C:/Program Files/MiKTeX 2.9/fonts/t
 ype1/urw/palatino/uplr8a.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/urw/palat
 ino/uplri8a.pfb>
-Output written on tamgmdi_v1.pdf (20 pages, 460681 bytes).
+Output written on tamgmdi_v1.pdf (20 pages, 461321 bytes).
 PDF statistics:
- 449 PDF objects out of 1000 (max. 8388607)
- 157 named destinations out of 1000 (max. 500000)
+ 451 PDF objects out of 1000 (max. 8388607)
+ 159 named destinations out of 1000 (max. 500000)
  212 words of extra memory for PDF output out of 10000 (max. 10000000)
 

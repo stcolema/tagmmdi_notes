@@ -384,7 +384,7 @@ Here $\phi \in \mathbb{R}_+$ controls the strength of association between datase
 MDI has been applied to precision medicine, specifically glioblastoma sub-typing \cite{SavageIdentifyingcancersubtypes2013a}, in the past showing its potential as a tool.
 
 \subsection{Protein localisation}
-Protein localisation is a fundamental question as localisation to the correct location is required for interaction with its binding partners and to carry out its function \cite{GibsonCellregulationdetermined2009}. These cellular components also provide the ideal biochemical environment for the proteins to function. Aberrant localisation is associated with a multitude of diseases including many subtypes of cancer, obesity and cardiovascular disease \cite{SiljeeSubcellularlocalizationMC4R2018a}\cite{HungProteinlocalizationdisease2011a}\cite{KauNucleartransportcancer2004a}. A thorough understanding of the biology behind protein localisation is important to a better understanding of these diseases. Possible translational implications of this understanding are diagnostic tools such as blood or urine tests based on protein localisation or drugs to correct mislocalisation as part of treatment \cite{KauNucleartransportcancer2004a}\cite{HorganOmictechnologiesgenomics2011a}.
+Protein localisation is a fundamental question as localisation of a protein to the correct location is required for interaction with its binding partners and to carry out its function \cite{GibsonCellregulationdetermined2009}. These cellular components also provide the ideal biochemical environment for the proteins to function. Aberrant localisation is associated with a multitude of diseases including many subtypes of cancer, obesity and cardiovascular disease \cite{SiljeeSubcellularlocalizationMC4R2018a}\cite{HungProteinlocalizationdisease2011a}\cite{KauNucleartransportcancer2004a}. A thorough understanding of the biology behind protein localisation is important to a better understanding of these diseases. Possible translational implications of this understanding are diagnostic tools such as blood or urine tests based on protein localisation or drugs to correct mislocalisation as part of treatment \cite{KauNucleartransportcancer2004a}\cite{HorganOmictechnologiesgenomics2011a}.
 
 The protein localisation data is produced using synchronous precursor selection (SPS)-based MS$^3$ technology using the LOPIT and \emph{hyper}LOPIT pipelines \cite{GeladakiLOPITDCsimplerapproach2018}\cite{DunkleyLocalizationOrganelleProteins2004}. In summary:
 \begin{enumerate}
@@ -417,11 +417,10 @@ Similar to the method outlined in \ref{mixture_models}, this model iterates over
  \item Sample component parameters based on current allocation;
  \item Sample component weights based on current allocation;
  \item Sample outlier distribution weight based on current allocation;
- \item Sample component allocation for each individual;
- \item Given the above allocation, sample membership of the outlier distribution; and
- \item Repeat.
+ \item Sample component allocation for each individual; and
+ \item Given the above allocation, sample membership of the outlier distribution.
 \end{enumerate}
-The proteins allocated as outliers contribute to the mixing proportions but not the component parameters. One of the advantages associated with tagm models is that they quantify the uncertainty of the allocation. This distribution of allocation probability across the $K$ organelles allows greater interpretation of the allocation and as \citet{CrookBayesianMixtureModelling2018a} show can lead to the concept of multiple membership.
+The proteins allocated as outliers contribute to the mixing proportions but not the component parameters. One of the advantages associated with TAGM models compared to the other methods used in spatial proteomics is that they quantify the uncertainty of the allocation. This distribution of allocation probability across the $K$ organelles allows greater interpretation of the allocation and as \citet{CrookBayesianMixtureModelling2018a} show can lead to the concept of multiple membership.
 
 \subsection{GO terms}
 Gene ontology terms describe characteristics of gene-products in three non-overlapping areas of molecular biology \cite{GeneOntologyConsortiumGeneOntologyGO2004}.
@@ -431,7 +430,7 @@ Gene ontology terms describe characteristics of gene-products in three non-overl
  \item Biological processes: a biological objective to which the gene or gene product contributes. A process is accomplished via one or more ordered assemblies of molecular functions \cite{AshburnerGeneOntologytool2000}. Examples of broad (high level) biological process terms are ‘cell growth and maintenance’ or ‘signal transduction’. Examples of more specific (lower level) process terms are ‘translation’, ‘pyrimidine metabolism’ or ‘cAMP biosynthesis’ \cite{AshburnerGeneOntologytool2000}.
  \item Cellular component: the location within the cell where a gene product is active, i.e. the component it localises to.
 \end{itemize}
-As one can see in the examples provided by \citet{AshburnerGeneOntologytool2000}, there is a hierarchy within the terms - the terms may be described using a directed acyclic graph. In our implementation we ignore this hierarchy and treat the terms as a matrix of binary variables. This simplifying assumption is made for the sake of computational complexity. We choose GO terms as an additional dataset as they contain the same proteins as our MS data (i.e. can be used within the MDI framework), are freely available and are expected to provide some additional information regarding the prediction of localisation based on the results of \citet{BreckelsLearningHeterogeneousData2016a}. The GO terms are a summary dataset in some way - they are not experiment specific and not cell-type specific, and hence are expected to contain a lower signal-to-noise ratio for protein localisation then the MS data.
+As one can see in the examples provided by \citet{AshburnerGeneOntologytool2000}, there is a hierarchy within the terms - the terms may be described using a directed acyclic graph. In our implementation we ignore this hierarchy and treat the terms as a matrix of binary variables (indicating the protein in question has or does not have the associated GO term). This simplifying assumption is made for the sake of computational complexity. We choose GO terms as an additional dataset as they contain the same proteins as our MS data (i.e. can be used within the MDI framework), are freely available and are expected to provide some additional information regarding the prediction of localisation based on the results of \citet{BreckelsLearningHeterogeneousData2016a}. The GO terms are a summary dataset in some way - they are not experiment specific and not cell-type specific, and hence are expected to contain a lower signal-to-noise ratio for protein localisation then the MS data.
 
 \subsection{tagmmdi}
 Within each dataset we assume a common prior for each mixture. For the MS data with some known labels we fit a TAGM model where $K$ is equal to the number of organelles present in the training data. These points are held fixed in their allocation across all iterations and the associated component is considered to represent allocation to the associated organelle. We overfit a mixture of Dirichlet models on the GO term dataset (i.e. we set the number of cluster to an arbitrarily high number). MDI is applied and the output of interest for prediction is the posterior similarity matrix. As each component represents a specific organelle, proteins with a greater frequency of allocation to the same component are predicted to localise to the associated organelle.
@@ -492,7 +491,7 @@ ARMA version & 9.100.5 \LL
 
 
 \section{Conclusions and further work}
-Compare to the vanilla TAGM model we see that tagmmdi does significantly differ in table \ref{table:cv_results}. It is worth commenting that there is no disimprovement either, so if the computational cost is not a limit use of tagmmdi models will not offer any risk. We suggest that with a carefully chosen secondary dataset we could acquire information about our subclusters as categorical data is normally more interpretable than continuous data. We state this as the categories are normally human defined whereas continuous data, as a matrix of quantitative measurements, can be slightly dense. This applies less so in the supervised case investigated here, but certainly holds for many unsupervised cases and could reveal information about the subclusters even in the supervised case. We recommend testing the method on different auxiliary datasets such as Protein-Protein Interactions (PPI) to further test its capabilities.
+Compare to the vanilla TAGM model we see that tagmmdi does significantly differ in table \ref{table:cv_results}. It is worth commenting that there is no disimprovement either, so if the computational cost is not a limit use of tagmmdi models will not offer any risk. We suggest that with a carefully chosen secondary dataset we could acquire information about our subclusters as categorical data is normally more interpretable than continuous data. We state this as the categories are normally human defined whereas continuous data, as a matrix of quantitative measurements, can be slightly dense. This applies less so in the supervised case investigated here, but certainly holds for many unsupervised cases and could reveal information about the subclusters even in the supervised case. We recommend testing the method on different auxiliary datasets such as Protein-Protein Interactions (PPI) to further test its predictive capabilities.
 
 The functions in \emph{tagmmdi} also allow use of a second continuous dataset. This could be used to test the strength of association between replicates or to investigate for new organelles (perhaps by running the second dataset with an unsupervised mixture of Gaussians). The possibility for this later concept is investigated briefly in figure \ref{fig:g_g_psm}.
 
@@ -508,9 +507,10 @@ Currently the R package \emph{tagmmdi} is being updated by O. Crook to be integr
 
 Different MCMC methods such as a collapsed Gibbs sampler or Hamiltonian MCMC might lower the computational cost.
 
+\newpage
 \appendix
 
-\section{MDI model}
+\section{MDI model derivations}
 For MDI in the case of $n$ observations in 2 datasets (also referred to as \emph{contexts}):
 
 \begin{align}
@@ -558,7 +558,7 @@ a_{\gamma} &= 1 + \sum_{i=1}^n \mathbb{I}(c_{il} = k) \\
 b_{\gamma} &= v \sum_{k_{l'}=1}^{K_{l'}} \gamma_{c_{il'}l'} \left(1 + \phi \mathbb{I}(k_l = k_{l'})\right)
 \end{align}
 
-\subsection{$\phi$ and associated derivations}
+\subsection{$\phi$}
 \subsubsection{Conditional probability}
 Consider the conditional probability of $\phi$, then from \eqref{joint_density} and expanding $Z$:
 
@@ -635,14 +635,23 @@ p(\phi | \cdot) &\propto p(\phi) p(\left\{c_{i1}, c_{i2}\right\}_{i=1}^n, v | \p
 We now use the same trick as with the likelihood to move towards the shape of a Gamma density function, and multiply by 1:
 
 \begin{align}
-p(\phi | \cdot) &\propto \sum_{r=0}^c  \binom{c}{r} \frac{(r + a_0 - 1)!}{ \left(v \sum_{k=1}^{K_{min}} \gamma_{k1} \gamma_{k2} + b_0 \right)^{r + a_0}} \frac{ \left(v \sum_{k=1}^{K_{min}} \gamma_{k1} \gamma_{k2} + b_0 \right)^{r + a_0}}{(r + a_0 - 1)!} \phi^{r + a_0 - 1} \exp \left( - \left(v \sum_{k=1}^{K_{min}} \gamma_{k1} \gamma_{k2} + b_0 \right)\phi\right) \\
-&= \sum_{r=0}^c  \binom{c}{r} \frac{(r + a_0 - 1)!}{ \left(v \sum_{k=1}^{K_{min}} \gamma_{k1} \gamma_{k2} + b_0 \right)^{r + a_0}} Gamma \left(r+ a_0, v \sum_{k=1}^{K_{min}} \gamma_{k1} \gamma_{k2} + b_0 \right)
+\nonumber p(\phi | \cdot) &\propto & \sum_{r=0}^c  \binom{c}{r} \frac{(r + a_0 - 1)!}{ \left(v \sum_{k=1}^{K_{min}} \gamma_{k1} \gamma_{k2} + b_0 \right)^{r + a_0}} \times & \\
+& &\frac{ \left(v \sum_{k=1}^{K_{min}} \gamma_{k1} \gamma_{k2} + b_0 \right)^{r + a_0}}{(r + a_0 - 1)!} \phi^{r + a_0 - 1} & \exp \left( - \left(v \sum_{k=1}^{K_{min}} \gamma_{k1} \gamma_{k2} + b_0 \right)\phi\right)
+\end{align}
+We recognise the rightmost terms as the pdf of a Gamma distribution with shape $r + \alpha_0$ and rate $v\sum_{k=1}^{K_{min}}\gamma_{k1}\gamma_{k2} + b_0$. Thus:
+\begin{align}
+p(\phi | \cdot) &\propto \sum_{r=0}^c  \binom{c}{r} \frac{(r + a_0 - 1)!}{ \left(v \sum_{k=1}^{K_{min}} \gamma_{k1} \gamma_{k2} + b_0 \right)^{r + a_0}} Gamma \left(r+ a_0, v \sum_{k=1}^{K_{min}} \gamma_{k1} \gamma_{k2} + b_0 \right)
 \end{align}
 Again we have a mixture of Gamma densities. For the normalising constant, we have, similarly to \eqref{Z_phi}:
 
 \begin{align}
-Z_{\phi}' &=\sum_{r=0}^c  \binom{c}{r} \frac{(r + a_0 - 1)!}{ \left(v \sum_{k=1}^{K_{min}} \gamma_{k1} \gamma_{k2} + b_0 \right)^{r + a_0}}  \int \frac{ \left(v \sum_{k=1}^{K_{min}} \gamma_{k1} \gamma_{k2} + b_0 \right)^{r + a_0}}{(r + a_0 - 1)!} \phi^{r + a_0 - 1} \exp \left( - \left(v \sum_{k=1}^{K_{min}} \gamma_{k1} \gamma_{k2} + b_0 \right)\phi\right) d\phi_{12} \\
-&= \sum_{r=0}^c \binom{c}{r} \frac{(r + a_0 - 1)!}{ \left(v \sum_{k=1}^{K_{min}} \gamma_{k1} \gamma_{k2} + b_0 \right)^{r + a_0}} 
+\nonumber Z_{\phi}' &=& \sum_{r=0}^c  \binom{c}{r} \frac{(r + a_0 - 1)!}{ \left(v \sum_{k=1}^{K_{min}} \gamma_{k1} \gamma_{k2} + b_0 \right)^{r + a_0}} \times & \\
+&& \int \frac{ \left(v \sum_{k=1}^{K_{min}} \gamma_{k1} \gamma_{k2} + b_0 \right)^{r + a_0}}{(r + a_0 - 1)!} \phi^{r + a_0 - 1} & \exp \left( - \left(v \sum_{k=1}^{K_{min}} \gamma_{k1} \gamma_{k2} + b_0 \right)\phi\right) d\phi_{12}
+\end{align}
+We recognise the integral as the pdf of a Gamma distribution and know it must integrate to 1. This leaves:
+
+\begin{align}
+Z_{\phi}' &= \sum_{r=0}^c \binom{c}{r} \frac{(r + a_0 - 1)!}{ \left(v \sum_{k=1}^{K_{min}} \gamma_{k1} \gamma_{k2} + b_0 \right)^{r + a_0}} 
 \end{align}
 Thus the posterior distribution of the context similarity parameter $\phi$ is:
 
@@ -650,10 +659,11 @@ Thus the posterior distribution of the context similarity parameter $\phi$ is:
 p(\phi |  \left\{c_{i1}, c_{i2}\right\}_{i=1}^n, v) &=  \frac{1}{Z_{\phi}'} \sum_{r=0}^c  \binom{c}{r} \frac{(r + a_0 - 1)!}{ \left(v \sum_{k=1}^{K_{min}} \gamma_{k1} \gamma_{k2} + b_0 \right)^{r + a_0}} Gamma \left(r+ a_0, v \sum_{k=1}^{K_{min}} \gamma_{k1} \gamma_{k2} + b_0 \right)
 \end{align}
 
+\newpage
 \section*{Acknowledgments}
 Thanks are due to my supervisors Paul Kirk (primary) and Laurent Gatto (secondary) as well as their PhD student Oliver M Crook who was very free with his time in explaining concepts to me. The project was designed and overseen by Paul who also took the time to run through my code on a few occasions which is an intimidating task for the unwary. All the people at the MRC Biostatistics Unit, Cambridge University made my stay there very pleasant as well as educational.
 
-Thanks also to Aalt-Jan van Dijk for agreeing to supervise me from Wagenignen thereby enabling this project.
+Thanks also to Aalt-Jan van Dijk for agreeing to supervise me from Wageningen thereby enabling this project.
 
 With regards to software this project was massively enabled by RStudio \cite{RStudioTeamRStudioIntegratedDevelopment2016} and GitHub. \citet{EddelbuettelRcppSeamlessIntegration2011} deserve special mention for the development of Rcpp which made integrating the Gibbs sampler from C++ far easier. The C++ is almost entirely coded using objects and functions from Armadillo \cite{SandersonArmadillotemplatebasedlibrary2016}.
 

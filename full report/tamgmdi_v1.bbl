@@ -1,4 +1,4 @@
-\begin{thebibliography}{30}
+\begin{thebibliography}{31}
 \providecommand{\natexlab}[1]{#1}
 \providecommand{\url}[1]{\texttt{#1}}
 \expandafter\ifx\csname urlstyle\endcsname\relax
@@ -266,5 +266,10 @@ Denise J.~L. Tan, Heidi Dvinge, Andrew Christoforou, Paul Bertone, Alfonso
 RStudio Team.
 \newblock {{RStudio}}: {{Integrated Development Environment}} for {{R}}.
 \newblock RStudio, Inc., 2016.
+
+\bibitem[Wickham(2015)]{Wickhampackagesorganizetest2015}
+Hadley Wickham.
+\newblock \emph{R Packages: Organize, Test, Document, and Share Your Code}.
+\newblock {O'Reilly Media, Inc.}, 2015.
 
 \end{thebibliography}

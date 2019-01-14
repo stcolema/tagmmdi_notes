@@ -102,6 +102,9 @@
 \usepackage{xcolor}
 \usepackage{siunitx}
 
+%%% For formatting code
+\usepackage{listings}
+
 %%% User commands
 % theorem box
 \newcounter{aside}[section]\setcounter{aside}{0}
@@ -433,7 +436,7 @@ Gene ontology terms describe characteristics of gene-products in three non-overl
 As one can see in the examples provided by \citet{AshburnerGeneOntologytool2000}, there is a hierarchy within the terms - the terms may be described using a directed acyclic graph. In our implementation we ignore this hierarchy and treat the terms as a matrix of binary variables (indicating the protein in question has or does not have the associated GO term). This simplifying assumption is made for the sake of computational complexity. We choose GO terms as an additional dataset as they contain the same proteins as our MS data (i.e. can be used within the MDI framework), are freely available and are expected to provide some additional information regarding the prediction of localisation based on the results of \citet{BreckelsLearningHeterogeneousData2016a}. The GO terms are a summary dataset in some way - they are not experiment specific and not cell-type specific, and hence are expected to contain a lower signal-to-noise ratio for protein localisation then the MS data.
 
 \subsection{tagmmdi}
-Within each dataset we assume a common prior for each mixture. For the MS data with some known labels we fit a TAGM model where $K$ is equal to the number of organelles present in the training data. These points are held fixed in their allocation across all iterations and the associated component is considered to represent allocation to the associated organelle. We overfit a mixture of Dirichlet models on the GO term dataset (i.e. we set the number of cluster to an arbitrarily high number). MDI is applied and the output of interest for prediction is the posterior similarity matrix. As each component represents a specific organelle, proteins with a greater frequency of allocation to the same component are predicted to localise to the associated organelle.
+Within each dataset we assume a common prior for each mixture. These are based on summary statistics about the entire dataset (i.e. empirical Bayes). For the MS data with some known labels we fit a TAGM model where $K$ is equal to the number of organelles present in the training data. These points are held fixed in their allocation across all iterations and the associated component is considered to represent allocation to the associated organelle. We overfit a mixture of Dirichlet models on the GO term dataset (i.e. we set the number of cluster to an arbitrarily high number). MDI is applied and the output of interest for prediction is the posterior similarity matrix. As each component represents a specific organelle, proteins with a greater frequency of allocation to the same component are predicted to localise to the associated organelle.
 
 \section{Results}
 \begin{figure}[h]
@@ -507,6 +510,26 @@ Currently the R package \emph{tagmmdi} is being updated by O. Crook to be integr
 
 Different MCMC methods such as a collapsed Gibbs sampler or Hamiltonian MCMC might lower the computational cost.
 
+\section{Self-reflection}
+My main achievements from this internship are:
+\begin{itemize}
+ \item Learning C++;
+ \item Implementing Bayesian analysis; and
+ \item Building an R package.
+\end{itemize}
+Learning C++ was very difficult. I used Armadillo, a linear algebra library, extensively, and it did make the process easier as it is very well documented. However I could not be confident in my coding or know the exact mechanisms of each step, so I needed to compare the version of TAGM in my package to that in \emph{pRoloc}. This is one of the harder things I  have learnt; that for checking your implementation for bugs you just have to do the work. This could be going through the code line by line (which I did several times over the course of the project) or if there is a comparable pre-existing tool recreating results exactly. The latter option was available to me in the form of TAGM models in \emph{pRoloc}, but I did try to avoid the work to make the two directly comparable. Eventually I accepted that I could not move forward without doing it however. To do this a few things were necessary. TAGM uses a collapsed Gibbs sampler and the code is in rather dense R, so I built a C++ version (which produced the same results as that produced by \emph{pRoloc}) and also changed the tagmmdi implementation to a collapsed Gibbs sampler to create results that could be compared before returning to a traditional Gibbs sampler. This allowed me to be sure that there was no bugs in my coding. It was a necessary step, but I avoided it as I hoped there would be an easier alternative. I probably lost a week due to this whereas it really was unavoidable; I hope that from now on I will be quicker to accept that sometimes this kind of work is mandatory. This is the main step I would have changed in this process.
+
+With regards to the inference, I had encountered the concept of the Bayesian paradigm and Bayes' theorem, but actually applying the method to a problem was very difficult. Building the Gibbs sampler and the bookkeeping with all of the components and the various associated vectors and matrices was a difficult and non-intuitive process. However I think that this approach has many strengths and is worth the initial difficulty. The dense output with its uncertainty estimation is very useful and the ability to include expert knowledge in the form of a prior can also be highly beneficial. There are downsides, particularly the computational cost and lack of scalability, to the Bayesian inferential method, so it is worth having as a tool but it also helps to be open-minded and use the correct tool for the correct problem. I am very glad to have had proper exposure to Bayesian inference in general but also to mixture models in particular as they extend to Gaussian and Dirichlet processes, two methods that seem very powerful. With this understanding of the methods implemented, if I was rebuilding the package I think an Object Oriented (OO) implementation of the MDI in C++ is more natural and would make for more concise code.
+
+Building an R package was surprisingly easy thanks to \citet{Wickhampackagesorganizetest2015}. The method is clear and with the RcppArmadillo package one is enabled to setup a package with the correct anatomy to call C++ and Armadillo. This is done by calling:
+\begin{lstlisting}
+RcppArmadillo.package.skeleton
+\end{lstlisting}
+At least for me, the package structure encourages better practices with regards to commenting and function writing. I think that it is a very useful way of capturing one's code, and the ease of combining a package with a Github repository via Rstudio is wonderful. I think this is likely to be a key part of my workflow in future.
+
+Overall I am very pleased with what I learnt and what I achieved during the internship. I really enjoyed working with my supervisor Paul Kirk and my time in Cambridge flew past. It was interesting to see the work that the people do there, a lot of it is trial design which I know nothing about. To see the multitude of roles statisticians play in the research of medicine is exciting. I was also lucky enough to be there for the Armitage Day (the MRC Biostatistics Unit's annual seminar), which was pretty nice; Barbara Engelhardt was the keynote speaker. Getting to meet and talk to someone as dynamic as that is quite inspiring. There was a number of smaller scale seminars. I think that due to this exposure, both to more career academics in a social setting (some of the Armitage events were aimed at exposing PhD students to older-hands and I was lucky enough to be included) and to seminars and more varied research, I have a better understanding of what academia is like.
+
+The internship has left me convinced that I want to do a PhD in the future but has left me unsure if long-term academia is suited for me. The unit received its 5-year grant from the MRC in my time there. The work and stress of this grant-hunting seems to be a common feature of an academic's life. This stress of low-security and the high bureaucracy might outweigh the attractions of learning and the freedom of research (relative to industry) in the long term. Fortunately this is not a question I need to answer yet. However I think it helps to enter a PhD with my eyes open and the intention to learn a few skills that are in demand in industry.
 \newpage
 \appendix
 
@@ -642,7 +665,7 @@ We recognise the rightmost terms as the pdf of a Gamma distribution with shape $
 \begin{align}
 p(\phi | \cdot) &\propto \sum_{r=0}^c  \binom{c}{r} \frac{(r + a_0 - 1)!}{ \left(v \sum_{k=1}^{K_{min}} \gamma_{k1} \gamma_{k2} + b_0 \right)^{r + a_0}} Gamma \left(r+ a_0, v \sum_{k=1}^{K_{min}} \gamma_{k1} \gamma_{k2} + b_0 \right)
 \end{align}
-Again we have a mixture of Gamma densities. For the normalising constant, we have, similarly to \eqref{Z_phi}:
+Again we have a mixture of Gamma densities. For the normalising constant we have an expression similar to \eqref{Z_phi}:
 
 \begin{align}
 \nonumber Z_{\phi}' &=& \sum_{r=0}^c  \binom{c}{r} \frac{(r + a_0 - 1)!}{ \left(v \sum_{k=1}^{K_{min}} \gamma_{k1} \gamma_{k2} + b_0 \right)^{r + a_0}} \times & \\
